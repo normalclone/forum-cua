@@ -1,0 +1,36 @@
+@model List<Topic>
+@inject Forum.Web.Services.IForumUrlService Url
+@{
+    var heading = (ViewData["FeaturedHeading"] as string) ?? "Nổi bật & Đang hot";
+}
+@if (Model.Count > 0)
+{
+    <section class="featured-strip">
+        <div class="featured-head">@Html.Icon("flame", 18, "fire") <span>@heading</span></div>
+        <div class="featured-grid">
+            @foreach (var t in Model)
+            {
+                <div class="featured-card">
+                    <div class="meta">
+                        @if (t.IsPinned)
+                        {
+                            <span class="flair-pinned">@Html.Icon("pin", 11) Ghim</span>
+                        }
+                        @if (t.IsFeatured)
+                        {
+                            <span class="flair-hot">@Html.Icon("flame", 11) Hot</span>
+                        }
+                        <span>@t.Category?.Name</span>
+                    </div>
+                    <a class="ttl" href="@Url.Topic(t)" data-topic-preview="@t.Id">@t.Title</a>
+                    <div class="meta">
+                        <span class="user-link" data-username="@t.Author?.UserName">@t.Author?.DisplayName</span>
+                        <span>@Html.Icon("arrow-big-up", 12) @t.Score</span>
+                        <span>@Html.Icon("message-square", 12) @t.CommentCount</span>
+                        <span>@Html.Icon("eye", 12) @ViewHelpers.Compact(t.ViewCount)</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+}

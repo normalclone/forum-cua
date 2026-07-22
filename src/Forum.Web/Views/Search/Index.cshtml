@@ -1,0 +1,71 @@
+@model TopicListViewModel
+@{
+    var danhMuc = ViewData["DanhMuc"] as string;
+    var the = ViewData["The"] as string;
+    var sortKey = ViewData["SortKey"] as string ?? "lien-quan";
+
+    var qParts = new List<string>();
+    if (!string.IsNullOrEmpty(Model.Keyword)) qParts.Add($"q={Uri.EscapeDataString(Model.Keyword)}");
+    if (!string.IsNullOrEmpty(danhMuc)) qParts.Add($"danh-muc={danhMuc}");
+    if (!string.IsNullOrEmpty(the)) qParts.Add($"the={the}");
+    if (!string.IsNullOrEmpty(Model.Period)) qParts.Add($"thoi-gian={Model.Period}");
+    if (sortKey != "lien-quan") qParts.Add($"sap-xep={sortKey}");
+    var pagerQuery = string.Join("&", qParts);
+}
+<form method="get" action="/tim-kiem" class="card card-pad mb-10">
+    <div class="field mb-10">
+        <div style="position:relative;">
+            @Html.Icon("search", 17, "search-icon")
+            <input class="input input-search" name="q" value="@Model.Keyword" placeholder="Tìm chủ đề, bài viết về cửa…" />
+        </div>
+    </div>
+    <div class="flex wrap gap-6 items-center">
+        <select name="danh-muc" class="form-control" style="width:auto;">
+            <option value="">Tất cả danh mục</option>
+            @foreach (var c in Model.AllCategories)
+            {
+                <option value="@c.Slug" selected="@(danhMuc == c.Slug)">@c.Name</option>
+            }
+        </select>
+        <select name="thoi-gian" class="form-control" style="width:auto;">
+            <option value="">Mọi lúc</option>
+            <option value="ngay" selected="@(Model.Period == "ngay")">24 giờ qua</option>
+            <option value="tuan" selected="@(Model.Period == "tuan")">Tuần này</option>
+            <option value="thang" selected="@(Model.Period == "thang")">Tháng này</option>
+            <option value="nam" selected="@(Model.Period == "nam")">Năm nay</option>
+        </select>
+        <select name="sap-xep" class="form-control" style="width:auto;">
+            <option value="lien-quan" selected="@(sortKey == "lien-quan")">Mới nhất</option>
+            <option value="noi-bat" selected="@(sortKey == "noi-bat")">Nổi bật</option>
+        </select>
+        @if (!string.IsNullOrEmpty(the))
+        {
+            <span class="tag">#@the</span>
+            <input type="hidden" name="the" value="@the" />
+        }
+        <button class="btn btn-primary btn-sm" type="submit">Tìm</button>
+    </div>
+</form>
+
+<h1 style="font-size:1.3rem;">@Model.Heading <span class="muted small">· @Model.Topics.TotalCount kết quả</span></h1>
+
+@if (Model.Topics.TotalCount == 0)
+{
+    <div class="empty">
+        <div class="ico">@Html.Icon("search", 44)</div>
+        <h3>Không tìm thấy kết quả</h3>
+        <p class="muted">Thử từ khóa khác hoặc bỏ bớt bộ lọc.</p>
+    </div>
+}
+else
+{
+    <div class="topic-list">
+        @foreach (var t in Model.Topics.Items)
+        {
+            <partial name="_TopicCard" model="t" />
+        }
+    </div>
+    <partial name="_Pager" model="@(new PagerModel { Page = Model.Topics.Page, TotalPages = Model.Topics.TotalPages, Path = "/tim-kiem", Query = pagerQuery })" />
+}
+
+@section Sidebar { @await Component.InvokeAsync("ForumSidebar") }

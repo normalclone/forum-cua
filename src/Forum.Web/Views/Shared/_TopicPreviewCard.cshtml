@@ -1,0 +1,42 @@
+@model Topic
+@inject Forum.Web.Services.IMarkdownService Md
+<div class="tp-card">
+    <div class="tp-meta">
+        @if (Model.Category != null)
+        {
+            <span class="pill"><span class="cat-dot" style="background:@Model.Category.ColorHex"></span> @Model.Category.Name</span>
+        }
+        @if (Model.IsPinned)
+        {
+            <span class="flair-pinned">@Html.Icon("pin", 11) Ghim</span>
+        }
+        @if (Model.IsFeatured)
+        {
+            <span class="flair-hot">@Html.Icon("flame", 11) Nổi bật</span>
+        }
+        @if (Model.IsQuestion)
+        {
+            <span class="flair-new">Hỏi đáp</span>
+        }
+    </div>
+    <div class="tp-title">@Model.Title</div>
+    <p class="tp-excerpt">@Md.Excerpt(Model.Body, 320)</p>
+    @if (Model.TopicTags?.Count > 0)
+    {
+        <div class="tp-tags">
+            @foreach (var tt in Model.TopicTags.Take(4))
+            {
+                <span class="tag">#@tt.Tag?.Name</span>
+            }
+        </div>
+    }
+    <div class="tp-foot">
+        <span>bởi <b>@(Model.Author?.DisplayName ?? "Ẩn danh")</b></span>
+        <span class="tp-sep">·</span>
+        <span>@Html.Icon("arrow-big-up", 12) @Model.Score</span>
+        <span>@Html.Icon("message-square", 12) @Model.CommentCount</span>
+        <span>@Html.Icon("eye", 12) @ViewHelpers.Compact(Model.ViewCount)</span>
+        <span class="tp-sep">·</span>
+        <span>@ViewHelpers.TimeAgo(Model.CreatedAt)</span>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+@model CreateTopicViewModel
+@inject Forum.Web.Services.ISiteSettingService Settings
+<div>
+    <h1 style="font-size:1.5rem;">Tạo chủ đề mới</h1>
+    <div class="card card-pad">
+        <form asp-action="Create" method="post" id="compose-form" data-compose novalidate>
+            <input type="hidden" asp-for="DraftId" data-draft-id />
+            <div asp-validation-summary="ModelOnly" class="validation-summary-errors mb-10"></div>
+
+            <div class="field">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control" placeholder="VD: So sánh cửa nhôm Xingfa và PMA cho nhà mặt phố" data-draft-field="title" />
+                <span asp-validation-for="Title" class="field-validation-error"></span>
+            </div>
+
+            <div class="field">
+                <label asp-for="CategoryId"></label>
+                <select asp-for="CategoryId" class="form-control" data-draft-field="category">
+                    <option value="">— Chọn danh mục —</option>
+                    @foreach (var c in Model.Categories)
+                    {
+                        <option value="@c.Id">@c.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="CategoryId" class="field-validation-error"></span>
+            </div>
+
+            <div class="field">
+                <label asp-for="Body"></label>
+                <textarea asp-for="Body" data-md-editor rows="10" placeholder="Nội dung (hỗ trợ Markdown: **đậm**, danh sách, bảng, ```code```, ảnh…)" data-draft-field="body"></textarea>
+                <span asp-validation-for="Body" class="field-validation-error"></span>
+            </div>
+
+            <div class="field">
+                <label class="form-label">Thẻ (tối đa 6)</label>
+                <div class="chip-input" data-tag-input>
+                    <input type="text" data-tag-add placeholder="Nhập thẻ rồi Enter (vd: cửa-nhôm)…" />
+                </div>
+                <input type="hidden" asp-for="Tags" data-tag-value data-draft-field="tags" />
+            </div>
+
+            <label class="checkbox mb-10"><input asp-for="IsQuestion" type="checkbox" /> Đây là câu hỏi (hỏi-đáp)</label>
+            <br />
+            @if (Settings.GetBool(SettingKeys.FeaturePolls, true))
+            {
+                <label class="checkbox mb-10"><input asp-for="AddPoll" type="checkbox" data-poll-toggle /> Thêm bình chọn</label>
+
+                <div id="poll-fields" class="card card-pad mb-10 @(Model.AddPoll ? "" : "hide")" style="background:var(--surface-2)">
+                    <div class="field">
+                        <label asp-for="PollQuestion"></label>
+                        <input asp-for="PollQuestion" class="form-control" placeholder="VD: Bạn thích cửa gỗ hay cửa nhôm kính hơn?" />
+                    </div>
+                    <div class="field">
+                        <label asp-for="PollOptionsText">Các lựa chọn (mỗi dòng một lựa chọn, tối thiểu 2)</label>
+                        <textarea asp-for="PollOptionsText" class="form-control" rows="4" placeholder="Cửa gỗ tự nhiên&#10;Cửa nhôm kính&#10;Cửa nhựa uPVC"></textarea>
+                    </div>
+                </div>
+            }
+
+            <div class="flex between items-center">
+                <span class="hint" data-draft-status></span>
+                <span>
+                    <a class="btn" href="/">Hủy</a>
+                    <button type="submit" class="btn btn-primary" data-submit>Đăng chủ đề</button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+@* Khai báo Sidebar → _Layout dùng bố cục 3 cột (rail danh mục trái + sidebar phải) như các trang khác. *@
+@section Sidebar { @await Component.InvokeAsync("ForumSidebar", new { part = "info" }) }
+
+@section Scripts {
+    <script src="~/js/editor.js" asp-append-version="true"></script>
+    <script src="~/js/compose.js" asp-append-version="true"></script>
+}

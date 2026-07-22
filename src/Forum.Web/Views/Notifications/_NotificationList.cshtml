@@ -1,0 +1,49 @@
+@model List<Notification>
+@functions {
+    string Text(Notification n)
+    {
+        var actor = n.Actor?.DisplayName ?? "Ai đó";
+        return n.Type switch
+        {
+            NotificationType.Reply => $"{actor} đã trả lời trong chủ đề bạn quan tâm",
+            NotificationType.Mention => $"{actor} đã nhắc đến bạn (@)",
+            NotificationType.Follow => $"{actor} đã bắt đầu theo dõi bạn",
+            NotificationType.Vote => $"{actor} đã thích nội dung của bạn",
+            NotificationType.Message => $"{actor} đã gửi cho bạn một tin nhắn",
+            NotificationType.Badge => n.Message ?? "Bạn nhận được huy hiệu mới",
+            NotificationType.Moderation => n.Message ?? "Có hành động kiểm duyệt liên quan tới bạn",
+            _ => n.Message ?? "Thông báo mới"
+        };
+    }
+    string Ico(NotificationType t) => t switch
+    {
+        NotificationType.Reply => "reply",
+        NotificationType.Mention => "hash",
+        NotificationType.Follow => "user",
+        NotificationType.Vote => "arrow-big-up",
+        NotificationType.Message => "message-square",
+        NotificationType.Badge => "award",
+        _ => "bell"
+    };
+}
+@if (Model.Count == 0)
+{
+    <div class="card-pad muted small text-center">Chưa có thông báo nào.</div>
+}
+else
+{
+    foreach (var n in Model)
+    {
+        <a class="notif-item @(n.IsRead ? "" : "unread")" href="@(n.Url ?? "#")" data-notif="@n.Id">
+            <span class="muted">@Html.Icon(Ico(n.Type), 18)</span>
+            <span style="flex:1;">
+                @Text(n)
+                <div class="nb">@Forum.Web.Helpers.ViewHelpers.TimeAgo(n.CreatedAt)</div>
+            </span>
+            @if (!n.IsRead)
+            {
+                <span class="presence-dot online" title="Chưa đọc" style="margin-top:4px;"></span>
+            }
+        </a>
+    }
+}

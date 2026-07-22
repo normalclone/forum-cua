@@ -1,0 +1,66 @@
+@model TopicListViewModel
+@inject Forum.Web.Services.ISiteSettingService Settings
+@{
+    var canPost = Settings.GetBool(SettingKeys.FeaturePosting, true);
+    var sortKey = Model.Sort switch { TopicSort.Latest => "moi", TopicSort.Top => "noi-bat", TopicSort.Trending => "xu-huong", _ => "hoat-dong" };
+    string SortUrl(string key) => key == "hoat-dong" ? Model.BasePath : $"{Model.BasePath}?sap-xep={key}";
+    var pagerQuery = sortKey == "hoat-dong" ? "" : $"sap-xep={sortKey}";
+    ViewData["SidebarActive"] = Model.Category?.Slug;
+}
+
+@* Thanh thông báo chạy: chỉ ở trang danh mục (không ở trang thẻ/tìm kiếm). *@
+@if (Model.Category != null)
+{
+    @await Component.InvokeAsync("AnnouncementTicker")
+}
+
+<partial name="_Breadcrumbs" />
+
+@* Breadcrumb đã hiển thị tên trang → bỏ khối tiêu đề lặp lại; giữ 1 h1 ẩn cho SEO/a11y. *@
+<h1 class="sr-only">@Model.Heading</h1>
+
+@if (Model.Tag != null)
+{
+    <div class="card card-pad flex between items-center wrap" style="gap:10px;margin-bottom:12px;">
+        <div>
+            <div style="font-weight:700;font-size:1.05rem;">@Html.Icon("hash", 16) @Model.Tag.Name</div>
+            @if (!string.IsNullOrWhiteSpace(Model.Tag.Description))
+            {
+                <div class="muted small">@Model.Tag.Description</div>
+            }
+            <div class="muted xsmall">@Model.Tag.UseCount chủ đề</div>
+        </div>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <button type="button" class="btn btn-sm tag-follow @(Model.IsFollowingTag ? "on" : "")" data-tag-follow="@Model.Tag.Id">
+                @Html.Icon("bell", 14) <span data-follow-label>@(Model.IsFollowingTag ? "Đang theo dõi" : "Theo dõi thẻ")</span>
+            </button>
+        }
+    </div>
+}
+
+@if (Model.Topics.Page == 1 && Model.Featured.Count > 0)
+{
+    ViewData["FeaturedHeading"] = Model.Category != null ? "Bài viết đã ghim" : "Nổi bật & Đang hot";
+    <partial name="_FeaturedStrip" model="Model.Featured" />
+}
+
+<div class="feed-toolbar">
+    <div class="seg">
+        <a href="@SortUrl("hoat-dong")" class="@(sortKey == "hoat-dong" ? "active" : "")">@Html.Icon("clock", 14) Hoạt động</a>
+        <a href="@SortUrl("moi")" class="@(sortKey == "moi" ? "active" : "")">@Html.Icon("calendar", 14) Mới nhất</a>
+        <a href="@SortUrl("noi-bat")" class="@(sortKey == "noi-bat" ? "active" : "")">@Html.Icon("arrow-big-up", 14) Nổi bật</a>
+        <a href="@SortUrl("xu-huong")" class="@(sortKey == "xu-huong" ? "active" : "")">@Html.Icon("trending-up", 14) Xu hướng</a>
+    </div>
+    @if (canPost)
+    {
+        <a class="btn btn-primary btn-sm" href="/tao-chu-de@(Model.Category != null ? $"?danh-muc={Model.Category.Slug}" : "")" style="margin-left:auto;">@Html.Icon("plus", 15) Tạo chủ đề</a>
+    }
+</div>
+
+<div id="feed" data-feed>
+    <partial name="_TopicFeed" model="@(new TopicFeedModel { Items = Model.Topics, BasePath = Model.BasePath, PagerQuery = pagerQuery, EmptyIcon = "folder", EmptyTitle = "Chưa có chủ đề", EmptyText = "Hãy mở màn thảo luận trong mục này." })" />
+</div>
+
+@section Sidebar { @await Component.InvokeAsync("ForumSidebar", new { part = "info" }) }
+@section Scripts { <script src="~/js/feed.js" asp-append-version="true"></script> }

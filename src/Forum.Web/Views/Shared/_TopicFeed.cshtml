@@ -1,0 +1,24 @@
+@model TopicFeedModel
+@*
+    Danh sách bài viết của feed (topic-list + pager) hoặc trạng thái rỗng.
+    Trả về nguyên phần này khi AJAX (đổi tab sắp xếp / phân trang) để thay vào #feed.
+*@
+@if (Model.Items.TotalCount == 0)
+{
+    <div class="empty">
+        <div class="ico">@Html.Icon(Model.EmptyIcon, 44)</div>
+        <h3>@Model.EmptyTitle</h3>
+        <p class="muted">@Model.EmptyText</p>
+        <a class="btn btn-primary" href="@Model.EmptyCtaHref">@Model.EmptyCta</a>
+    </div>
+}
+else
+{
+    <div class="topic-list">
+        @foreach (var t in Model.Items.Items)
+        {
+            <partial name="_TopicCard" model="t" />
+        }
+    </div>
+    <partial name="_Pager" model="@(new PagerModel { Page = Model.Items.Page, TotalPages = Model.Items.TotalPages, Path = Model.BasePath, Query = Model.PagerQuery })" />
+}

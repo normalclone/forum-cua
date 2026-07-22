@@ -1,0 +1,16 @@
+@model int
+<div class="menu-wrap">
+    <button class="btn-icon nav-icon-link" data-menu="notif-menu" aria-label="Thông báo" title="Thông báo">
+        @Html.Icon("bell", 20)
+        <span class="badge-count@(Model > 0 ? "" : " hide")" id="notif-badge">@(Model > 99 ? "99+" : Model.ToString())</span>
+    </button>
+    <div id="notif-menu" class="menu notif-menu" hidden>
+        <div class="notif-head">
+            <b>Thông báo</b>
+            <button class="btn btn-sm btn-ghost" id="notif-mark-all" type="button">Đánh dấu đã đọc</button>
+        </div>
+        <div id="notif-body">
+            <div class="card-pad muted small">Đang tải…</div>
+        </div>
+    </div>
+</div>

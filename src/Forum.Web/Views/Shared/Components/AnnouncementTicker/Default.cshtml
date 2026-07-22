@@ -1,0 +1,30 @@
+@model List<TickerItem>
+@if (Model.Count > 0)
+{
+    <div class="ticker" aria-label="Thông báo">
+        <span class="ticker-label">@Html.Icon("bell", 14) Thông báo</span>
+        <div class="ticker-viewport">
+            <div class="ticker-track">
+                @* Lặp 2 lần để cuộn nối tiếp liền mạch (translateX -50%). *@
+                @for (var pass = 0; pass < 2; pass++)
+                {
+                    foreach (var it in Model)
+                    {
+                        var hidden = pass == 1;
+                        if (it.Url != null)
+                        {
+                            <a class="tk-item" href="@it.Url" aria-hidden="@(hidden ? "true" : "false")" tabindex="@(hidden ? "-1" : "0")">
+                                @Html.Icon(it.Icon, 12) <span>@it.Text</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="tk-item" aria-hidden="@(hidden ? "true" : "false")">@Html.Icon(it.Icon, 12) <span>@it.Text</span></span>
+                        }
+                        <span class="tk-dot" aria-hidden="true">•</span>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}

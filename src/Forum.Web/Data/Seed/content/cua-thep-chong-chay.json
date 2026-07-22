@@ -1,0 +1,314 @@
+{
+  "topics": [
+    {
+      "title": "Tổng hợp báo giá cửa thép vân gỗ & cửa chống cháy EI60/EI90 năm 2026 (cập nhật liên tục)",
+      "body": "Mình lập topic này để gom toàn bộ **báo giá tham khảo** cho anh em đang tìm hiểu cửa thép vân gỗ và cửa chống cháy, tránh bị thổi giá. Mọi người có giá mới hãy comment bổ sung nhé.\n\n## Cửa thép vân gỗ (dân dụng, không kiểm định PCCC)\n\n| Loại cửa | Độ dày cánh | Giá tham khảo |\n|---|---|---|\n| Thép vân gỗ 1 cánh phủ sơn tĩnh điện | 0.8mm | 3.2 - 4.5 triệu/bộ |\n| Thép vân gỗ 1 cánh phủ film vân gỗ | 1.0mm | 4.8 - 6.5 triệu/bộ |\n| Thép vân gỗ 2 cánh lệch | 1.0mm | 8.5 - 12 triệu/bộ |\n\n## Cửa chống cháy có kiểm định\n\n```\nCửa chống cháy EI60 1 cánh   : 4.500.000 - 6.000.000đ/bộ\nCửa chống cháy EI60 2 cánh   : 8.000.000 - 11.000.000đ/bộ\nCửa chống cháy EI90 1 cánh   : 6.500.000 - 8.500.000đ/bộ\nCửa thoát hiểm EI70 + thanh thoát hiểm panic bar: +1.200.000đ/bộ\n(Giá đã gồm khung bao, bản lề, chưa gồm khóa & VAT)\n```\n\n> Lưu ý: cửa chống cháy **bắt buộc** phải có hồ sơ kiểm định của đơn vị được Cục PCCC công nhận, đừng ham rẻ mua hàng không giấy tờ vì sẽ không nghiệm thu được.\n\nGiá còn phụ thuộc ruột cửa (giấy honeycomb hay bông khoáng/rockwool), loại gioăng và phụ kiện đi kèm. Anh em ở khu vực nào thì ghi rõ để tiện so sánh.",
+      "isQuestion": false,
+      "featured": true,
+      "pinned": true,
+      "tags": ["cửa-chống-cháy", "EI60", "EI90", "cửa-thép", "báo-giá"],
+      "poll": null,
+      "comments": [
+        {
+          "body": "Cảm ơn chủ thớt, đúng cái mình đang cần. Cho hỏi cửa EI90 2 cánh khổ 1m6 thì khoảng bao nhiêu ạ?",
+          "replies": [
+            {
+              "body": "EI90 2 cánh khổ 1m6 cao 2m2 mình mới lắp tháng trước, ruột bông khoáng, hết **13.5 triệu/bộ** chưa khóa, có đủ hồ sơ kiểm định.",
+              "replies": [
+                {
+                  "body": "Giá đó ổn đó bạn, mình hỏi mấy chỗ toàn báo 15-16 triệu.",
+                  "replies": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "body": "Bổ sung khu vực TP.HCM: cửa thép vân gỗ 1 cánh phủ film mình lấy sỉ chỉ 4.2 triệu/bộ nếu đặt từ 10 bộ.",
+          "replies": [
+            {
+              "body": "Bạn cho xin liên hệ xưởng được không, mình cần khoảng 20 bộ cho dự án nhà trọ.",
+              "replies": []
+            }
+          ]
+        },
+        {
+          "body": "Anh em lưu ý hỏi rõ ruột cửa nhé, nhiều nơi báo giá EI60 nhưng ruột giấy tổ ong honeycomb thì không đạt chuẩn chống cháy đâu, phải là bông khoáng tỷ trọng cao.",
+          "replies": [
+            {
+              "body": "Chuẩn luôn. Honeycomb chỉ dùng cho cửa thép vân gỗ dân dụng thôi, không phải cửa chống cháy.",
+              "replies": []
+            }
+          ]
+        },
+        {
+          "body": "Giá khu vực Hà Nội mình thấy nhỉnh hơn miền Nam khoảng 5-10%, chắc do vận chuyển.",
+          "replies": []
+        }
+      ]
+    },
+    {
+      "title": "Cửa chống cháy EI60 và EI90 khác nhau thế nào? Nhà chung cư nên dùng loại nào?",
+      "body": "Chào mọi người, mình đang làm thủ tục nghiệm thu PCCC cho căn hộ và bị rối ở phần cửa. Có người bảo dùng **EI60** là đủ, người lại nói phải **EI90**. Cho mình hỏi 2 cái này khác nhau ra sao?\n\nMình hiểu sơ sơ thì:\n\n- **E** = tính toàn vẹn (ngăn lửa, khói xuyên qua)\n- **I** = tính cách nhiệt (không cho nhiệt truyền sang mặt bên kia)\n- Con số 60/90 là **số phút** chịu lửa\n\nNhưng cụ thể với chung cư thì áp dụng theo quy chuẩn nào? Cửa căn hộ vào hành lang, cửa thang thoát hiểm, cửa phòng kỹ thuật có yêu cầu khác nhau không?\n\nNhờ anh em rành PCCC tư vấn giúp. Cảm ơn nhiều!",
+      "isQuestion": true,
+      "featured": false,
+      "pinned": false,
+      "tags": ["cửa-chống-cháy", "EI60", "EI90", "PCCC", "chung-cư"],
+      "poll": null,
+      "comments": [
+        {
+          "body": "Bạn tham khảo **QCVN 06:2022/BXD** nhé. Tóm tắt nhanh:\n\n- Cửa căn hộ ra hành lang chung: thường yêu cầu **EI60** (giới hạn chịu lửa 60 phút).\n- Cửa buồng thang bộ thoát hiểm (loại N1, không nhiễm khói): yêu cầu cửa chống cháy có cơ cấu tự đóng, thường **EI30-EI60** tùy chiều cao nhà.\n- Cửa phòng kỹ thuật điện, gen rác: tùy hạng mục, có thể EI60-EI90.\n\nNhà trên 75m (khoảng 25 tầng) thì yêu cầu cao hơn, nên hỏi đơn vị tư vấn thiết kế PCCC của tòa nhà cho chắc.",
+          "replies": [
+            {
+              "body": "Cảm ơn bạn nhiều, vậy là phải xem hồ sơ thiết kế PCCC được duyệt của tòa chứ không tự quyết được đúng không?",
+              "replies": [
+                {
+                  "body": "Đúng rồi, cửa phải đúng giới hạn chịu lửa ghi trong hồ sơ đã được thẩm duyệt, lắp sai là nghiệm thu trượt ngay.",
+                  "replies": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "body": "Bổ sung: con số EI càng cao thì ruột bông khoáng càng dày, cửa càng nặng, bản lề cũng phải loại chịu tải tốt hơn. EI90 cánh nặng hơn EI60 khá nhiều.",
+          "replies": []
+        },
+        {
+          "body": "Quan trọng nhất là gioăng chống cháy (gioăng trương nở) phải còn nguyên và lắp đúng rãnh, chứ cửa EI90 mà gioăng hỏng thì cũng vô nghĩa.",
+          "replies": [
+            {
+              "body": "Chuẩn, gioăng intumescent gặp nhiệt sẽ nở ra bịt kín khe hở, đây là chi tiết hay bị bỏ qua khi mua hàng rẻ.",
+              "replies": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "So sánh cửa thép vân gỗ với cửa gỗ HDF và cửa nhựa Composite cho cửa thông phòng",
+      "body": "Nhà mình đang xây, phân vân giữa 3 loại cửa thông phòng: **thép vân gỗ**, **gỗ HDF veneer**, và **nhựa Composite lõi thép**. Mình tổng hợp lại để anh em dễ chọn.\n\n## Bảng so sánh nhanh\n\n| Tiêu chí | Thép vân gỗ | Gỗ HDF veneer | Nhựa Composite |\n|---|---|---|---|\n| Chống nước | Tốt | Trung bình | Rất tốt |\n| Cách âm | Khá | Tốt | Khá |\n| Chống cong vênh | Rất tốt | Trung bình | Tốt |\n| Thẩm mỹ vân gỗ | Khá tự nhiên | Tự nhiên nhất | Khá |\n| Giá/bộ | 3.5-6 triệu | 2.5-5 triệu | 3-5.5 triệu |\n| Hợp khu vực | Cửa chính, sân thượng | Phòng ngủ | Nhà vệ sinh, ban công |\n\n![Mẫu cửa thép vân gỗ phủ film sơn tĩnh điện cho cửa thông phòng](https://picsum.photos/seed/steeldoor1/800/450)\n\nTheo trải nghiệm của mình:\n\n- **Thép vân gỗ**: bền nhất, không lo mối mọt, hợp nhà cho thuê.\n- **HDF veneer**: ấm cúng, sang nhất cho phòng ngủ nhưng kỵ nước.\n- **Composite**: lý tưởng cho khu vực ẩm như nhà tắm.\n\nAnh em đang dùng loại nào, có gì cần lưu ý thêm không?",
+      "isQuestion": false,
+      "featured": true,
+      "pinned": false,
+      "tags": ["cửa-thép", "cửa-thép-vân-gỗ", "so-sánh", "cửa-HDF", "composite"],
+      "poll": null,
+      "comments": [
+        {
+          "body": "Mình dùng thép vân gỗ cho toàn bộ nhà trọ 8 phòng, 3 năm rồi vẫn đẹp, lau chùi dễ. Khách thuê dùng kiểu gì cũng khó hỏng.",
+          "replies": [
+            {
+              "body": "Lớp film vân gỗ có bị bong tróc ở mép không bạn? Mình lo nhất khoản đó.",
+              "replies": [
+                {
+                  "body": "Loại film tốt thì không, nhưng phải tránh va đập mạnh ở góc. Mình chọn loại phủ film 3D ép nhiệt nên mép khá chắc.",
+                  "replies": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "body": "Lưu ý cửa thép vân gỗ giá rẻ hay bị truyền nhiệt mùa hè, sờ vào nóng. Nếu lắp hướng tây nên chọn loại có lớp foam cách nhiệt bên trong.",
+          "replies": []
+        },
+        {
+          "body": "Cửa thông phòng thì mình vote HDF veneer vì cách âm tốt hơn hẳn, phòng ngủ cần yên tĩnh. Thép vân gỗ để làm cửa chính hoặc cửa phụ ra sân thượng thôi.",
+          "replies": [
+            {
+              "body": "Đồng ý, mỗi loại có chỗ dùng riêng. Đừng dùng 1 loại cho cả nhà.",
+              "replies": []
+            }
+          ]
+        },
+        {
+          "body": "Bảng so sánh rất hữu ích, cảm ơn bạn. Bổ sung là composite lõi thép giờ vân gỗ cũng đẹp lắm rồi, không thua HDF nhiều.",
+          "replies": []
+        }
+      ]
+    },
+    {
+      "title": "Hướng dẫn lắp đặt cửa chống cháy đúng chuẩn để qua nghiệm thu PCCC",
+      "body": "Sau vài lần đi nghiệm thu cùng anh em thợ, mình rút ra quy trình lắp cửa chống cháy để **không bị trượt nghiệm thu**. Chia sẻ cho ai cần.\n\n## Các bước lắp đặt\n\n1. **Kiểm tra hồ sơ trước**: cửa phải có tem kiểm định, biên bản kiểm định mẫu, CO/CQ khớp với loại cửa lắp thực tế (EI60/EI90).\n2. **Lắp khung bao chắc chắn**: khung thép phải được bắt vít nở vào tường, đổ vữa/bê tông chèn đặc khe hở giữa khung và tường, không để rỗng.\n3. **Lắp gioăng chống cháy**: gioăng trương nở phải lắp đúng rãnh trên khung/cánh, liền mạch không đứt đoạn.\n4. **Lắp bản lề chịu lực + tay co thủy lực**: cửa chống cháy **bắt buộc tự đóng**, nên phải có tay co (door closer).\n5. **Khe hở cánh-khung**: giữ đúng khoảng 3-4mm đều quanh cánh.\n\n## Lỗi hay gặp khi nghiệm thu\n\n- Thiếu tay co tự đóng → trượt ngay.\n- Khe hở giữa khung và tường không chèn kín.\n- Lắp khóa thường thay vì khóa chống cháy.\n- Tem kiểm định không khớp model thực tế.\n\n> Mẹo: chụp ảnh từng bước lắp lưu lại, khi cán bộ PCCC hỏi có cái mà giải trình.\n\nAnh em có kinh nghiệm gì bổ sung thêm nhé.",
+      "isQuestion": false,
+      "featured": false,
+      "pinned": false,
+      "tags": ["cửa-chống-cháy", "PCCC", "hướng-dẫn-lắp-đặt", "nghiệm-thu"],
+      "poll": null,
+      "comments": [
+        {
+          "body": "Phần chèn khe hở khung-tường nhiều thợ làm ẩu lắm, chỉ bắn foam PU thường rồi che lại. Phải dùng vữa hoặc foam chống cháy chuyên dụng mới đạt.",
+          "replies": [
+            {
+              "body": "Đúng, foam PU thường gặp lửa là cháy luôn, vô tác dụng. Phải là foam fire-rated hoặc vữa không co ngót.",
+              "replies": []
+            }
+          ]
+        },
+        {
+          "body": "Bổ sung: tay co thủy lực nên chọn loại có lực đóng phù hợp trọng lượng cánh, cánh EI90 nặng mà dùng tay co yếu thì cửa đóng không khít.",
+          "replies": []
+        },
+        {
+          "body": "Cảm ơn bài viết chi tiết. Cho mình hỏi cửa thoát hiểm có thanh panic bar thì lắp thêm gì để vẫn tự đóng được không?",
+          "replies": [
+            {
+              "body": "Vẫn lắp tay co bình thường bạn nhé, panic bar chỉ là cơ cấu mở từ trong khi thoát hiểm, không thay thế chức năng tự đóng.",
+              "replies": [
+                {
+                  "body": "Rõ rồi, cảm ơn bạn. Vậy là panic bar + tay co + khóa chống cháy đi cùng nhau.",
+                  "replies": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Hỏi: Cửa chống cháy mua về có cần kiểm định lại không hay dùng luôn hồ sơ của nhà sản xuất?",
+      "body": "Mình mua 5 bộ cửa chống cháy EI60 cho xưởng. Bên bán đưa **biên bản kiểm định mẫu** và giấy chứng nhận của họ. Vậy cho mình hỏi:\n\n1. Hồ sơ kiểm định của nhà sản xuất có dùng được để nghiệm thu PCCC cho công trình của mình không, hay phải kiểm định riêng từng lô?\n2. Tem kiểm định dán trên cửa cần có thông tin gì để được coi là hợp lệ?\n3. Nếu cửa lắp ở công trình khác địa phương với nơi sản xuất thì giấy tờ có còn giá trị không?\n\nMình hơi lo vì nghe nói có trường hợp cửa có giấy nhưng cán bộ PCCC vẫn không chấp nhận. Nhờ anh em rành thủ tục giải thích giúp ạ.",
+      "isQuestion": true,
+      "featured": false,
+      "pinned": false,
+      "tags": ["cửa-chống-cháy", "PCCC", "kiểm-định", "EI60"],
+      "poll": null,
+      "comments": [
+        {
+          "body": "1. Hồ sơ kiểm định mẫu của NSX dùng được, nhưng model/cấu tạo cửa lắp thực tế phải **khớp 100%** với mẫu đã kiểm định (cùng độ dày, ruột, gioăng, kích thước trong dải kiểm định).\n2. Tem cần có: tên đơn vị kiểm định, số giấy chứng nhận, giới hạn chịu lửa, ngày kiểm định, mã QR tra cứu (nếu có).\n3. Giấy kiểm định có giá trị toàn quốc, không phụ thuộc địa phương sản xuất.",
+          "replies": [
+            {
+              "body": "Cảm ơn bạn, vậy điểm mấu chốt là cửa thực tế phải đúng như mẫu kiểm định. Mình sẽ đối chiếu kỹ lại.",
+              "replies": []
+            }
+          ]
+        },
+        {
+          "body": "Cảnh báo: nhiều nơi dùng chung 1 bộ hồ sơ kiểm định cho đủ loại cửa khác nhau. Bạn yêu cầu họ chỉ rõ model cửa bạn mua nằm trong dải kích thước nào của biên bản kiểm định.",
+          "replies": [
+            {
+              "body": "Mẹo hay, mình suýt dính vụ này. Họ đưa giấy EI60 cánh đơn nhưng bán mình cánh đôi, kích thước vượt dải kiểm định.",
+              "replies": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Review cửa thép vân gỗ Đại Cát sau 2 năm sử dụng - có nên mua không?",
+      "body": "Mình lắp **6 bộ cửa thép vân gỗ Đại Cát** cho nhà 3 tầng từ năm 2024, giờ review thật cho anh em tham khảo.\n\n![Cửa thép vân gỗ Đại Cát lắp tại nhà phố sau 2 năm sử dụng](https://picsum.photos/seed/steeldoor2/800/450)\n\n## Ưu điểm\n\n- **Vân gỗ phủ film 3D** nhìn khá thật, khách tới ai cũng tưởng cửa gỗ tự nhiên.\n- Không cong vênh, không mối mọt, mùa nồm không bị ẩm như cửa gỗ công nghiệp.\n- Cách âm ổn, đóng nghe chắc tay.\n- Giá hợp lý: trung bình **4.8 triệu/bộ** đã gồm khóa.\n\n## Nhược điểm\n\n- Cửa hướng tây buổi chiều **nóng**, sờ vào ấm vì truyền nhiệt.\n- Một cánh bị **xước nhẹ lớp film** ở mép dưới do kéo lê đồ, khó phục hồi như sơn.\n- Bản lề zin hơi nhẹ, mình thay loại bi tốt hơn.\n\n## Kết luận\n\nVới tầm giá 4-5 triệu thì rất đáng tiền cho nhà phố, nhà cho thuê. Nếu là phòng ngủ chính cần ấm cúng thì mình vẫn thích gỗ HDF hơn. Cho điểm **8/10**.\n\nAnh em ai dùng hãng khác như Việt Pháp, Huge thì so sánh giúp nhé.",
+      "isQuestion": false,
+      "featured": false,
+      "pinned": false,
+      "tags": ["cửa-thép-vân-gỗ", "review", "Đại-Cát", "cửa-thép"],
+      "poll": null,
+      "comments": [
+        {
+          "body": "Cảm ơn review chân thực. Mình đang xem giữa Đại Cát và Việt Pháp, bạn có biết Việt Pháp lớp film có bền hơn không?",
+          "replies": [
+            {
+              "body": "Việt Pháp mình dùng thấy film cũng tương đương, quan trọng là độ dày tôn cánh. Bạn hỏi rõ tôn 0.8 hay 1.0mm, dày hơn thì chắc và đỡ móp hơn.",
+              "replies": []
+            }
+          ]
+        },
+        {
+          "body": "Vụ truyền nhiệt hướng tây đúng là điểm yếu chung của cửa thép. Bạn thử dán thêm tấm cách nhiệt mặt trong hoặc làm mái che là đỡ hẳn.",
+          "replies": [
+            {
+              "body": "Cảm ơn gợi ý, để mình thử dán tấm xốp PE cách nhiệt mặt trong xem sao.",
+              "replies": []
+            }
+          ]
+        },
+        {
+          "body": "8/10 là hợp lý. Mình lắp Huge cũng tầm đó, được cái mẫu mã nhiều. Cửa thép vân gỗ tầm giá này khó đòi hỏi hơn.",
+          "replies": []
+        },
+        {
+          "body": "Lớp film bị xước thì có loại bút phủ vân gỗ che tạm được đó bạn, mình hay dùng cho khách.",
+          "replies": []
+        }
+      ]
+    },
+    {
+      "title": "Bình chọn: Anh em ưu tiên tiêu chí nào nhất khi chọn cửa chống cháy cho chung cư?",
+      "body": "Mình thấy mỗi người một quan điểm khi chọn cửa chống cháy, nên lập poll cho vui và cũng để tham khảo xu hướng chung của anh em trên diễn đàn.\n\nBối cảnh là chọn cửa căn hộ ra hành lang chung cư (thường yêu cầu **EI60**), tầm giá 5-8 triệu/bộ. Các yếu tố thường được cân nhắc:\n\n- **Giấy tờ kiểm định PCCC** đầy đủ, hợp lệ.\n- **Thương hiệu uy tín** (bảo hành, đổi trả rõ ràng).\n- **Giá cả** hợp lý nhất.\n- **Thẩm mỹ** (vân gỗ đẹp, hợp nội thất).\n\nTheo mình thì giấy tờ kiểm định phải đặt lên hàng đầu vì liên quan an toàn và nghiệm thu, nhưng thực tế nhiều người lại quan tâm giá trước. Anh em vote và comment lý do nhé!",
+      "isQuestion": false,
+      "featured": false,
+      "pinned": false,
+      "tags": ["cửa-chống-cháy", "EI60", "chung-cư", "bình-chọn", "PCCC"],
+      "poll": {
+        "question": "Tiêu chí quan trọng nhất khi chọn cửa chống cháy cho chung cư?",
+        "options": [
+          "Giấy tờ kiểm định PCCC đầy đủ",
+          "Thương hiệu uy tín, bảo hành tốt",
+          "Giá cả hợp lý",
+          "Thẩm mỹ, vân gỗ đẹp"
+        ]
+      },
+      "comments": [
+        {
+          "body": "Mình chọn giấy tờ kiểm định. An toàn cháy nổ không đùa được, mà thiếu giấy thì nghiệm thu cũng trượt.",
+          "replies": [
+            {
+              "body": "Đồng quan điểm. Thẩm mỹ tính sau, mạng người quan trọng hơn.",
+              "replies": []
+            }
+          ]
+        },
+        {
+          "body": "Thực tế chủ nhà hay hỏi giá đầu tiên, nhưng dân trong nghề như mình luôn khuyên ưu tiên kiểm định + thương hiệu.",
+          "replies": []
+        },
+        {
+          "body": "Mình vote thương hiệu uy tín, vì hãng tốt thì vừa có giấy tờ chuẩn vừa bảo hành đàng hoàng, đỡ phải lo nhiều thứ.",
+          "replies": [
+            {
+              "body": "Hợp lý, chọn hãng tốt là gói gọn được mấy tiêu chí kia luôn.",
+              "replies": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Gioăng chống cháy bị hỏng/bong sau vài năm - cách kiểm tra và thay thế?",
+      "body": "Tòa nhà văn phòng chỗ mình quản lý có một số cửa chống cháy EI60 đã lắp 4-5 năm. Gần đây mình kiểm tra thì thấy **gioăng trương nở** ở một số cửa bị bong khỏi rãnh, có cái còn bị khô cứng, nứt. Mình lo là cửa không còn đảm bảo chống cháy.\n\nCho mình hỏi:\n\n1. Gioăng chống cháy có **tuổi thọ** không, bao lâu nên kiểm tra/thay?\n2. Làm sao phân biệt gioăng còn tốt và gioăng đã hỏng cần thay?\n3. Gioăng trương nở (intumescent) và gioăng cao su chặn khói khác nhau thế nào, có thay được cho nhau không?\n\nMình định tự mua gioăng về thay cho rẻ nhưng sợ mua sai loại lại mất tác dụng chống cháy. Nhờ anh em tư vấn ạ.",
+      "isQuestion": true,
+      "featured": false,
+      "pinned": false,
+      "tags": ["gioăng-chống-cháy", "cửa-chống-cháy", "bảo-trì", "EI60"],
+      "poll": null,
+      "comments": [
+        {
+          "body": "1. Gioăng trương nở thường nên kiểm tra định kỳ hằng năm, tuổi thọ tùy chất lượng nhưng bong/khô cứng/nứt là phải thay ngay.\n2. Gioăng tốt còn đàn hồi, bám chắc rãnh, không bong mép. Gioăng hỏng thì cứng, giòn, bong ra khỏi rãnh.\n3. Hai loại khác nhau: **gioăng trương nở** gặp nhiệt sẽ nở bịt khe (chống cháy), **gioăng cao su** chỉ chặn khói/giảm ồn lúc bình thường. Không thay thế cho nhau được, cửa chuẩn thường có **cả hai**.",
+          "replies": [
+            {
+              "body": "Cảm ơn bạn giải thích rõ. Vậy mình phải thay đúng gioăng trương nở chứ không lắp đại gioăng cao su là được.",
+              "replies": [
+                {
+                  "body": "Đúng vậy. Mua đúng loại fire-rated, chú ý đúng kích thước rãnh (thường 10x4mm hoặc 15x2mm tùy cửa).",
+                  "replies": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "body": "Tự thay được nhưng nếu tòa nhà cần duy trì hồ sơ PCCC thì nên dùng đơn vị có hóa đơn + chứng từ gioăng, sau này thanh tra còn có cái trình.",
+          "replies": []
+        },
+        {
+          "body": "Lưu ý mua gioăng có nguồn gốc rõ ràng. Gioăng trôi nổi nhìn giống nhau nhưng hệ số trương nở kém, gặp lửa nở không đủ thì coi như không có.",
+          "replies": [
+            {
+              "body": "Chuẩn, cái này mắt thường khó phân biệt nên cứ mua chỗ uy tín có giấy tờ cho yên tâm.",
+              "replies": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+@model AdminAnnouncementsViewModel
+@{
+    ViewData["Container"] = "wide";
+    ViewData["AdminTab"] = "announcements";
+    string Dt(DateTime? d) => d?.ToString("yyyy-MM-ddTHH:mm") ?? "";
+}
+
+<h1 class="admin-head">@Html.Icon("bell", 22) Thông báo chạy</h1>
+<partial name="_AdminNav" />
+
+<div class="card card-pad mb-10">
+    <div class="card-title" id="ann-form-title">@Html.Icon("plus", 14) Thêm thông báo</div>
+    <form class="admin-form" method="post" action="/quan-tri/thong-bao/luu" id="ann-form">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="Id" id="ann-id" value="0" />
+        <div>
+            <label>Nội dung</label>
+            <input class="input" name="Message" id="ann-msg" required maxlength="500" placeholder="VD: Khuyến mãi lắp đặt cửa tháng 7 — giảm 15%!" />
+        </div>
+        <div class="row">
+            <div>
+                <label>Link (tuỳ chọn)</label>
+                <input class="input" name="Url" id="ann-url" maxlength="500" placeholder="/chu-de/... hoặc https://…" />
+            </div>
+            <div style="flex:0 0 110px;">
+                <label>Thứ tự</label>
+                <input class="input" type="number" name="DisplayOrder" id="ann-order" value="0" min="0" />
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <label>Bắt đầu (tuỳ chọn)</label>
+                <input class="input" type="datetime-local" name="StartsAt" id="ann-start" />
+            </div>
+            <div>
+                <label>Kết thúc (tuỳ chọn)</label>
+                <input class="input" type="datetime-local" name="EndsAt" id="ann-end" />
+            </div>
+        </div>
+        <label style="display:flex; align-items:center; gap:8px; font-weight:600; font-size:.85rem;">
+            <input type="checkbox" name="IsActive" id="ann-active" value="true" checked /> Đang hiển thị
+        </label>
+        <div class="flex gap-6">
+            <button class="btn btn-primary btn-sm" type="submit">@Html.Icon("check", 14) Lưu</button>
+            <button class="btn btn-sm" type="button" id="ann-reset">Làm mới</button>
+        </div>
+    </form>
+</div>
+
+<div class="card admin-scroll">
+    <table class="admin-table">
+        <thead><tr><th style="width:60px;">TT</th><th>Nội dung</th><th>Hiệu lực</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+        <tbody>
+            @if (Model.Items.Count == 0)
+            {
+                <tr><td colspan="5" class="muted small">Chưa có thông báo nào. Khi trống, thanh chạy sẽ tự lấy chủ đề ghim/nổi bật.</td></tr>
+            }
+            @foreach (var a in Model.Items)
+            {
+                <tr data-ann-row="@a.Id">
+                    <td class="small">@a.DisplayOrder</td>
+                    <td>
+                        <b>@a.Message</b>
+                        @if (!string.IsNullOrEmpty(a.Url))
+                        {
+                            <div class="muted xsmall">→ @a.Url</div>
+                        }
+                    </td>
+                    <td class="xsmall muted">
+                        @(a.StartsAt?.ToString("dd/MM/yy HH:mm") ?? "—") → @(a.EndsAt?.ToString("dd/MM/yy HH:mm") ?? "∞")
+                    </td>
+                    <td>
+                        @if (a.IsActive)
+                        {
+                            <span class="role-badge r-Moderator">Bật</span>
+                        }
+                        else
+                        {
+                            <span class="role-badge r-Member">Tắt</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn btn-sm" data-edit-ann
+                                    data-id="@a.Id" data-msg="@a.Message" data-url="@a.Url"
+                                    data-order="@a.DisplayOrder" data-active="@a.IsActive.ToString().ToLower()"
+                                    data-start="@Dt(a.StartsAt)" data-end="@Dt(a.EndsAt)">
+                                @Html.Icon("pencil", 13) Sửa
+                            </button>
+                            <form method="post" action="/quan-tri/thong-bao/xoa" style="display:inline;" onsubmit="return confirm('Xóa thông báo này?');">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@a.Id" />
+                                <button class="btn btn-sm btn-danger" type="submit">@Html.Icon("trash", 13)</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts { <script src="~/js/admin.js" asp-append-version="true"></script> }

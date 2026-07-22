@@ -1,0 +1,173 @@
+@model TopicDetailViewModel
+@inject Forum.Web.Services.IMarkdownService Md
+@inject Forum.Web.Services.IForumUrlService Url
+@inject Forum.Web.Services.ISiteSettingService Settings
+@{
+    var t = Model.Topic;
+    var canPost = Settings.GetBool(SettingKeys.FeaturePosting, true);
+    var scoreCls = t.Score > 0 ? "pos" : t.Score < 0 ? "neg" : "";
+    string CSort(string key) => $"{Url.Topic(t)}?binh-luan={key}";
+    ViewData["SidebarActive"] = t.Category?.Slug;
+}
+
+<partial name="_Breadcrumbs" />
+
+@if (Model.IsPendingApproval)
+{
+    <div class="pending-banner">
+        @Html.Icon("clock", 16)
+        <span>Chủ đề này đang <b>chờ kiểm duyệt</b> — chỉ bạn và ban quản trị thấy được cho tới khi được duyệt.</span>
+    </div>
+}
+
+<article class="card reveal" style="display:grid; grid-template-columns:40px 1fr; overflow:hidden;">
+    <div class="vote-rail vote" data-vote="topic" data-id="@t.Id">
+        <button class="vote-btn up @(Model.UserTopicVote == 1 ? "on" : "")" data-value="1" type="button" aria-label="Upvote">@Html.Icon("arrow-big-up", 22)</button>
+        <span class="vote-score @scoreCls">@t.Score</span>
+        <button class="vote-btn down @(Model.UserTopicVote == -1 ? "on" : "")" data-value="-1" type="button" aria-label="Downvote">@Html.Icon("arrow-big-down", 22)</button>
+    </div>
+    <div style="padding:14px 16px; min-width:0;">
+        <div class="topic-meta">
+            <a class="pill" href="/danh-muc/@t.Category?.Slug"><span class="cat-dot" style="background:@t.Category?.ColorHex"></span> @t.Category?.Name</a>
+            @if (t.IsPinned)
+            {
+                <span class="flair-pinned">@Html.Icon("pin", 12) Đã ghim</span>
+            }
+            @if (t.IsFeatured)
+            {
+                <span class="flair-hot">@Html.Icon("flame", 12) Nổi bật</span>
+            }
+            @if (t.IsLocked)
+            {
+                <span class="flair-pinned" style="color:var(--danger);background:rgba(224,46,46,.12)">@Html.Icon("lock", 12) Đã khóa</span>
+            }
+            @if (t.IsQuestion)
+            {
+                <span class="flair-new">Hỏi đáp</span>
+            }
+        </div>
+
+        <h1 style="font-size:1.5rem; margin:6px 0 8px;">@t.Title</h1>
+
+        <div class="topic-meta mb-10">
+            @Html.Avatar(t.Author?.AvatarUrl, t.Author?.DisplayName, 24)
+            <a class="user-link" data-username="@t.Author?.UserName" href="/thanh-vien/@t.Author?.UserName" style="font-weight:600;color:var(--text);">@t.Author?.DisplayName</a>
+            <span>· @ViewHelpers.TimeAgo(t.CreatedAt)</span>
+            @if (t.UpdatedAt.HasValue)
+            {
+                <span class="edited-tag">· đã chỉnh sửa @ViewHelpers.TimeAgo(t.UpdatedAt.Value)</span>
+            }
+            <span>· @Html.Icon("eye", 13) @ViewHelpers.Compact(t.ViewCount) lượt xem</span>
+        </div>
+
+        <div class="md">@Html.Raw(Md.ToHtml(t.Body))</div>
+
+        <partial name="_Reactions" model="@(new ReactionBarModel { IsComment = false, Id = t.Id, Summary = Model.TopicReactions, Allowed = Model.AllowedEmojis, CanReact = User.Identity?.IsAuthenticated == true })" />
+
+        @if (t.Poll != null)
+        {
+            <partial name="_Poll" model="Model" />
+        }
+
+        @if (t.TopicTags?.Count > 0)
+        {
+            <div class="topic-tags mt-14">
+                @foreach (var tt in t.TopicTags)
+                {
+                    <a class="tag" href="/the/@tt.Tag?.Slug">#@tt.Tag?.Name</a>
+                }
+            </div>
+        }
+
+        <div class="flex wrap gap-6 mt-14" style="align-items:center;">
+            <span class="tf small muted">@Html.Icon("message-square", 14) @Model.CommentCount bình luận</span>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <button class="btn-save @(Model.IsBookmarked ? "is-saved" : "")" data-bookmark="@t.Id" type="button">@Html.Icon("star", 15) <span class="bm-label">@(Model.IsBookmarked ? "Đã lưu" : "Lưu")</span></button>
+                <button class="btn btn-sm @(Model.IsSubscribed ? "btn-primary" : "")" data-subscribe="@t.Id" type="button">@Html.Icon("bell", 14) <span class="sub-label">@(Model.IsSubscribed ? "Đang theo dõi" : "Theo dõi")</span></button>
+            }
+            <button class="btn btn-sm" data-share="@Url.Absolute(Url.Topic(t))" type="button">@Html.Icon("link", 14) Chia sẻ</button>
+            @if (Model.CanEdit)
+            {
+                <a class="btn btn-sm" href="/chu-de/@t.Id/sua">@Html.Icon("pencil", 14) Sửa</a>
+                <button class="btn btn-sm btn-danger" data-delete-topic="@t.Id" type="button">@Html.Icon("trash", 14) Xóa</button>
+            }
+            @if (User.Identity?.IsAuthenticated == true && t.AuthorId != User.UserId())
+            {
+                <button class="btn btn-sm" data-report="topic" data-id="@t.Id" type="button">@Html.Icon("flag", 14) Báo cáo</button>
+            }
+            @if (Model.CanModerate)
+            {
+                <div class="menu-wrap">
+                    <button class="btn btn-sm" data-menu="mod-menu" type="button">@Html.Icon("shield", 14) Kiểm duyệt</button>
+                    <div id="mod-menu" class="menu menu-up" hidden>
+                        <button type="button" data-mod="pin" data-id="@t.Id" data-on="@t.IsPinned.ToString().ToLower()">@Html.Icon("pin", 15) @(t.IsPinned ? "Bỏ ghim" : "Ghim")</button>
+                        <button type="button" data-mod="lock" data-id="@t.Id" data-on="@t.IsLocked.ToString().ToLower()">@Html.Icon("lock", 15) @(t.IsLocked ? "Mở khóa" : "Khóa")</button>
+                        <button type="button" data-mod="feature" data-id="@t.Id" data-on="@t.IsFeatured.ToString().ToLower()">@Html.Icon("flame", 15) @(t.IsFeatured ? "Bỏ nổi bật" : "Nổi bật")</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</article>
+
+<section class="comments" id="binh-luan">
+    <div class="flex between items-center wrap" style="margin:18px 0 8px;">
+        <h2 style="font-size:1.1rem;margin:0;">@Model.CommentCount bình luận</h2>
+        <div class="seg">
+            <a href="@CSort("top")" class="@(Model.CommentSort == "top" ? "active" : "")">Nổi bật</a>
+            <a href="@CSort("moi")" class="@(Model.CommentSort == "moi" ? "active" : "")">Mới nhất</a>
+            <a href="@CSort("cu")" class="@(Model.CommentSort == "cu" ? "active" : "")">Cũ nhất</a>
+        </div>
+    </div>
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        if (t.IsLocked)
+        {
+            <div class="card card-pad muted small">@Html.Icon("lock", 14) Chủ đề đã bị khóa — không thể bình luận.</div>
+        }
+        else if (!canPost)
+        {
+            <div class="card card-pad muted small">@Html.Icon("lock", 14) Diễn đàn đang ở chế độ chỉ đọc — tạm thời không thể bình luận.</div>
+        }
+        else
+        {
+            <form class="card card-pad comment-form-wrap" data-comment-form data-topic="@t.Id">
+                <textarea data-md-editor name="body" rows="3" placeholder="Chia sẻ ý kiến của bạn… (hỗ trợ Markdown)"></textarea>
+                <div class="flex between items-center mt-8">
+                    <span class="hint">Hỗ trợ **Markdown**. Nhắc tên bằng @@tên-đăng-nhập.</span>
+                    <button class="btn btn-primary btn-sm" type="submit">Bình luận</button>
+                </div>
+            </form>
+        }
+    }
+    else
+    {
+        <div class="card card-pad small">
+            <a href="/dang-nhap?returnUrl=@Uri.EscapeDataString(Url.Topic(t))">Đăng nhập</a> để tham gia thảo luận.
+        </div>
+    }
+
+    <div id="comment-tree" class="mt-14">
+        @if (Model.CommentRoots.Count == 0)
+        {
+            <div class="empty" id="no-comments"><div class="ico">@Html.Icon("message-square", 36)</div><h3>Chưa có bình luận</h3><p class="muted">Hãy là người đầu tiên chia sẻ!</p></div>
+        }
+        else
+        {
+            foreach (var root in Model.CommentRoots)
+            {
+                <partial name="_Comment" model="@(new CommentRenderModel { Node = root, UserVotes = Model.UserCommentVotes, CurrentUserId = User.UserId(), CanModerate = Model.CanModerate, TopicLocked = t.IsLocked, TopicId = t.Id, IsQuestion = t.IsQuestion, AcceptedAnswerId = t.AcceptedAnswerId, CanAccept = Model.CanAcceptAnswer, Reactions = Model.CommentReactions, AllowedEmojis = Model.AllowedEmojis })" />
+            }
+        }
+    </div>
+</section>
+
+@section Sidebar { @await Component.InvokeAsync("ForumSidebar", new { part = "info" }) }
+
+@section Scripts {
+    <script src="~/js/editor.js" asp-append-version="true"></script>
+    <script src="~/js/comments.js" asp-append-version="true"></script>
+    <script src="~/js/topics.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,78 @@
+@model SidebarViewModel
+@{
+    var active = ViewData["Active"] as string;
+    var part = ViewData["Part"] as string ?? "all";
+    var showCategories = part is "all" or "categories";
+    var showInfo = part is "all" or "info";
+}
+
+@if (showCategories)
+{
+    <div class="card card-pad">
+        <div class="card-title">Danh mục</div>
+        <ul class="list-reset">
+            @foreach (var cc in Model.Categories)
+            {
+                <li>
+                    <a href="/danh-muc/@cc.Category.Slug" class="flex items-center between"
+                       style="padding:6px 4px; border-radius:var(--radius-sm); @(active == cc.Category.Slug ? "background:var(--surface-hover);" : "")">
+                        <span class="flex items-center gap-6">
+                            <span class="cat-dot" style="background:@cc.Category.ColorHex"></span>
+                            <span style="color:var(--text); font-size:.86rem; font-weight:600;">@cc.Category.Name</span>
+                        </span>
+                        <span class="xsmall muted">@cc.TopicCount</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+
+    @if (Model.Tags.Count > 0)
+    {
+        <div class="card card-pad">
+            <div class="card-title">@Html.Icon("hash", 14) Thẻ phổ biến</div>
+            <div class="flex wrap gap-6">
+                @foreach (var t in Model.Tags)
+                {
+                    <a class="tag" href="/the/@t.Slug" title="@t.UseCount chủ đề">#@t.Name <span class="muted" style="margin-left:3px;">@t.UseCount</span></a>
+                }
+            </div>
+            <a class="btn btn-sm btn-block mt-8" href="/the">Xem tất cả thẻ</a>
+        </div>
+    }
+}
+
+@if (showInfo)
+{
+    <div class="card card-pad">
+        <div class="card-title">Thống kê</div>
+        <div class="flex between small"><span class="muted">Chủ đề</span><b>@ViewHelpers.Compact(Model.TotalTopics)</b></div>
+        <div class="flex between small"><span class="muted">Bình luận</span><b>@ViewHelpers.Compact(Model.TotalComments)</b></div>
+        <div class="flex between small"><span class="muted">Thành viên</span><b>@ViewHelpers.Compact(Model.TotalMembers)</b></div>
+    </div>
+
+    <div class="card card-pad">
+        <div class="card-title">@Html.Icon("award", 14) Thành viên nổi bật</div>
+        <ul class="list-reset">
+            @foreach (var (m, i) in Model.TopMembers.Select((m, i) => (m, i)))
+            {
+                <li class="flex items-center gap-10" style="padding:5px 0;">
+                    <span class="lb-rank @(i < 3 ? "top" : "")">@(i + 1)</span>
+                    @Html.Avatar(m.AvatarUrl, m.DisplayName, 24)
+                    <a class="user-link small" data-username="@m.UserName" href="/thanh-vien/@m.UserName" style="flex:1; font-weight:600; color:var(--text);">@m.DisplayName</a>
+                    <span class="xsmall muted">@m.Reputation</span>
+                </li>
+            }
+        </ul>
+        <a class="btn btn-sm btn-block mt-8" href="/thanh-vien-tich-cuc">Xem bảng xếp hạng</a>
+    </div>
+
+    <div class="card card-pad">
+        <div class="card-title">Nội quy nhanh</div>
+        <ul class="small muted" style="padding-left:18px; margin:0;">
+            <li>Đăng đúng danh mục, tiêu đề rõ ràng.</li>
+            <li>Không spam, không quảng cáo trá hình.</li>
+            <li>Tôn trọng các thành viên khác.</li>
+        </ul>
+    </div>
+}

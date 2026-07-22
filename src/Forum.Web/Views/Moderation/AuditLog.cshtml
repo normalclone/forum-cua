@@ -1,0 +1,54 @@
+@model PagedResult<ModerationLog>
+@functions {
+    string ActionLabel(ModerationAction a) => a switch
+    {
+        ModerationAction.Pin => "Ghim", ModerationAction.Unpin => "Bỏ ghim",
+        ModerationAction.Lock => "Khóa", ModerationAction.Unlock => "Mở khóa",
+        ModerationAction.Feature => "Nổi bật", ModerationAction.Unfeature => "Bỏ nổi bật",
+        ModerationAction.Move => "Di chuyển", ModerationAction.Delete => "Xóa",
+        ModerationAction.Restore => "Khôi phục", ModerationAction.ResolveReport => "Giải quyết báo cáo",
+        ModerationAction.DismissReport => "Bỏ qua báo cáo",
+        ModerationAction.Approve => "Duyệt bài", ModerationAction.Reject => "Từ chối bài", _ => a.ToString()
+    };
+}
+@{
+    ViewData["Container"] = "wide";
+    var q = ViewData["q"] as string;
+    var pagerQuery = string.IsNullOrWhiteSpace(q) ? "" : $"q={Uri.EscapeDataString(q)}";
+}
+
+<partial name="_Breadcrumbs" />
+<h1 class="admin-head">@Html.Icon("clock", 22) Nhật ký kiểm duyệt</h1>
+<a href="/kiem-duyet" class="small">← Về bảng kiểm duyệt</a>
+
+<div class="feed-toolbar mt-14">
+    <form action="/kiem-duyet/nhat-ky" method="get" style="margin-left:auto; display:flex; gap:6px;">
+        <input class="input" type="search" name="q" value="@q" placeholder="Tìm theo người / đối tượng / ghi chú…" style="width:280px;" />
+        <button class="btn btn-sm" type="submit">@Html.Icon("search", 14) Tìm</button>
+    </form>
+</div>
+
+<div class="muted xsmall mb-10">@Model.TotalCount mục</div>
+
+<div class="card admin-scroll">
+    <table class="admin-table">
+        <thead><tr><th>Thời gian</th><th>Người</th><th>Hành động</th><th>Đối tượng</th></tr></thead>
+        <tbody>
+            @foreach (var l in Model.Items)
+            {
+                <tr>
+                    <td class="xsmall muted">@ViewHelpers.FullTime(l.CreatedAt)</td>
+                    <td class="small">@l.Moderator?.DisplayName</td>
+                    <td class="small"><b>@ActionLabel(l.Action)</b></td>
+                    <td class="small">@(l.TargetTitle ?? $"{l.TargetType} #{l.TargetId}") @(string.IsNullOrEmpty(l.Detail) ? "" : $"— {l.Detail}")</td>
+                </tr>
+            }
+            @if (Model.Items.Count == 0)
+            {
+                <tr><td colspan="4" class="muted small">Không có mục nào.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<partial name="_Pager" model="@(new PagerModel { Page = Model.Page, TotalPages = Model.TotalPages, Path = "/kiem-duyet/nhat-ky", Query = pagerQuery })" />

@@ -1,0 +1,46 @@
+@model List<UserActivity>
+<h1 style="font-size:1.4rem;">Bảng tin của bạn</h1>
+<p class="muted small mb-10">Hoạt động gần đây từ bạn và những người bạn theo dõi.</p>
+
+@if (Model.Count == 0)
+{
+    <div class="empty">
+        <div class="ico">@Html.Icon("home", 40)</div>
+        <h3>Chưa có hoạt động</h3>
+        <p class="muted">Hãy theo dõi vài thành viên để xem hoạt động của họ tại đây.</p>
+        <a class="btn btn-primary" href="/thanh-vien-tich-cuc">Khám phá thành viên</a>
+    </div>
+}
+else
+{
+    <div class="card">
+        <ul class="list-reset">
+            @foreach (var a in Model)
+            {
+                <li class="lb-row reveal">
+                    @Html.Avatar(a.User.AvatarUrl, a.User.DisplayName, 24)
+                    <div class="small" style="flex:1;">
+                        <a class="user-link" data-username="@a.User.UserName" href="/thanh-vien/@a.User.UserName"><b>@a.User.DisplayName</b></a>
+                        @switch (a.Type)
+                        {
+                            case ActivityType.CreatedTopic:
+                                <text> đã đăng chủ đề </text>
+                                break;
+                            case ActivityType.PostedComment:
+                                <text> đã bình luận trong </text>
+                                break;
+                            default:
+                                <text> có hoạt động mới </text>
+                                break;
+                        }
+                        @if (a.Topic != null)
+                        {
+                            <a href="/chu-de/@a.Topic.Id/@a.Topic.Slug">@a.Topic.Title</a>
+                        }
+                        <span class="muted">· @ViewHelpers.TimeAgo(a.CreatedAt)</span>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+}

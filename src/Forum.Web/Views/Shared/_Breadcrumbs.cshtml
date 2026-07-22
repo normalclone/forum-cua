@@ -1,0 +1,24 @@
+@{
+    var seo = ViewData["Seo"] as SeoModel;
+}
+@if (seo is not null && seo.Breadcrumbs.Count > 1)
+{
+    <nav class="small muted flex items-center wrap" aria-label="breadcrumb" style="gap:6px; margin-bottom:10px;">
+        @for (var i = 0; i < seo.Breadcrumbs.Count; i++)
+        {
+            var b = seo.Breadcrumbs[i];
+            if (i > 0)
+            {
+                <span aria-hidden="true">@Html.Icon("chevron-right", 12)</span>
+            }
+            if (!string.IsNullOrEmpty(b.Url) && i < seo.Breadcrumbs.Count - 1)
+            {
+                <a href="@b.Url">@b.Name</a>
+            }
+            else
+            {
+                <span style="color:var(--text);">@b.Name</span>
+            }
+        }
+    </nav>
+}

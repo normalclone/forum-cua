@@ -1,0 +1,53 @@
+@model RegisterViewModel
+<div style="max-width:430px; margin:24px auto;">
+    <div class="card card-pad reveal">
+        <h1 style="font-size:1.4rem; text-align:center; display:flex; align-items:center; justify-content:center; gap:8px;">
+            @Html.Icon("door-open", 26) Tạo tài khoản
+        </h1>
+        <p class="muted text-center small mb-10">Tham gia cộng đồng thảo luận về cửa.</p>
+
+        <form asp-action="Register" method="post" novalidate>
+            <input type="hidden" asp-for="ReturnUrl" />
+            <div asp-validation-summary="ModelOnly" class="validation-summary-errors mb-10"></div>
+
+            <div class="field">
+                <label asp-for="DisplayName"></label>
+                <input asp-for="DisplayName" class="form-control" autocomplete="name" placeholder="VD: Nguyễn Văn A" />
+                <span asp-validation-for="DisplayName" class="field-validation-error"></span>
+            </div>
+            <div class="field">
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" class="form-control" autocomplete="username" placeholder="vd: nguyenvana" />
+                <span asp-validation-for="UserName" class="field-validation-error"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" autocomplete="email" placeholder="ban@email.com" />
+                <span asp-validation-for="Email" class="field-validation-error"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Trade"></label>
+                <select asp-for="Trade" class="form-control">
+                    @foreach (var t in Enum.GetValues<UserTrade>())
+                    {
+                        <option value="@t">@ViewHelpers.TradeLabel(t)</option>
+                    }
+                </select>
+            </div>
+            <div class="field">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control" autocomplete="new-password" />
+                <span asp-validation-for="Password" class="field-validation-error"></span>
+            </div>
+            <div class="field">
+                <label asp-for="ConfirmPassword"></label>
+                <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" />
+                <span asp-validation-for="ConfirmPassword" class="field-validation-error"></span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Đăng ký</button>
+        </form>
+
+        <partial name="_SocialLogins" />
+        <p class="text-center small mt-8">Đã có tài khoản? <a asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">Đăng nhập</a></p>
+    </div>
+</div>

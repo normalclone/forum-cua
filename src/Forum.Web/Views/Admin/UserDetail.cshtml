@@ -1,0 +1,120 @@
+@model AdminUserDetailViewModel
+@inject Forum.Web.Services.IForumUrlService Url
+@{
+    ViewData["Container"] = "wide";
+    ViewData["AdminTab"] = "users";
+    var u = Model.User;
+    var roles = new[] { Roles.Admin, Roles.Moderator, Roles.Member };
+    var permanent = Model.LockoutEnd == DateTimeOffset.MaxValue;
+}
+
+<h1 class="admin-head">@Html.Icon("user", 22) @u.DisplayName</h1>
+<partial name="_AdminNav" />
+<a href="/quan-tri/nguoi-dung" class="small">← Về danh sách người dùng</a>
+
+<div class="flex wrap gap-10" style="align-items:flex-start; margin-top:10px;">
+    <div class="card card-pad" style="flex:1; min-width:320px;">
+        <div class="flex items-center gap-10 mb-10">
+            @Html.Avatar(u.AvatarUrl, u.DisplayName, 48)
+            <div>
+                <div style="font-weight:800; font-size:1.1rem;">@u.DisplayName</div>
+                <a class="user-link small muted" data-username="@u.UserName" href="/thanh-vien/@u.UserName">@@@u.UserName</a>
+            </div>
+            <span class="role-badge r-@Model.Role" style="margin-left:auto;">@Model.Role</span>
+        </div>
+        <table class="admin-table" style="font-size:.84rem;">
+            <tr><td class="muted">Email</td><td>@u.Email</td></tr>
+            <tr><td class="muted">Tham gia</td><td>@ViewHelpers.FullTime(u.CreatedAt)</td></tr>
+            <tr><td class="muted">Uy tín</td><td>@u.Reputation</td></tr>
+            <tr><td class="muted">Chủ đề / Bình luận</td><td>@Model.TopicCount / @Model.CommentCount</td></tr>
+            <tr>
+                <td class="muted">Trạng thái</td>
+                <td>
+                    @if (Model.IsLocked)
+                    {
+                        <span class="locked-badge">@Html.Icon("lock", 11) Đang khóa @(permanent ? "(vĩnh viễn)" : $"đến {Model.LockoutEnd:dd/MM/yy HH:mm}")</span>
+                    }
+                    else
+                    {
+                        <span class="small" style="color:var(--success)">Hoạt động</span>
+                    }
+                </td>
+            </tr>
+        </table>
+
+        @if (!Model.IsSelf)
+        {
+            <div class="divider" style="margin:12px 0;"></div>
+            <div class="admin-form">
+                <div>
+                    <label>Vai trò</label>
+                    <select class="input" data-set-role="@u.Id" style="width:auto;">
+                        @foreach (var r in roles)
+                        {
+                            <option value="@r" selected="@(r == Model.Role)">@r</option>
+                        }
+                    </select>
+                </div>
+                @if (Model.IsLocked)
+                {
+                    <button class="btn btn-sm" data-user-unlock="@u.Id" style="align-self:flex-start;">@Html.Icon("unlock", 14) Mở khóa</button>
+                }
+                else if (Model.Role != Roles.Admin)
+                {
+                    <div>
+                        <label>Khóa tài khoản</label>
+                        <div class="flex gap-6 items-center wrap">
+                            <input class="input" type="number" id="ban-days" value="7" min="0" style="width:80px;" /> <span class="small muted">ngày (0 = vĩnh viễn)</span>
+                            <input class="input" type="text" id="ban-reason" placeholder="Lý do (tuỳ chọn)" style="flex:1; min-width:160px;" />
+                            <button class="btn btn-sm btn-danger" data-ban="@u.Id">@Html.Icon("lock", 13) Khóa</button>
+                        </div>
+                    </div>
+                }
+                <button class="btn btn-sm" data-warn="@u.Id" style="align-self:flex-start;">@Html.Icon("flag", 14) Gửi cảnh cáo</button>
+            </div>
+        }
+    </div>
+
+    <div class="card card-pad" style="flex:1; min-width:320px;">
+        <div class="card-title">@Html.Icon("flag", 14) Cảnh cáo / khóa (@Model.Warnings.Count)</div>
+        @if (Model.Warnings.Count == 0)
+        {
+            <div class="muted small">Chưa có cảnh cáo nào.</div>
+        }
+        @foreach (var w in Model.Warnings)
+        {
+            <div style="padding:6px 0; border-bottom:1px solid var(--border);">
+                <div class="small">@w.Reason</div>
+                <div class="muted xsmall">@ViewHelpers.FullTime(w.CreatedAt)</div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="flex wrap gap-10 mt-14" style="align-items:flex-start;">
+    <div class="card card-pad" style="flex:1; min-width:320px;">
+        <div class="card-title">@Html.Icon("list", 14) Chủ đề gần đây</div>
+        @foreach (var t in Model.RecentTopics)
+        {
+            <div class="small" style="padding:4px 0; border-bottom:1px solid var(--border);">
+                <a href="@Url.Topic(t)" target="_blank">@t.Title</a>
+                @if (t.IsDeleted) { <span class="flag-chip del">đã xóa</span> }
+                @if (!t.IsApproved) { <span class="flag-chip" style="background:var(--warning);color:#fff;">chờ duyệt</span> }
+            </div>
+        }
+        @if (Model.RecentTopics.Count == 0) { <div class="muted small">Chưa có.</div> }
+    </div>
+    <div class="card card-pad" style="flex:1; min-width:320px;">
+        <div class="card-title">@Html.Icon("message-square", 14) Bình luận gần đây</div>
+        @foreach (var c in Model.RecentComments)
+        {
+            <div class="small" style="padding:4px 0; border-bottom:1px solid var(--border);">
+                @(c.Body.Length > 90 ? c.Body[..90] + "…" : c.Body)
+                @if (c.IsDeleted) { <span class="flag-chip del">đã xóa</span> }
+            </div>
+        }
+        @if (Model.RecentComments.Count == 0) { <div class="muted small">Chưa có.</div> }
+    </div>
+</div>
+
+@section Scripts { <script src="~/js/admin.js" asp-append-version="true"></script> }

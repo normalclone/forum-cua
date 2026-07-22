@@ -1,0 +1,64 @@
+@model Topic
+@inject Forum.Web.Services.IMarkdownService Md
+@inject Forum.Web.Services.IForumUrlService Url
+@{
+    var url = Url.Topic(Model);
+    var scoreCls = Model.Score > 0 ? "pos" : Model.Score < 0 ? "neg" : "";
+}
+<article class="topic-card reveal">
+    <div class="vote-rail vote" data-vote="topic" data-id="@Model.Id">
+        <button class="vote-btn up" data-value="1" type="button" aria-label="Upvote">@Html.Icon("arrow-big-up", 20)</button>
+        <span class="vote-score @scoreCls">@Model.Score</span>
+        <button class="vote-btn down" data-value="-1" type="button" aria-label="Downvote">@Html.Icon("arrow-big-down", 20)</button>
+    </div>
+    <div class="topic-body">
+        <div class="topic-meta">
+            @if (Model.Category != null)
+            {
+                <a class="pill" href="/danh-muc/@Model.Category.Slug"><span class="cat-dot" style="background:@Model.Category.ColorHex"></span> @Model.Category.Name</a>
+            }
+            @if (Model.IsPinned)
+            {
+                <span class="flair-pinned">@Html.Icon("pin", 12) Đã ghim</span>
+            }
+            @if (Model.IsFeatured)
+            {
+                <span class="flair-hot">@Html.Icon("flame", 12) Nổi bật</span>
+            }
+            @if (Model.IsLocked)
+            {
+                <span title="Đã khóa">@Html.Icon("lock", 12)</span>
+            }
+            <span>· bởi
+                <a class="user-link" data-username="@Model.Author?.UserName" href="/thanh-vien/@Model.Author?.UserName">@(Model.Author?.DisplayName ?? "Ẩn danh")</a>
+            </span>
+            <span>· @ViewHelpers.TimeAgo(Model.CreatedAt)</span>
+            @if (Model.IsQuestion)
+            {
+                <span class="flair-new">Hỏi đáp</span>
+            }
+        </div>
+
+        <a class="topic-title" href="@url" data-topic-preview="@Model.Id">@Model.Title</a>
+        <p class="topic-excerpt">@Md.Excerpt(Model.Body, 180)</p>
+
+        @if (Model.TopicTags?.Count > 0)
+        {
+            <div class="topic-tags">
+                @foreach (var tt in Model.TopicTags.Take(5))
+                {
+                    <a class="tag" href="/the/@tt.Tag?.Slug">#@tt.Tag?.Name</a>
+                }
+            </div>
+        }
+
+        <div class="topic-footer">
+            <a class="tf" href="@url#binh-luan">@Html.Icon("message-square", 14) @Model.CommentCount bình luận</a>
+            <span class="tf">@Html.Icon("eye", 14) @ViewHelpers.Compact(Model.ViewCount) lượt xem</span>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <button class="btn-save" type="button" data-bookmark="@Model.Id" title="Lưu chủ đề">@Html.Icon("star", 14) <span class="bm-label">Lưu</span></button>
+            }
+        </div>
+    </div>
+</article>

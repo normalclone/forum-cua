@@ -1,0 +1,17 @@
+@{
+    var tab = ViewData["AdminTab"] as string;
+    string Cls(string t) => tab == t ? "active" : "";
+}
+<nav class="admin-nav" aria-label="Quản trị">
+    <a href="/quan-tri" class="@Cls("dashboard")">@Html.Icon("bar-chart", 15) Tổng quan</a>
+    <a href="/quan-tri/phan-tich" class="@Cls("analytics")">@Html.Icon("trending-up", 15) Phân tích</a>
+    <a href="/quan-tri/nguoi-dung" class="@Cls("users")">@Html.Icon("users", 15) Người dùng</a>
+    <a href="/quan-tri/noi-dung" class="@Cls("content")">@Html.Icon("list", 15) Nội dung</a>
+    <a href="/quan-tri/danh-muc" class="@Cls("categories")">@Html.Icon("folder", 15) Danh mục</a>
+    <a href="/quan-tri/the" class="@Cls("tags")">@Html.Icon("hash", 15) Thẻ</a>
+    <a href="/quan-tri/huy-hieu" class="@Cls("badges")">@Html.Icon("award", 15) Huy hiệu</a>
+    <a href="/quan-tri/thong-bao" class="@Cls("announcements")">@Html.Icon("bell", 15) Thông báo</a>
+    <a href="/quan-tri/trang" class="@Cls("pages")">@Html.Icon("list", 15) Trang</a>
+    <a href="/quan-tri/cau-hinh" class="@Cls("settings")">@Html.Icon("settings", 15) Cấu hình</a>
+    <a href="/kiem-duyet">@Html.Icon("shield", 15) Kiểm duyệt</a>
+</nav>

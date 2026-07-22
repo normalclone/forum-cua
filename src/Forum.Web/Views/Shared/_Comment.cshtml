@@ -1,0 +1,74 @@
+@model CommentRenderModel
+@inject Forum.Web.Services.IMarkdownService Md
+@{
+    var c = Model.Node.Comment;
+    var uv = Model.UserVotes.GetValueOrDefault(c.Id, 0);
+    var isOwn = c.AuthorId == Model.CurrentUserId;
+    var canEdit = !c.IsDeleted && (isOwn || Model.CanModerate);
+    var scoreCls = c.Score > 0 ? "pos" : c.Score < 0 ? "neg" : "";
+    var isAccepted = Model.AcceptedAnswerId == c.Id;
+}
+<div class="comment-node" id="comment-@c.Id" data-comment-id="@c.Id">
+    <div class="comment @(c.IsDeleted ? "deleted" : "") @(isAccepted ? "accepted-answer" : "")">
+        <div class="comment-head">
+            <button class="comment-collapse btn-icon" type="button" title="Thu gọn" aria-label="Thu gọn" style="padding:0;width:16px;height:16px;">@Html.Icon("chevron-down", 14)</button>
+            @if (!c.IsDeleted)
+            {
+                @Html.Avatar(c.Author?.AvatarUrl, c.Author?.DisplayName, 20)
+                <a class="author user-link" data-username="@c.Author?.UserName" href="/thanh-vien/@c.Author?.UserName">@(c.Author?.DisplayName ?? "Ẩn danh")</a>
+                <span>· @ViewHelpers.TimeAgo(c.CreatedAt)</span>
+                <span>· @c.Score điểm</span>
+                @if (c.UpdatedAt.HasValue)
+                {
+                    <span class="edited-tag">· đã chỉnh sửa</span>
+                }
+                @if (isAccepted)
+                {
+                    <span class="accepted-badge">@Html.Icon("check-check", 13) Đáp án được chấp nhận</span>
+                }
+            }
+            else
+            {
+                <span class="muted">[Bình luận đã bị xóa]</span>
+            }
+        </div>
+
+        @if (!c.IsDeleted)
+        {
+            <div class="comment-body md">@Html.Raw(Md.ToHtml(c.Body))</div>
+            <partial name="_Reactions" model="@(new ReactionBarModel { IsComment = true, Id = c.Id, Summary = Model.Reactions.GetValueOrDefault(c.Id, Forum.Web.Services.ReactionSummary.Empty), Allowed = Model.AllowedEmojis, CanReact = Model.CurrentUserId > 0 })" />
+            <div class="comment-actions">
+                @if (Model.IsQuestion && Model.CanAccept)
+                {
+                    <button type="button" class="accept-btn @(isAccepted ? "on" : "")" data-accept="@c.Id" data-topic="@Model.TopicId">
+                        @Html.Icon("check-check", 13) <span>@(isAccepted ? "Bỏ chọn đáp án" : "Chọn làm đáp án")</span>
+                    </button>
+                }
+                <span class="vote horizontal" data-vote="comment" data-id="@c.Id">
+                    <button class="vote-btn up @(uv == 1 ? "on" : "")" data-value="1" type="button" aria-label="Upvote">@Html.Icon("arrow-big-up", 16)</button>
+                    <span class="vote-score @scoreCls">@c.Score</span>
+                    <button class="vote-btn down @(uv == -1 ? "on" : "")" data-value="-1" type="button" aria-label="Downvote">@Html.Icon("arrow-big-down", 16)</button>
+                </span>
+                @if (!Model.TopicLocked && Model.CurrentUserId > 0)
+                {
+                    <button type="button" data-reply="@c.Id" data-author="@c.Author?.UserName">@Html.Icon("reply", 14) Trả lời</button>
+                }
+                @if (canEdit)
+                {
+                    <button type="button" data-edit-comment="@c.Id">@Html.Icon("pencil", 13) Sửa</button>
+                    <button type="button" class="danger" data-delete-comment="@c.Id">@Html.Icon("trash", 13) Xóa</button>
+                }
+                @if (Model.CurrentUserId > 0 && !isOwn)
+                {
+                    <button type="button" data-report="comment" data-id="@c.Id">@Html.Icon("flag", 13) Báo cáo</button>
+                }
+            </div>
+        }
+    </div>
+    <div class="comment-children">
+        @foreach (var child in Model.Node.Children)
+        {
+            <partial name="_Comment" model="Model.ForChild(child)" />
+        }
+    </div>
+</div>

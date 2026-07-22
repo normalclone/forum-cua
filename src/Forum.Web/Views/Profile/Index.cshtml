@@ -1,0 +1,166 @@
+@model ProfileViewModel
+@inject Forum.Web.Services.ISiteSettingService Settings
+@{
+    var u = Model.User;
+    string RoleLabel(string r) => r switch { "Admin" => "Quản trị viên", "Moderator" => "Điều hành viên", _ => "Thành viên" };
+    string TabUrl(string t) => $"/thanh-vien/{u.UserName}?tab={t}";
+    var canned = Settings.Get(SettingKeys.CannedReasons, "")
+        .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    var isMuted = u.MutedUntil.HasValue && u.MutedUntil.Value > DateTimeOffset.UtcNow;
+}
+
+<div class="card mb-10 reveal">
+    <div class="profile-head">
+        @Html.Avatar(u.AvatarUrl, u.DisplayName, 64, "avatar-ring")
+        <div style="flex:1; min-width:0;">
+            <h1 class="pname">@u.DisplayName
+                @if (Model.PrimaryRole != "Member")
+                {
+                    <span class="role-badge role-@Model.PrimaryRole">@RoleLabel(Model.PrimaryRole)</span>
+                }
+            </h1>
+            <div class="muted small">@@@u.UserName · @ViewHelpers.TradeLabel(u.Trade)
+                @if (!string.IsNullOrEmpty(u.Location))
+                {
+                    <span>· @Html.Icon("map-pin", 12) @u.Location</span>
+                }
+                <span>· @Html.Icon("calendar", 12) Tham gia @u.CreatedAt.ToLocalTime().ToString("MM/yyyy")</span>
+            </div>
+            @if (!string.IsNullOrEmpty(u.Bio))
+            {
+                <p class="small mt-8 mb-0">@u.Bio</p>
+            }
+            <div class="profile-stats">
+                <div><b>@u.Reputation</b><span>Uy tín</span></div>
+                <div><b>@Model.TopicCount</b><span>Chủ đề</span></div>
+                <div><b>@Model.CommentCount</b><span>Bình luận</span></div>
+                <div><b id="follower-count">@Model.FollowerCount</b><span>Người theo dõi</span></div>
+            </div>
+        </div>
+        <div class="flex gap-6" style="flex-direction:column;">
+            @if (Model.IsSelf)
+            {
+                <a class="btn btn-sm" href="/cai-dat">@Html.Icon("settings", 15) Chỉnh sửa</a>
+            }
+            else if (User.Identity?.IsAuthenticated == true)
+            {
+                <button class="btn btn-sm @(Model.IsFollowing ? "" : "btn-primary")" data-follow="@u.UserName" type="button">
+                    @(Model.IsFollowing ? "Đang theo dõi" : "Theo dõi")
+                </button>
+                <a class="btn btn-sm" href="/tin-nhan/voi/@u.UserName" data-chat-with="@u.UserName">@Html.Icon("message-square", 15) Nhắn tin</a>
+            }
+        </div>
+    </div>
+</div>
+
+@if (User.IsStaff() && !Model.IsSelf)
+{
+    <div class="card card-pad mb-10" data-modtools data-user="@u.Id">
+        <div class="card-title">@Html.Icon("shield", 14) Công cụ điều hành</div>
+        @if (!Model.TargetIsStaff)
+        {
+            <div class="flex wrap gap-6 items-center">
+                <button class="btn btn-sm" data-mt-warn type="button">@Html.Icon("flag", 13) Cảnh cáo</button>
+                <span class="flex gap-6 items-center">
+                    <select class="input" data-mt-hours style="width:auto; padding:4px 8px;">
+                        <option value="1">1 giờ</option><option value="24" selected>1 ngày</option><option value="72">3 ngày</option><option value="168">7 ngày</option>
+                    </select>
+                    <button class="btn btn-sm btn-danger" data-mt-mute type="button">@Html.Icon("volume-x", 13) Tạm cấm nói</button>
+                </span>
+                <span data-mt-mutestatus class="small" style="@(isMuted ? "" : "display:none")">
+                    @Html.Icon("volume-x", 12) Đang cấm nói đến <b>@(u.MutedUntil?.ToLocalTime().ToString("HH:mm dd/MM"))</b>
+                    <button class="btn btn-sm" data-mt-unmute type="button">Bỏ cấm</button>
+                </span>
+            </div>
+            @if (canned.Length > 0)
+            {
+                <div class="flex wrap gap-6 mt-8">
+                    <span class="muted xsmall">Lý do mẫu:</span>
+                    @foreach (var r in canned)
+                    {
+                        <button type="button" class="pill canned-chip" data-mt-canned="@r">@r</button>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <div class="muted small">Không áp dụng cảnh cáo/tạm cấm cho nhân sự.</div>
+        }
+        <div class="mt-14">
+            <div class="muted xsmall" style="font-weight:700;">@Html.Icon("sticky-note", 12) GHI CHÚ NỘI BỘ (chỉ nhân sự thấy)</div>
+            <div class="flex gap-6 mt-8">
+                <input class="input" data-mt-note placeholder="Thêm ghi chú về thành viên này…" />
+                <button class="btn btn-sm btn-primary" data-mt-note-add type="button">Lưu</button>
+            </div>
+            <ul class="note-list" data-mt-notes>
+                @foreach (var n in Model.Notes)
+                {
+                    <li data-note="@n.Id">
+                        <span class="muted xsmall">@n.Author?.DisplayName · @n.CreatedAt.ToLocalTime().ToString("HH:mm dd/MM/yy")</span>
+                        <button class="btn-icon" data-mt-note-del="@n.Id" title="Xóa" style="float:right;">@Html.Icon("x", 12)</button>
+                        <div>@n.Body</div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+<div class="tabs">
+    <a href="@TabUrl("chu-de")" class="@(Model.Tab == "chu-de" ? "active" : "")">Chủ đề (@Model.TopicCount)</a>
+    <a href="@TabUrl("binh-luan")" class="@(Model.Tab == "binh-luan" ? "active" : "")">Bình luận (@Model.CommentCount)</a>
+    <a href="@TabUrl("huy-hieu")" class="@(Model.Tab == "huy-hieu" ? "active" : "")">Huy hiệu</a>
+</div>
+
+@if (Model.Tab == "binh-luan")
+{
+    if (Model.Comments.Count == 0)
+    {
+        <div class="empty"><div class="ico">@Html.Icon("message-square", 40)</div><h3>Chưa có bình luận</h3></div>
+    }
+    <div class="topic-list">
+        @foreach (var c in Model.Comments)
+        {
+            <div class="card card-pad reveal">
+                <div class="comment-head">đã bình luận trong
+                    <a href="/chu-de/@c.TopicId/@c.Topic?.Slug#comment-@c.Id">@c.Topic?.Title</a>
+                    · @ViewHelpers.TimeAgo(c.CreatedAt) · @c.Score điểm
+                </div>
+                <div class="small">@c.Body</div>
+            </div>
+        }
+    </div>
+}
+else if (Model.Tab == "huy-hieu")
+{
+    if (Model.Badges.Count == 0)
+    {
+        <div class="empty"><div class="ico">@Html.Icon("award", 40)</div><h3>Chưa có huy hiệu</h3></div>
+    }
+    <div class="card card-pad">
+        <div class="flex wrap gap-10">
+            @foreach (var ub in Model.Badges)
+            {
+                <div class="flex items-center gap-10 reveal" style="width:260px;">
+                    <span class="medal @ub.Badge.Tier">@Html.Icon(ub.Badge.IconName, 16)</span>
+                    <div><b class="small">@ub.Badge.Name</b><div class="xsmall muted">@ub.Badge.Description</div></div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    @if (Model.Topics.TotalCount == 0)
+    {
+        <div class="empty"><div class="ico">@Html.Icon("folder", 40)</div><h3>Chưa đăng chủ đề nào</h3></div>
+    }
+    <div class="topic-list">
+        @foreach (var t in Model.Topics.Items)
+        {
+            <partial name="_TopicCard" model="t" />
+        }
+    </div>
+    <partial name="_Pager" model="@(new PagerModel { Page = Model.Topics.Page, TotalPages = Model.Topics.TotalPages, Path = $"/thanh-vien/{u.UserName}", Query = "tab=chu-de" })" />
+}

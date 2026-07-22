@@ -1,0 +1,12 @@
+@* Dock chat kiểu Messenger:
+   - chat-windows: cửa sổ đang active (bung ngang bên trái)
+   - chat-rail: cột avatar (chat head) các hội thoại đang mở + nút mở danh sách ở dưới cùng *@
+<div class="chat-dock" id="chat-dock">
+    <div class="chat-windows" id="chat-windows"></div>
+    <div class="chat-rail" id="chat-rail">
+        <button class="chat-launcher" id="chat-launcher" type="button" title="Tin nhắn" aria-label="Tin nhắn">
+            @Html.Icon("message-circle", 24)
+            <span class="badge-count hide" id="chat-launcher-badge"></span>
+        </button>
+    </div>
+</div>

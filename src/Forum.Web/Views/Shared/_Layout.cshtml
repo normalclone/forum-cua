@@ -1,0 +1,149 @@
+@using Microsoft.AspNetCore.Http
+@inject Forum.Web.Services.ISiteSettingService Settings
+@{
+    var hasSidebar = IsSectionDefined("Sidebar");
+    var containerClass = (ViewData["Container"] as string) ?? (hasSidebar ? "three" : "single");
+    var uname = User.Identity?.Name;
+    var brandLogo = Settings.Get(SettingKeys.BrandLogo, "");
+    var brandFavicon = Settings.Get(SettingKeys.BrandFavicon, "");
+    var brandAccent = Settings.Get(SettingKeys.BrandAccent, "");
+    var canRegister = Settings.GetBool(SettingKeys.FeatureRegistration, true);
+    var canPost = Settings.GetBool(SettingKeys.FeaturePosting, true);
+    var chatOn = Settings.GetBool(SettingKeys.FeatureChat, true);
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1a1a1b" />
+    <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+    <partial name="_Seo" />
+    <link rel="icon" href="@(string.IsNullOrEmpty(brandFavicon) ? Url.Content("~/favicon.ico") : brandFavicon)" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/animations.css" asp-append-version="true" />
+    @if (!string.IsNullOrEmpty(brandAccent))
+    {
+        <style>:root{--accent:@brandAccent;--accent-hover:color-mix(in srgb, @brandAccent 82%, #000);} :root[data-theme="dark"]{--accent:@brandAccent;--accent-hover:color-mix(in srgb, @brandAccent 85%, #fff);}</style>
+    }
+    @await RenderSectionAsync("Head", required: false)
+</head>
+<body>
+    <form id="af-form" style="display:none">@Html.AntiForgeryToken()</form>
+    <script>window.Forum = window.Forum || {}; window.Forum.isAuthenticated = @((User.Identity?.IsAuthenticated == true).ToString().ToLower());</script>
+
+    <header class="app-header">
+        <button class="btn-icon hamburger" data-toggle-sidebar aria-label="Mở danh mục">@Html.Icon("menu", 22)</button>
+        <a class="brand" href="/" data-no-progress>
+            @if (!string.IsNullOrEmpty(brandLogo))
+            {
+                <img src="@brandLogo" alt="@Settings.SiteName" class="logo" style="width:auto; height:26px;" />
+            }
+            else
+            {
+                @Html.Icon("door-open", 26, "logo")
+            }
+            <span class="hide-mobile">@Settings.SiteName</span>
+        </a>
+
+        <form class="header-search collapsible" action="/tim-kiem" method="get" role="search" autocomplete="off" data-autocomplete>
+            @Html.Icon("search", 17, "search-icon")
+            <input class="input input-search" type="search" name="q" placeholder="Tìm chủ đề, thẻ, bài viết về cửa…"
+                   value="@(Context.Request.Query["q"])" aria-label="Tìm kiếm" />
+            <div class="menu ac-menu" id="ac-menu" hidden></div>
+        </form>
+
+        <div class="header-actions">
+            <button class="btn-icon hide-mobile" data-toggle-search aria-label="Tìm kiếm">@Html.Icon("search", 20)</button>
+            <button class="btn-icon" data-theme-toggle aria-label="Đổi giao diện sáng/tối" title="Sáng/Tối">
+                <span data-theme-icon="light">@Html.Icon("moon", 20)</span>
+                <span data-theme-icon="dark" class="hide">@Html.Icon("sun", 20)</span>
+            </button>
+
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                @if (canPost)
+                {
+                    <a class="btn btn-primary btn-sm cta-pulse" href="/tao-chu-de"><span>@Html.Icon("plus", 16)</span> <span class="hide-mobile">Tạo chủ đề</span></a>
+                }
+                @await Component.InvokeAsync("NotificationBell")
+                <div class="menu-wrap">
+                    <button class="btn-icon" data-menu="user-menu" aria-label="Tài khoản">@Html.Avatar(User.Avatar(), User.DisplayName(), 28)</button>
+                    <div id="user-menu" class="menu" hidden>
+                        <a href="/thanh-vien/@uname">@Html.Icon("user") Hồ sơ của tôi</a>
+                        <a href="/bang-tin">@Html.Icon("home") Bảng tin</a>
+                        <a href="/da-luu">@Html.Icon("bookmark") Đã lưu</a>
+                        <a href="/tin-nhan">@Html.Icon("message-square") Tin nhắn</a>
+                        <a href="/cai-dat">@Html.Icon("settings") Cài đặt hồ sơ</a>
+                        @if (User.IsStaff())
+                        {
+                            <div class="sep"></div>
+                            <a href="/kiem-duyet">@Html.Icon("shield") Bảng kiểm duyệt</a>
+                        }
+                        @if (User.IsInRole(Roles.Admin))
+                        {
+                            <a href="/quan-tri">@Html.Icon("bar-chart") Quản trị</a>
+                        }
+                        <div class="sep"></div>
+                        <form method="post" action="/dang-xuat">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="danger">@Html.Icon("log-out") Đăng xuất</button>
+                        </form>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <a class="btn btn-sm" href="/dang-nhap" data-login>Đăng nhập</a>
+                @if (canRegister)
+                {
+                    <a class="btn btn-primary btn-sm cta-pulse" href="/dang-ky">Đăng ký</a>
+                }
+            }
+        </div>
+    </header>
+
+    <div class="container @containerClass">
+        <main class="main-col" role="main">
+            @if (TempData["Toast"] is string toast)
+            {
+                <script>document.addEventListener('DOMContentLoaded',function(){Forum.toast(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(toast)), '@(TempData["ToastType"] ?? "success")');});</script>
+            }
+            @RenderBody()
+        </main>
+        @if (hasSidebar)
+        {
+            <aside class="left-rail">@await Component.InvokeAsync("ForumSidebar", new { part = "categories", active = ViewData["SidebarActive"] as string })</aside>
+            <aside class="sidebar">@await RenderSectionAsync("Sidebar", required: false)</aside>
+        }
+    </div>
+
+    <footer class="footer">
+        <div>
+            © 2026 <strong>@Settings.SiteName</strong> — Cộng đồng thảo luận về cửa &amp; vật liệu cửa.
+            <a href="/noi-quy">Nội quy</a> · <a href="/sitemap.xml" data-no-progress>Sitemap</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/engagement.js" asp-append-version="true"></script>
+    <script src="~/js/auth.js" asp-append-version="true"></script>
+    <script src="~/js/hovercard.js" asp-append-version="true"></script>
+    <script src="~/js/autocomplete.js" asp-append-version="true"></script>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <script src="~/js/notifications.js" asp-append-version="true"></script>
+    }
+    <script src="~/lib/signalr/signalr.min.js"></script>
+    <script src="~/js/board.js" asp-append-version="true"></script>
+    @if (User.Identity?.IsAuthenticated == true && chatOn)
+    {
+        <partial name="_ChatDock" />
+        <script src="~/js/chat-dock.js" asp-append-version="true"></script>
+    }
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

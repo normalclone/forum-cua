@@ -1,0 +1,82 @@
+@inject Forum.Web.Services.ISeoService Seo
+@{
+    var seo = ViewData["Seo"] as SeoModel ?? new SeoModel { Title = Seo.SiteName };
+    var fullTitle = string.Equals(seo.Title, Seo.SiteName, StringComparison.Ordinal)
+        ? seo.Title
+        : $"{seo.Title} — {Seo.SiteName}";
+    var isArticle = string.Equals(seo.OgType, "article", StringComparison.Ordinal);
+}
+<title>@fullTitle</title>
+@if (!string.IsNullOrEmpty(seo.Description))
+{
+    <meta name="description" content="@seo.Description" />
+}
+<meta name="robots" content="@(seo.NoIndex ? "noindex, nofollow" : "index, follow")" />
+@if (!string.IsNullOrEmpty(seo.CanonicalUrl))
+{
+    <link rel="canonical" href="@seo.CanonicalUrl" />
+}
+@if (!string.IsNullOrEmpty(seo.PrevUrl))
+{
+    <link rel="prev" href="@seo.PrevUrl" />
+}
+@if (!string.IsNullOrEmpty(seo.NextUrl))
+{
+    <link rel="next" href="@seo.NextUrl" />
+}
+
+@* ---- Open Graph ---- *@
+<meta property="og:site_name" content="@Seo.SiteName" />
+<meta property="og:title" content="@seo.Title" />
+@if (!string.IsNullOrEmpty(seo.Description))
+{
+    <meta property="og:description" content="@seo.Description" />
+}
+<meta property="og:type" content="@seo.OgType" />
+<meta property="og:locale" content="vi_VN" />
+@if (!string.IsNullOrEmpty(seo.CanonicalUrl))
+{
+    <meta property="og:url" content="@seo.CanonicalUrl" />
+}
+@if (!string.IsNullOrEmpty(seo.OgImage))
+{
+    <meta property="og:image" content="@seo.OgImage" />
+    <meta property="og:image:alt" content="@(seo.OgImageAlt ?? seo.Title)" />
+}
+@if (isArticle)
+{
+    if (seo.PublishedTime.HasValue)
+    {
+        <meta property="article:published_time" content="@seo.PublishedTime.Value.ToString("o")" />
+    }
+    if (seo.ModifiedTime.HasValue)
+    {
+        <meta property="article:modified_time" content="@seo.ModifiedTime.Value.ToString("o")" />
+    }
+    if (!string.IsNullOrEmpty(seo.AuthorName))
+    {
+        <meta property="article:author" content="@seo.AuthorName" />
+    }
+}
+
+@* ---- Twitter Card ---- *@
+<meta name="twitter:card" content="@(string.IsNullOrEmpty(seo.OgImage) ? "summary" : "summary_large_image")" />
+<meta name="twitter:title" content="@seo.Title" />
+@if (!string.IsNullOrEmpty(seo.Description))
+{
+    <meta name="twitter:description" content="@seo.Description" />
+}
+@if (!string.IsNullOrEmpty(seo.OgImage))
+{
+    <meta name="twitter:image" content="@seo.OgImage" />
+}
+
+@* ---- JSON-LD ---- *@
+@if (seo.Breadcrumbs.Count > 0)
+{
+    <script type="application/ld+json">@Html.Raw(Seo.BreadcrumbJsonLd(seo.Breadcrumbs))</script>
+}
+@foreach (var block in seo.JsonLd)
+{
+    <script type="application/ld+json">@Html.Raw(block)</script>
+}

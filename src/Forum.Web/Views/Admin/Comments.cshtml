@@ -1,0 +1,62 @@
+@model AdminCommentsViewModel
+@inject Forum.Web.Services.IForumUrlService Url
+@{
+    ViewData["Container"] = "wide";
+    ViewData["AdminTab"] = "content";
+    var parts = new List<string>();
+    if (!string.IsNullOrWhiteSpace(Model.Keyword)) parts.Add($"q={Uri.EscapeDataString(Model.Keyword)}");
+    if (Model.IncludeDeleted) parts.Add("gom-xoa=true");
+    var pagerQuery = string.Join("&", parts);
+}
+
+<h1 class="admin-head">@Html.Icon("list", 22) Quản lý nội dung</h1>
+<partial name="_AdminNav" />
+
+<div class="feed-toolbar">
+    <div class="seg">
+        <a href="/quan-tri/noi-dung">@Html.Icon("list", 14) Chủ đề</a>
+        <a href="/quan-tri/noi-dung/binh-luan" class="active">@Html.Icon("message-square", 14) Bình luận</a>
+    </div>
+    <form action="/quan-tri/noi-dung/binh-luan" method="get" style="margin-left:auto; display:flex; gap:6px; align-items:center;">
+        <label class="small" style="display:flex; align-items:center; gap:4px;">
+            <input type="checkbox" name="gom-xoa" value="true" @(Model.IncludeDeleted ? "checked" : "") /> Gồm đã xóa
+        </label>
+        <input class="input" type="search" name="q" value="@Model.Keyword" placeholder="Tìm nội dung…" style="width:200px;" />
+        <button class="btn btn-sm" type="submit">@Html.Icon("search", 14) Tìm</button>
+    </form>
+</div>
+
+<div class="muted xsmall mb-10">@Model.Comments.TotalCount bình luận</div>
+
+<div class="card admin-scroll">
+    <table class="admin-table">
+        <thead><tr><th>Nội dung</th><th>Tác giả</th><th>Chủ đề</th><th>Điểm</th><th>Ngày</th><th>Thao tác</th></tr></thead>
+        <tbody>
+            @foreach (var c in Model.Comments.Items)
+            {
+                var body = c.Body.Length > 140 ? c.Body[..140] + "…" : c.Body;
+                <tr data-comment-row="@c.Id" style="@(c.IsDeleted ? "opacity:.6;" : "")">
+                    <td class="small" style="max-width:360px;">@body @if (c.IsDeleted) { <span class="flag-chip del">đã xóa</span> }</td>
+                    <td class="small">@c.Author?.DisplayName</td>
+                    <td class="small"><a href="@Url.Topic(c.Topic)#comment-@c.Id" target="_blank">@(c.Topic?.Title?.Length > 40 ? c.Topic.Title[..40] + "…" : c.Topic?.Title)</a></td>
+                    <td class="small">@c.Score</td>
+                    <td class="xsmall muted">@c.CreatedAt.ToString("dd/MM/yy")</td>
+                    <td>
+                        @if (c.IsDeleted)
+                        {
+                            <button class="btn btn-sm" data-comment-restore="@c.Id">@Html.Icon("check-check", 13) Khôi phục</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm btn-danger" data-comment-del="@c.Id">@Html.Icon("trash", 13) Xóa</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<partial name="_Pager" model="@(new PagerModel { Page = Model.Comments.Page, TotalPages = Model.Comments.TotalPages, Path = "/quan-tri/noi-dung/binh-luan", Query = pagerQuery })" />
+
+@section Scripts { <script src="~/js/admin.js" asp-append-version="true"></script> }

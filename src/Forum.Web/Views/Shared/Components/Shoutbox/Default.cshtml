@@ -1,0 +1,40 @@
+@model List<ShoutMessage>
+@{
+    var authed = User.Identity?.IsAuthenticated == true;
+}
+<section class="shoutbox card" id="shoutbox">
+    <div class="shoutbox-head">
+        <span class="flex items-center gap-6">@Html.Icon("message-circle", 16) <b>Chat chung diễn đàn</b></span>
+        <span class="xsmall muted">Trò chuyện cùng cả cộng đồng cửa</span>
+    </div>
+    <div class="shoutbox-msgs" id="shoutbox-msgs">
+        @if (Model.Count == 0)
+        {
+            <div class="muted small text-center" style="padding:14px;">Chưa có tin nào — hãy mở lời chào nhé! 👋</div>
+        }
+        @foreach (var m in Model)
+        {
+            <div class="shout" data-id="@m.Id">
+                @Html.Avatar(m.Sender?.AvatarUrl, m.Sender?.DisplayName, 24)
+                <div class="shout-body">
+                    <a class="user-link shout-name" data-username="@m.Sender?.UserName" href="/thanh-vien/@m.Sender?.UserName">@m.Sender?.DisplayName</a>
+                    <span class="shout-text">@m.Body</span>
+                    <span class="shout-time">@ViewHelpers.TimeAgo(m.CreatedAt)</span>
+                </div>
+            </div>
+        }
+    </div>
+    @* Cuộn xuống tin mới nhất NGAY trong lúc parse (trước khi vẽ) → tránh giật khi tải trang. *@
+    <script>(function(){var l=document.getElementById('shoutbox-msgs');if(l)l.scrollTop=l.scrollHeight;})();</script>
+    @if (authed)
+    {
+        <form class="shoutbox-compose" id="shoutbox-form">
+            <input type="text" id="shoutbox-input" class="form-control" placeholder="Nhập tin nhắn cho cả diễn đàn…" autocomplete="off" maxlength="500" />
+            <button class="btn btn-primary btn-sm" type="submit">Gửi</button>
+        </form>
+    }
+    else
+    {
+        <div class="shoutbox-compose"><a class="btn btn-sm btn-block" href="/dang-nhap">Đăng nhập để tham gia Chat chung</a></div>
+    }
+</section>

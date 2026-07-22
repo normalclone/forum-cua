@@ -1,0 +1,29 @@
+# Build
+bin/
+obj/
+*.user
+
+# SQLite databases (tự tạo + seed khi chạy)
+*.db
+*.db-shm
+*.db-wal
+
+# Uploads do người dùng tải lên khi chạy
+src/Forum.Web/wwwroot/uploads/*
+!src/Forum.Web/wwwroot/uploads/.gitkeep
+
+# Playwright
+tests/**/bin/
+tests/**/obj/
+test-results/
+playwright-report/
+.playwright/
+
+# IDE
+.vs/
+.idea/
+*.swp
+
+# Ảnh/video kiểm chứng (tự sinh lại được, không đưa vào repo)
+shots/
+TestResults/

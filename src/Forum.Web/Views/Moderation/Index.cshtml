@@ -1,0 +1,111 @@
+@model ModerationViewModel
+@functions {
+    string ActionLabel(ModerationAction a) => a switch
+    {
+        ModerationAction.Pin => "Ghim", ModerationAction.Unpin => "Bỏ ghim",
+        ModerationAction.Lock => "Khóa", ModerationAction.Unlock => "Mở khóa",
+        ModerationAction.Feature => "Nổi bật", ModerationAction.Unfeature => "Bỏ nổi bật",
+        ModerationAction.Move => "Di chuyển", ModerationAction.Delete => "Xóa",
+        ModerationAction.Restore => "Khôi phục", ModerationAction.ResolveReport => "Giải quyết báo cáo",
+        ModerationAction.DismissReport => "Bỏ qua báo cáo",
+        ModerationAction.Approve => "Duyệt bài", ModerationAction.Reject => "Từ chối bài", _ => a.ToString()
+    };
+}
+<partial name="_Breadcrumbs" />
+<h1 style="font-size:1.4rem;">@Html.Icon("shield", 22) Bảng kiểm duyệt</h1>
+
+<div class="flex wrap gap-10 mb-10">
+    <div class="card card-pad" style="flex:1; min-width:140px;"><div class="muted xsmall">CHỦ ĐỀ</div><b style="font-size:1.4rem;">@Model.TotalTopics</b></div>
+    <div class="card card-pad" style="flex:1; min-width:140px;"><div class="muted xsmall">BÌNH LUẬN</div><b style="font-size:1.4rem;">@Model.TotalComments</b></div>
+    <div class="card card-pad" style="flex:1; min-width:140px;"><div class="muted xsmall">BÁO CÁO CHỜ XỬ LÝ</div><b style="font-size:1.4rem; color:var(--danger);">@Model.PendingReportCount</b></div>
+    <div class="card card-pad" style="flex:1; min-width:140px;"><div class="muted xsmall">BÀI CHỜ DUYỆT</div><b style="font-size:1.4rem; color:@(Model.PendingApprovalCount > 0 ? "var(--warning)" : "var(--text)")">@Model.PendingApprovalCount</b></div>
+</div>
+
+<h2 style="font-size:1.05rem;">@Html.Icon("clock", 16) Bài chờ duyệt</h2>
+<div class="card mb-10" id="approval-list" data-bulk-scope>
+    @if (Model.PendingTopics.Count == 0)
+    {
+        <div class="card-pad muted small">Không có bài nào đang chờ duyệt. 🎉</div>
+    }
+    else
+    {
+        <div class="card-pad flex wrap gap-6 items-center" style="border-bottom:1px solid var(--border);">
+            <label class="small" style="display:flex;align-items:center;gap:6px;"><input type="checkbox" data-bulk-all> Chọn tất cả</label>
+            <button class="btn btn-sm btn-primary" data-bulk-approve type="button">@Html.Icon("check-check", 14) Duyệt đã chọn</button>
+            <button class="btn btn-sm btn-danger" data-bulk-reject type="button">@Html.Icon("x", 14) Từ chối đã chọn</button>
+            <span class="muted xsmall" data-bulk-count></span>
+        </div>
+        foreach (var t in Model.PendingTopics)
+        {
+            <div class="lb-row reveal" data-approval-row="@t.Id" style="align-items:flex-start; flex-direction:column; gap:6px;">
+                <div class="small flex gap-6" style="align-items:baseline;">
+                    <input type="checkbox" class="bulk-chk" value="@t.Id" aria-label="Chọn">
+                    <span>
+                        <span class="pill">@t.Category?.Name</span>
+                        <a href="/chu-de/@t.Id/@t.Slug" target="_blank" style="font-weight:600;">@t.Title</a>
+                        <span class="muted">· bởi @t.Author?.DisplayName · @ViewHelpers.TimeAgo(t.CreatedAt)</span>
+                    </span>
+                </div>
+                <div class="flex gap-6">
+                    <button class="btn btn-sm btn-primary" data-approve="@t.Id">@Html.Icon("check", 14) Duyệt</button>
+                    <button class="btn btn-sm btn-danger" data-reject="@t.Id">@Html.Icon("x", 14) Từ chối</button>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<h2 style="font-size:1.05rem;">@Html.Icon("flag", 16) Báo cáo chờ xử lý</h2>
+<div class="card mb-10" id="report-list">
+    @if (Model.PendingReports.Count == 0)
+    {
+        <div class="card-pad muted small">Không có báo cáo nào đang chờ. 🎉</div>
+    }
+    else
+    {
+        foreach (var r in Model.PendingReports)
+        {
+            var link = r.TargetType == ContentTargetType.Topic && r.Topic != null
+                ? $"/chu-de/{r.Topic.Id}/{r.Topic.Slug}"
+                : $"/chu-de/{r.Comment?.TopicId}/x#comment-{r.CommentId}";
+            <div class="lb-row reveal" data-report-row="@r.Id" style="align-items:flex-start; flex-direction:column; gap:6px;">
+                <div class="flex between" style="width:100%;">
+                    <div class="small">
+                        <span class="pill" style="color:var(--danger);">@r.Reason</span>
+                        <a href="@link" target="_blank">@(r.TargetType == ContentTargetType.Topic ? (r.Topic?.Title ?? "Chủ đề") : "Bình luận")</a>
+                        <span class="muted">· bởi @r.Reporter?.DisplayName · @ViewHelpers.TimeAgo(r.CreatedAt)</span>
+                    </div>
+                </div>
+                @if (!string.IsNullOrEmpty(r.Details))
+                {
+                    <div class="xsmall muted">“@r.Details”</div>
+                }
+                <div class="flex gap-6">
+                    <button class="btn btn-sm" data-resolve="@r.Id">@Html.Icon("check", 14) Giải quyết</button>
+                    <button class="btn btn-sm" data-dismiss="@r.Id">Bỏ qua</button>
+                    <button class="btn btn-sm btn-danger" data-mod-delete="@r.Id" data-type="@(r.TargetType == ContentTargetType.Topic ? "topic" : "comment")" data-target="@(r.TopicId ?? r.CommentId)">@Html.Icon("trash", 14) Xóa nội dung</button>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<h2 style="font-size:1.05rem; display:flex; align-items:center; gap:8px;">@Html.Icon("clock", 16) Nhật ký kiểm duyệt <a href="/kiem-duyet/nhat-ky" class="small" style="margin-left:auto; font-weight:600;">Xem tất cả / tìm kiếm →</a></h2>
+<div class="card">
+    <table class="md" style="margin:0;">
+        <thead><tr><th>Thời gian</th><th>Người</th><th>Hành động</th><th>Đối tượng</th></tr></thead>
+        <tbody>
+            @foreach (var l in Model.AuditLog)
+            {
+                <tr>
+                    <td class="xsmall muted">@ViewHelpers.FullTime(l.CreatedAt)</td>
+                    <td class="small">@l.Moderator?.DisplayName</td>
+                    <td class="small"><b>@ActionLabel(l.Action)</b></td>
+                    <td class="small">@(l.TargetTitle ?? $"{l.TargetType} #{l.TargetId}") @(string.IsNullOrEmpty(l.Detail) ? "" : $"— {l.Detail}")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts { <script src="~/js/moderation.js" asp-append-version="true"></script> }

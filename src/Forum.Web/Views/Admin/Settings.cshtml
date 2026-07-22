@@ -1,0 +1,110 @@
+@model AdminSettingsViewModel
+@{
+    ViewData["Container"] = "wide";
+    ViewData["AdminTab"] = "settings";
+}
+
+<h1 class="admin-head">@Html.Icon("settings", 22) Cấu hình site</h1>
+<partial name="_AdminNav" />
+
+<form class="admin-form" method="post" action="/quan-tri/cau-hinh" style="max-width:720px;">
+    @Html.AntiForgeryToken()
+
+    <div class="card card-pad">
+        <div class="card-title">@Html.Icon("home", 14) Thông tin site</div>
+        <div>
+            <label>Tên site</label>
+            <input class="input" name="SiteName" value="@Model.SiteName" maxlength="80" required />
+        </div>
+        <div class="mt-8">
+            <label>Mô tả site</label>
+            <textarea class="input" name="SiteDescription" rows="2" maxlength="400">@Model.SiteDescription</textarea>
+        </div>
+        <div class="mt-8">
+            <label>Từ ngữ bị cấm</label>
+            <textarea class="input" name="BannedWords" rows="3" placeholder="cách nhau bằng dấu phẩy hoặc xuống dòng">@Model.BannedWords</textarea>
+        </div>
+    </div>
+
+    <div class="card card-pad">
+        <div class="card-title">@Html.Icon("check-check", 14) Tính năng (bật/tắt toàn site)</div>
+        @* Hidden "false" đứng SAU checkbox: khi bỏ tick, form vẫn gửi "false" (nếu không, model bind
+           giữ nguyên mặc định = true và không thể tắt tính năng). Khi tick, checkbox "true" đứng trước → thắng. *@
+        <label class="chk"><input type="checkbox" name="FeatureRegistration" value="true" @(Model.FeatureRegistration ? "checked" : "") /> Cho phép đăng ký thành viên mới</label>
+        <input type="hidden" name="FeatureRegistration" value="false" />
+        <label class="chk"><input type="checkbox" name="FeaturePosting" value="true" @(Model.FeaturePosting ? "checked" : "") /> Cho phép đăng bài mới (chủ đề &amp; bình luận) — tắt = chế độ chỉ đọc</label>
+        <input type="hidden" name="FeaturePosting" value="false" />
+        <label class="chk"><input type="checkbox" name="FeatureChat" value="true" @(Model.FeatureChat ? "checked" : "") /> Bật chat (chat chung + tin nhắn 1-1)</label>
+        <input type="hidden" name="FeatureChat" value="false" />
+        <label class="chk"><input type="checkbox" name="FeaturePolls" value="true" @(Model.FeaturePolls ? "checked" : "") /> Bật bình chọn (poll) trong chủ đề</label>
+        <input type="hidden" name="FeaturePolls" value="false" />
+    </div>
+
+    <div class="card card-pad">
+        <div class="card-title">@Html.Icon("image", 14) Thương hiệu / giao diện</div>
+        <div class="row">
+            <div style="flex:0 0 160px;">
+                <label>Màu nhấn</label>
+                <input class="input" type="color" name="BrandAccent" value="@(string.IsNullOrEmpty(Model.BrandAccent) ? "#3d7bff" : Model.BrandAccent)" style="height:38px; padding:2px;" />
+                <div class="muted xsmall mt-8">Để trống = màu mặc định.</div>
+            </div>
+            <div>
+                <label>Logo (thay icon ở header)</label>
+                <div class="flex items-center gap-6">
+                    <img src="@Model.BrandLogo" alt="" data-preview="BrandLogo" style="height:30px; @(string.IsNullOrEmpty(Model.BrandLogo) ? "display:none;" : "")" />
+                    <input type="file" accept="image/*" data-upload-target="BrandLogo" />
+                    <button type="button" class="btn btn-sm" data-clear-target="BrandLogo">Xóa</button>
+                </div>
+                <input type="hidden" name="BrandLogo" id="BrandLogo" value="@Model.BrandLogo" />
+            </div>
+            <div>
+                <label>Favicon</label>
+                <div class="flex items-center gap-6">
+                    <img src="@Model.BrandFavicon" alt="" data-preview="BrandFavicon" style="height:24px; @(string.IsNullOrEmpty(Model.BrandFavicon) ? "display:none;" : "")" />
+                    <input type="file" accept="image/*" data-upload-target="BrandFavicon" />
+                    <button type="button" class="btn btn-sm" data-clear-target="BrandFavicon">Xóa</button>
+                </div>
+                <input type="hidden" name="BrandFavicon" id="BrandFavicon" value="@Model.BrandFavicon" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-pad">
+        <div class="card-title">@Html.Icon("shield", 14) Tự động kiểm duyệt</div>
+        <label class="chk"><input type="checkbox" name="AutomodNewUser" value="true" @(Model.AutomodNewUser ? "checked" : "") /> Bài của <b>tài khoản mới</b> phải chờ duyệt</label>
+        <input type="hidden" name="AutomodNewUser" value="false" />
+        <div style="margin:4px 0 8px 26px;">
+            <label>Coi là "mới" nếu tạo dưới (ngày)</label>
+            <input class="input" type="number" name="AutomodNewUserDays" value="@Model.AutomodNewUserDays" min="0" style="width:100px;" />
+        </div>
+        <label class="chk"><input type="checkbox" name="AutomodSpam" value="true" @(Model.AutomodSpam ? "checked" : "") /> Bài nghi spam (nhiều link / ký tự lặp) → đưa vào chờ duyệt thay vì chặn</label>
+        <input type="hidden" name="AutomodSpam" value="false" />
+    </div>
+
+    <div class="card card-pad">
+        <div class="card-title">@Html.Icon("gauge", 14) Chống spam — giới hạn tần suất (0 = tắt)</div>
+        <div class="row">
+            <div style="flex:0 0 220px;">
+                <label>Tối đa số chủ đề / giờ / người</label>
+                <input class="input" type="number" name="RateTopicsPerHour" value="@Model.RateTopicsPerHour" min="0" style="width:120px;" />
+            </div>
+            <div style="flex:0 0 240px;">
+                <label>Tối đa số bình luận / phút / người</label>
+                <input class="input" type="number" name="RateCommentsPerMinute" value="@Model.RateCommentsPerMinute" min="0" style="width:120px;" />
+            </div>
+        </div>
+        <div class="muted xsmall mt-8">Nhân sự (mod/admin) không bị giới hạn.</div>
+    </div>
+
+    <div class="card card-pad">
+        <div class="card-title">@Html.Icon("message-square", 14) Lý do kiểm duyệt mẫu (canned)</div>
+        <label>Mỗi dòng một lý do — hiện trong menu chọn nhanh khi từ chối/cảnh cáo/tạm cấm.</label>
+        <textarea class="input" name="CannedReasons" rows="4" placeholder="Sai danh mục&#10;Spam / quảng cáo&#10;Ngôn từ không phù hợp&#10;Trùng lặp nội dung">@Model.CannedReasons</textarea>
+    </div>
+
+    <div class="flex gap-6">
+        <button class="btn btn-primary" type="submit">@Html.Icon("check", 15) Lưu cấu hình</button>
+    </div>
+</form>
+
+@section Scripts { <script src="~/js/admin.js" asp-append-version="true"></script> }

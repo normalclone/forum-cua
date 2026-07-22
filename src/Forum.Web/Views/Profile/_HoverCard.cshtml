@@ -1,0 +1,36 @@
+@model HoverCardViewModel
+@{
+    var u = Model.User;
+    string RoleLabel(string r) => r switch { "Admin" => "Quản trị viên", "Moderator" => "Điều hành viên", _ => "Thành viên" };
+}
+<div class="hc-top">
+    @Html.Avatar(u.AvatarUrl, u.DisplayName, 40)
+    <div style="min-width:0;">
+        <div class="hc-name">@u.DisplayName
+            @if (Model.PrimaryRole != "Member")
+            {
+                <span class="role-badge role-@Model.PrimaryRole">@RoleLabel(Model.PrimaryRole)</span>
+            }
+        </div>
+        <div class="hc-user">@@@u.UserName · @ViewHelpers.TradeLabel(u.Trade)</div>
+    </div>
+</div>
+@if (!string.IsNullOrEmpty(u.Bio))
+{
+    <p class="hc-bio">@u.Bio</p>
+}
+<div class="hc-stats">
+    <div><b>@u.Reputation</b>Uy tín</div>
+    <div><b>@Model.TopicCount</b>Chủ đề</div>
+    <div><b>@Model.CommentCount</b>Bình luận</div>
+    <div><b>@Model.BadgeCount</b>Huy hiệu</div>
+</div>
+<div class="xsmall muted mb-10">@Html.Icon("calendar", 12) Tham gia @u.CreatedAt.ToLocalTime().ToString("MM/yyyy")</div>
+<div class="hc-actions">
+    <a class="btn btn-sm" href="/thanh-vien/@u.UserName">Xem hồ sơ</a>
+    @if (Model.IsAuthenticated && !Model.IsSelf)
+    {
+        <button class="btn btn-sm @(Model.IsFollowing ? "" : "btn-primary")" data-follow="@u.UserName" type="button">@(Model.IsFollowing ? "Đang theo dõi" : "Theo dõi")</button>
+        <a class="btn btn-sm" href="/tin-nhan/voi/@u.UserName" data-chat-with="@u.UserName" title="Nhắn tin">@Html.Icon("message-square", 15)</a>
+    }
+</div>

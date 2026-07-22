@@ -1,0 +1,90 @@
+@model AdminUsersViewModel
+@{
+    ViewData["Container"] = "wide";
+    ViewData["AdminTab"] = "users";
+    var roles = new[] { Roles.Admin, Roles.Moderator, Roles.Member };
+    var pagerParts = new List<string>();
+    if (!string.IsNullOrWhiteSpace(Model.Keyword)) pagerParts.Add($"q={Uri.EscapeDataString(Model.Keyword)}");
+    if (!string.IsNullOrWhiteSpace(Model.RoleFilter)) pagerParts.Add($"vai-tro={Model.RoleFilter}");
+    var pagerQuery = string.Join("&", pagerParts);
+    string RoleUrl(string? r) => r == null ? "/quan-tri/nguoi-dung" : $"/quan-tri/nguoi-dung?vai-tro={r}";
+}
+
+<h1 class="admin-head">@Html.Icon("users", 22) Quản lý người dùng</h1>
+<partial name="_AdminNav" />
+
+<div class="feed-toolbar">
+    <div class="seg">
+        <a href="@RoleUrl(null)" class="@(Model.RoleFilter == null ? "active" : "")">Tất cả</a>
+        <a href="@RoleUrl(Roles.Admin)" class="@(Model.RoleFilter == Roles.Admin ? "active" : "")">Admin</a>
+        <a href="@RoleUrl(Roles.Moderator)" class="@(Model.RoleFilter == Roles.Moderator ? "active" : "")">Mod</a>
+        <a href="@RoleUrl(Roles.Member)" class="@(Model.RoleFilter == Roles.Member ? "active" : "")">Member</a>
+    </div>
+    <form action="/quan-tri/nguoi-dung" method="get" style="margin-left:auto; display:flex; gap:6px;">
+        @if (!string.IsNullOrWhiteSpace(Model.RoleFilter))
+        {
+            <input type="hidden" name="vai-tro" value="@Model.RoleFilter" />
+        }
+        <input class="input" type="search" name="q" value="@Model.Keyword" placeholder="Tìm tên / email…" style="width:220px;" />
+        <button class="btn btn-sm" type="submit">@Html.Icon("search", 14) Tìm</button>
+    </form>
+</div>
+
+<div class="muted xsmall mb-10">@Model.Rows.TotalCount người dùng</div>
+
+<div class="card admin-scroll">
+    <table class="admin-table">
+        <thead>
+            <tr><th>Thành viên</th><th>Email</th><th>Vai trò</th><th>Bài</th><th>B.luận</th><th>Trạng thái</th><th>Thao tác</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model.Rows.Items)
+            {
+                var isSelf = r.User.Id == Model.CurrentUserId;
+                <tr data-user-row="@r.User.Id">
+                    <td>
+                        <div class="flex items-center gap-6">
+                            @Html.Avatar(r.User.AvatarUrl, r.User.DisplayName, 28)
+                            <a class="user-link" data-username="@r.User.UserName" href="/thanh-vien/@r.User.UserName" style="font-weight:600; color:var(--text);">@r.User.DisplayName</a>
+                        </div>
+                    </td>
+                    <td class="small muted">@r.User.Email</td>
+                    <td>
+                        <span class="role-badge r-@r.Role" data-role-badge>@r.Role</span>
+                    </td>
+                    <td class="small">@r.TopicCount</td>
+                    <td class="small">@r.CommentCount</td>
+                    <td>
+                        <span class="locked-badge" data-lock-badge style="@(r.IsLocked ? "" : "display:none;")">@Html.Icon("lock", 11) Đã khóa</span>
+                        <span class="small muted" data-active-badge style="@(r.IsLocked ? "display:none;" : "")">Hoạt động</span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <a class="btn btn-sm" href="/quan-tri/nguoi-dung/@r.User.Id">@Html.Icon("eye", 13) Xem</a>
+                            @if (isSelf)
+                            {
+                                <span class="muted xsmall">(bạn)</span>
+                            }
+                            else
+                            {
+                                <select class="input" data-set-role="@r.User.Id" style="padding:4px 8px; font-size:.78rem; width:auto;">
+                                    @foreach (var role in roles)
+                                    {
+                                        <option value="@role" selected="@(role == r.Role)">@role</option>
+                                    }
+                                </select>
+                                <button class="btn btn-sm @(r.IsLocked ? "" : "btn-danger")" data-lock="@r.User.Id" data-locked="@r.IsLocked.ToString().ToLower()">
+                                    @Html.Icon(r.IsLocked ? "unlock" : "lock", 13) <span data-lock-label>@(r.IsLocked ? "Mở khóa" : "Khóa")</span>
+                                </button>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<partial name="_Pager" model="@(new PagerModel { Page = Model.Rows.Page, TotalPages = Model.Rows.TotalPages, Path = "/quan-tri/nguoi-dung", Query = pagerQuery })" />
+
+@section Scripts { <script src="~/js/admin.js" asp-append-version="true"></script> }

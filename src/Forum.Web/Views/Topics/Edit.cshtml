@@ -1,0 +1,38 @@
+@model EditTopicViewModel
+<div>
+    <h1 style="font-size:1.5rem;">Chỉnh sửa chủ đề</h1>
+    <div class="card card-pad">
+        <form asp-action="Edit" method="post" novalidate>
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="ModelOnly" class="validation-summary-errors mb-10"></div>
+
+            <div class="field">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="field-validation-error"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Body"></label>
+                <textarea asp-for="Body" data-md-editor rows="10"></textarea>
+                <span asp-validation-for="Body" class="field-validation-error"></span>
+            </div>
+            <div class="field">
+                <label class="form-label">Thẻ</label>
+                <div class="chip-input" data-tag-input>
+                    <input type="text" data-tag-add placeholder="Nhập thẻ rồi Enter…" />
+                </div>
+                <input type="hidden" asp-for="Tags" data-tag-value />
+            </div>
+            <div class="flex gap-6">
+                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                <a class="btn" href="/chu-de/@Model.Id">Hủy</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Sidebar { @await Component.InvokeAsync("ForumSidebar", new { part = "info" }) }
+@section Scripts {
+    <script src="~/js/editor.js" asp-append-version="true"></script>
+    <script src="~/js/compose.js" asp-append-version="true"></script>
+}

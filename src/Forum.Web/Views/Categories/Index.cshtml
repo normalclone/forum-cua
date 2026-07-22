@@ -1,0 +1,20 @@
+@model List<Category>
+@{
+    var counts = ViewData["Counts"] as Dictionary<int, int> ?? new();
+}
+<partial name="_Breadcrumbs" />
+<h1 style="font-size:1.4rem;">Danh mục thảo luận</h1>
+<div class="topic-list">
+    @foreach (var c in Model)
+    {
+        <a class="card card-pad reveal flex items-center gap-10" href="/danh-muc/@c.Slug" style="text-decoration:none;">
+            <span class="medal" style="background:@(c.ColorHex)22; color:@c.ColorHex;">@Html.Icon(c.IconName, 18)</span>
+            <span style="flex:1;">
+                <b style="color:var(--text);">@c.Name</b>
+                <div class="small muted">@c.Description</div>
+            </span>
+            <span class="pill">@(counts.GetValueOrDefault(c.Id)) chủ đề</span>
+        </a>
+    }
+</div>
+@section Sidebar { @await Component.InvokeAsync("ForumSidebar", new { part = "info" }) }

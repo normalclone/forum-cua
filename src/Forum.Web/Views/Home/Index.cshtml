@@ -1,0 +1,44 @@
+@model HomeViewModel
+@inject Forum.Web.Services.IForumUrlService Url
+@inject Forum.Web.Services.ISiteSettingService Settings
+@{
+    var chatOn = Settings.GetBool(SettingKeys.FeatureChat, true);
+    var canPost = Settings.GetBool(SettingKeys.FeaturePosting, true);
+    var sortKey = Model.Sort switch { TopicSort.Latest => "moi", TopicSort.Top => "noi-bat", TopicSort.Trending => "xu-huong", _ => "hoat-dong" };
+    string SortUrl(string key) => key == "hoat-dong" ? "/" : $"/?sap-xep={key}";
+    var pagerQuery = sortKey == "hoat-dong" ? "" : $"sap-xep={sortKey}";
+}
+
+@if (Model.Feed.Page == 1)
+{
+    @await Component.InvokeAsync("AnnouncementTicker")
+    @if (chatOn)
+    {
+        @await Component.InvokeAsync("Shoutbox")
+    }
+}
+
+@if (Model.Feed.Page == 1)
+{
+    <partial name="_FeaturedStrip" model="Model.Featured" />
+}
+
+<div class="feed-toolbar">
+    <div class="seg">
+        <a href="@SortUrl("hoat-dong")" class="@(sortKey == "hoat-dong" ? "active" : "")">@Html.Icon("clock", 14) Hoạt động</a>
+        <a href="@SortUrl("moi")" class="@(sortKey == "moi" ? "active" : "")">@Html.Icon("calendar", 14) Mới nhất</a>
+        <a href="@SortUrl("noi-bat")" class="@(sortKey == "noi-bat" ? "active" : "")">@Html.Icon("arrow-big-up", 14) Nổi bật</a>
+        <a href="@SortUrl("xu-huong")" class="@(sortKey == "xu-huong" ? "active" : "")">@Html.Icon("trending-up", 14) Xu hướng</a>
+    </div>
+    @if (canPost)
+    {
+        <a class="btn btn-primary btn-sm" href="/tao-chu-de" style="margin-left:auto;">@Html.Icon("plus", 15) Tạo chủ đề</a>
+    }
+</div>
+
+<div id="feed" data-feed>
+    <partial name="_TopicFeed" model="@(new TopicFeedModel { Items = Model.Feed, BasePath = "/", PagerQuery = pagerQuery, EmptyIcon = "door-open", EmptyTitle = "Chưa có chủ đề nào", EmptyText = "Hãy là người đầu tiên mở màn thảo luận!", EmptyCta = "Tạo chủ đề đầu tiên" })" />
+</div>
+
+@section Sidebar { @await Component.InvokeAsync("ForumSidebar", new { part = "info" }) }
+@section Scripts { <script src="~/js/feed.js" asp-append-version="true"></script> }

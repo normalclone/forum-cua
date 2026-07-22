@@ -1,0 +1,84 @@
+@model ChatViewModel
+@{
+    ViewData["Container"] = "single";
+}
+<h1 style="font-size:1.3rem;">@Html.Icon("message-square", 20) Tin nhắn</h1>
+<div class="chat-layout">
+    <div class="chat-list @(Model.Active != null ? "hide-mobile" : "")">
+        @if (Model.Conversations.Count == 0)
+        {
+            <div class="card-pad muted small">Chưa có cuộc trò chuyện nào. Vào hồ sơ một thành viên và bấm "Nhắn tin".</div>
+        }
+        @foreach (var c in Model.Conversations)
+        {
+            <a class="chat-conv @(Model.Active?.Id == c.Id ? "active" : "")" href="/tin-nhan/@c.Id">
+                <span style="position:relative;">
+                    @Html.Avatar(c.Other.AvatarUrl, c.Other.DisplayName, 32)
+                    <span class="presence-dot @(c.Online ? "online" : "")" data-presence="@c.Other.Id" style="position:absolute;bottom:0;right:0;border:2px solid var(--surface);"></span>
+                </span>
+                <span style="flex:1; min-width:0;">
+                    <b class="small" style="color:var(--text);">@c.Other.DisplayName</b>
+                    <div class="xsmall muted" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">@(c.LastMessage ?? "Bắt đầu trò chuyện")</div>
+                </span>
+                @if (c.Unread)
+                {
+                    <span class="presence-dot online" title="Tin chưa đọc"></span>
+                }
+            </a>
+        }
+    </div>
+
+    <div class="chat-main">
+        @if (Model.Active is null || Model.Other is null)
+        {
+            <div class="empty" style="margin:auto;">
+                <div class="ico">@Html.Icon("message-square", 40)</div>
+                <h3>Chọn một cuộc trò chuyện</h3>
+                <p class="muted">Hoặc nhắn tin cho ai đó từ trang hồ sơ của họ.</p>
+            </div>
+        }
+        else
+        {
+            <div class="flex items-center gap-10" style="padding:10px 14px; border-bottom:1px solid var(--border);">
+                @Html.Avatar(Model.Other.AvatarUrl, Model.Other.DisplayName, 32)
+                <div>
+                    <a class="user-link" data-username="@Model.Other.UserName" href="/thanh-vien/@Model.Other.UserName" style="font-weight:700;color:var(--text);">@Model.Other.DisplayName</a>
+                    <div class="xsmall muted" data-presence-label="@Model.Other.Id">@(Model.OtherOnline ? "Đang hoạt động" : "Ngoại tuyến")</div>
+                </div>
+            </div>
+            <div class="chat-msgs" id="chat-msgs" data-conversation="@Model.Active.Id" data-me="@Model.CurrentUserId">
+                @foreach (var m in Model.Messages)
+                {
+                    <div class="msg @(m.SenderId == Model.CurrentUserId ? "mine" : "")" data-msg-id="@m.Id">
+                        @if (!string.IsNullOrEmpty(m.Body))
+                        {
+                            <div>@m.Body</div>
+                        }
+                        @if (!string.IsNullOrEmpty(m.AttachmentUrl))
+                        {
+                            if (m.IsImageAttachment)
+                            {
+                                <img class="chat-img" src="@m.AttachmentUrl" alt="@m.AttachmentName" loading="lazy" />
+                            }
+                            else
+                            {
+                                <a class="chat-file" href="@m.AttachmentUrl" target="_blank" rel="noopener" download="@m.AttachmentName"><span class="cf-ico">📄</span><span class="cf-name">@(m.AttachmentName ?? "Tệp")</span></a>
+                            }
+                        }
+                        <span class="t">@ViewHelpers.FullTime(m.CreatedAt)</span>
+                    </div>
+                }
+            </div>
+            <form class="chat-compose" id="chat-form" data-conversation="@Model.Active.Id">
+                <button type="button" class="cw-attach" id="chat-attach" title="Đính kèm ảnh/tệp" aria-label="Đính kèm">📎</button>
+                <input type="file" id="chat-file" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" hidden />
+                <input class="form-control" id="chat-input" placeholder="Nhập tin nhắn… (Ctrl+V để dán ảnh)" autocomplete="off" maxlength="4000" />
+                <button class="btn btn-primary" type="submit">@Html.Icon("send", 16)</button>
+            </form>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/chat.js" asp-append-version="true"></script>
+}

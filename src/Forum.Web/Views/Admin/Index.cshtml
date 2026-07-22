@@ -1,0 +1,98 @@
+@model AdminDashboardViewModel
+@{
+    ViewData["Container"] = "wide";
+    ViewData["AdminTab"] = "dashboard";
+}
+
+<h1 class="admin-head">@Html.Icon("shield", 22) Quản trị</h1>
+<partial name="_AdminNav" />
+
+<div class="stat-grid">
+    <div class="stat-card"><div class="n">@Model.UserCount</div><div class="l">Thành viên</div></div>
+    <div class="stat-card"><div class="n">@Model.TopicCount</div><div class="l">Chủ đề</div></div>
+    <div class="stat-card"><div class="n">@Model.CommentCount</div><div class="l">Bình luận</div></div>
+    <div class="stat-card"><div class="n">@Model.CategoryCount</div><div class="l">Danh mục</div></div>
+    <div class="stat-card"><div class="n">@Model.TagCount</div><div class="l">Thẻ</div></div>
+    <div class="stat-card"><div class="n @(Model.PendingReportCount > 0 ? "danger" : "")">@Model.PendingReportCount</div><div class="l">Báo cáo chờ</div></div>
+    <div class="stat-card"><div class="n @(Model.LockedUserCount > 0 ? "danger" : "")">@Model.LockedUserCount</div><div class="l">TK bị khóa</div></div>
+    <div class="stat-card"><div class="n">@Model.TodayTopics + @Model.TodayComments</div><div class="l">Bài/bình luận hôm nay</div></div>
+</div>
+
+@{
+    var maxT = Math.Max(1, Model.Activity.Count > 0 ? Model.Activity.Max(a => a.Topics) : 1);
+    var maxC = Math.Max(1, Model.Activity.Count > 0 ? Model.Activity.Max(a => a.Comments) : 1);
+    var maxU = Math.Max(1, Model.Activity.Count > 0 ? Model.Activity.Max(a => a.Users) : 1);
+}
+<div class="card card-pad mb-10">
+    <div class="flex between items-center">
+        <div class="card-title" style="margin:0;">@Html.Icon("bar-chart", 14) Hoạt động 30 ngày</div>
+        @if (Model.Activity.Count > 0)
+        {
+            <span class="muted xsmall">@Model.Activity.First().Day.ToString("dd/MM") – @Model.Activity.Last().Day.ToString("dd/MM")</span>
+        }
+    </div>
+    <div class="mini-charts">
+        <div class="mini-chart">
+            <div class="mini-head"><span style="color:var(--accent)">● Chủ đề mới</span> <b>@Model.Activity.Sum(a => a.Topics)</b></div>
+            <div class="bars">
+                @foreach (var a in Model.Activity)
+                {
+                    <span class="bar" style="height:@(Math.Max(3, (int)(a.Topics * 100.0 / maxT)))%; background:var(--accent);" title="@a.Day.ToString("dd/MM"): @a.Topics chủ đề"></span>
+                }
+            </div>
+        </div>
+        <div class="mini-chart">
+            <div class="mini-head"><span style="color:var(--success)">● Bình luận</span> <b>@Model.Activity.Sum(a => a.Comments)</b></div>
+            <div class="bars">
+                @foreach (var a in Model.Activity)
+                {
+                    <span class="bar" style="height:@(Math.Max(3, (int)(a.Comments * 100.0 / maxC)))%; background:var(--success);" title="@a.Day.ToString("dd/MM"): @a.Comments bình luận"></span>
+                }
+            </div>
+        </div>
+        <div class="mini-chart">
+            <div class="mini-head"><span style="color:var(--trending)">● Thành viên mới</span> <b>@Model.Activity.Sum(a => a.Users)</b></div>
+            <div class="bars">
+                @foreach (var a in Model.Activity)
+                {
+                    <span class="bar" style="height:@(Math.Max(3, (int)(a.Users * 100.0 / maxU)))%; background:var(--trending);" title="@a.Day.ToString("dd/MM"): @a.Users thành viên"></span>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="flex wrap gap-10" style="align-items:flex-start;">
+    <div class="card card-pad" style="flex:1; min-width:280px;">
+        <div class="card-title">@Html.Icon("bar-chart", 14) Chủ đề theo danh mục</div>
+        @foreach (var c in Model.TopCategories)
+        {
+            var max = Model.TopCategories.Count > 0 ? Model.TopCategories.Max(x => x.Count) : 1;
+            var pct = max > 0 ? (int)(c.Count * 100.0 / max) : 0;
+            <div style="margin-bottom:8px;">
+                <div class="flex between small" style="margin-bottom:3px;"><span><span class="cat-swatch" style="background:@c.Color"></span>@c.Name</span><b>@c.Count</b></div>
+                <div style="height:7px; background:var(--surface-2); border-radius:999px; overflow:hidden;"><div style="height:100%; width:@(pct)%; background:@c.Color; border-radius:999px;"></div></div>
+            </div>
+        }
+    </div>
+    <div class="card card-pad" style="flex:1; min-width:280px;">
+        <div class="card-title">@Html.Icon("users", 14) Thành viên mới</div>
+        @foreach (var u in Model.NewestUsers)
+        {
+            <div class="flex items-center gap-6" style="padding:5px 0; border-bottom:1px solid var(--border);">
+                @Html.Avatar(u.AvatarUrl, u.DisplayName, 26)
+                <a class="user-link" data-username="@u.UserName" href="/thanh-vien/@u.UserName" style="flex:1; font-weight:600; color:var(--text);">@u.DisplayName</a>
+                <span class="muted xsmall">@ViewHelpers.TimeAgo(u.CreatedAt)</span>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="card card-pad mt-14">
+    <div class="card-title">@Html.Icon("arrow-big-up", 14) Xuất dữ liệu (CSV)</div>
+    <div class="flex gap-6 wrap">
+        <a class="btn btn-sm" href="/quan-tri/xuat/nguoi-dung">@Html.Icon("users", 14) Người dùng</a>
+        <a class="btn btn-sm" href="/quan-tri/xuat/chu-de">@Html.Icon("list", 14) Chủ đề</a>
+        <a class="btn btn-sm" href="/quan-tri/xuat/binh-luan">@Html.Icon("message-square", 14) Bình luận</a>
+    </div>
+</div>

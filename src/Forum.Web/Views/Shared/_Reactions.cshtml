@@ -1,0 +1,11 @@
+@model ReactionBarModel
+<div class="reactions" data-reactions data-target="@(Model.IsComment ? "comment" : "topic")" data-id="@Model.Id">
+    @foreach (var emoji in Model.Allowed)
+    {
+        var count = Model.Summary.Counts.GetValueOrDefault(emoji, 0);
+        var mine = Model.Summary.Mine.Contains(emoji);
+        <button type="button" class="reaction @(mine ? "on" : "")" data-emoji="@emoji" title="@emoji"@(Model.CanReact ? "" : " disabled")>
+            <span class="r-emoji">@emoji</span><span class="r-count" style="@(count > 0 ? "" : "display:none")">@count</span>
+        </button>
+    }
+</div>

@@ -1,0 +1,110 @@
+@model AdminCategoriesViewModel
+@{
+    ViewData["Container"] = "wide";
+    ViewData["AdminTab"] = "categories";
+}
+
+<h1 class="admin-head">@Html.Icon("folder", 22) Quản lý danh mục</h1>
+<partial name="_AdminNav" />
+
+<div class="card card-pad mb-10">
+    <div class="card-title" id="cat-form-title">@Html.Icon("plus", 14) Thêm danh mục</div>
+    <form class="admin-form" method="post" action="/quan-tri/danh-muc/luu" id="cat-form">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="Id" id="cat-id" value="0" />
+        <div class="row">
+            <div>
+                <label>Tên danh mục</label>
+                <input class="input" name="Name" id="cat-name" required maxlength="150" placeholder="VD: Cửa gỗ" />
+            </div>
+            <div>
+                <label>Icon (Lucide)</label>
+                <input class="input" name="IconName" id="cat-icon" value="door-open" maxlength="64" />
+            </div>
+            <div style="flex:0 0 120px;">
+                <label>Màu</label>
+                <input class="input" type="color" name="ColorHex" id="cat-color" value="#4f8cff" style="height:38px; padding:2px;" />
+            </div>
+            <div style="flex:0 0 120px;">
+                <label>Thứ tự</label>
+                <input class="input" type="number" name="DisplayOrder" id="cat-order" value="0" min="0" />
+            </div>
+        </div>
+        <div>
+            <label>Mô tả</label>
+            <input class="input" name="Description" id="cat-desc" maxlength="500" placeholder="Mô tả ngắn (SEO)" />
+        </div>
+        <label style="display:flex; align-items:center; gap:8px; font-weight:600; font-size:.85rem;">
+            <input type="checkbox" name="RequireApproval" id="cat-approval" value="true" />
+            @Html.Icon("clock", 15) Yêu cầu kiểm duyệt trước khi hiển thị (đăng phải chờ duyệt)
+        </label>
+        <div>
+            <label>Kiểm duyệt viên phụ trách (username, cách nhau dấu phẩy)</label>
+            <input class="input" name="Moderators" id="cat-mods" placeholder="vd: mod, kts-linh" />
+            <div class="muted xsmall mt-8">Mod được gán sẽ chỉ thấy hàng chờ duyệt/báo cáo của các danh mục mình phụ trách. Bỏ trống = mod thường thấy tất cả.</div>
+        </div>
+        <div class="flex gap-6">
+            <button class="btn btn-primary btn-sm" type="submit">@Html.Icon("check", 14) Lưu</button>
+            <button class="btn btn-sm" type="button" id="cat-reset">Làm mới</button>
+        </div>
+    </form>
+</div>
+
+<div class="card admin-scroll">
+    <table class="admin-table" id="cat-table">
+        <thead>
+            <tr><th style="width:70px;">Thứ tự</th><th>Danh mục</th><th>Slug</th><th>Chủ đề</th><th>Thao tác</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model.Categories)
+            {
+                var count = Model.TopicCounts.GetValueOrDefault(c.Id);
+                <tr data-cat-row="@c.Id">
+                    <td>
+                        <div class="flex gap-6">
+                            <button class="btn-icon" data-move="up" title="Lên">@Html.Icon("chevron-up", 16)</button>
+                            <button class="btn-icon" data-move="down" title="Xuống">@Html.Icon("chevron-down", 16)</button>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="cat-swatch" style="background:@c.ColorHex"></span>
+                        <b>@c.Name</b>
+                        @if (c.RequireApproval)
+                        {
+                            <span class="flag-chip" style="background:var(--warning); color:#fff;">@Html.Icon("clock", 10) Kiểm duyệt</span>
+                        }
+                        @if (!string.IsNullOrEmpty(c.Description))
+                        {
+                            <div class="muted xsmall">@c.Description</div>
+                        }
+                        @if (Model.Moderators.TryGetValue(c.Id, out var mods) && mods.Count > 0)
+                        {
+                            <div class="muted xsmall">@Html.Icon("shield", 10) Mod: @string.Join(", ", mods)</div>
+                        }
+                    </td>
+                    <td class="small muted">/@c.Slug</td>
+                    <td class="small">@count</td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn btn-sm" data-edit-cat
+                                    data-id="@c.Id" data-name="@c.Name" data-desc="@c.Description"
+                                    data-icon="@c.IconName" data-color="@c.ColorHex" data-order="@c.DisplayOrder"
+                                    data-approval="@c.RequireApproval.ToString().ToLower()"
+                                    data-mods="@(Model.Moderators.TryGetValue(c.Id, out var em) ? string.Join(", ", em) : "")">
+                                @Html.Icon("pencil", 13) Sửa
+                            </button>
+                            <form method="post" action="/quan-tri/danh-muc/xoa" style="display:inline;"
+                                  onsubmit="return confirm('Xóa danh mục @c.Name? (chỉ được khi không còn chủ đề)');">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@c.Id" />
+                                <button class="btn btn-sm btn-danger" type="submit">@Html.Icon("trash", 13) Xóa</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts { <script src="~/js/admin.js" asp-append-version="true"></script> }

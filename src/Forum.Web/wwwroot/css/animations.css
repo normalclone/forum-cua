@@ -1,0 +1,167 @@
+/* =========================================================================
+   Animations & keyframes — giữ ngắn (150-300ms), tôn trọng prefers-reduced-motion.
+   ========================================================================= */
+
+@keyframes ripple { to { transform: scale(2.6); opacity: 0; } }
+
+@keyframes cta-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-soft); }
+  50% { box-shadow: 0 0 0 6px var(--accent-soft); }
+}
+
+@keyframes vote-bounce {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.4) translateY(-2px); }
+  70% { transform: scale(.9); }
+  100% { transform: scale(1); }
+}
+@keyframes vote-glow {
+  0% { box-shadow: 0 0 0 0 var(--upvote-soft); }
+  100% { box-shadow: 0 0 0 14px transparent; }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  45% { opacity: .75; transform: scale(.94) rotate(-3deg); }
+  55% { opacity: 1; transform: scale(1.06) rotate(2deg); }
+}
+
+@keyframes border-flow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Viền gradient "thở" + quầng sáng nhịp cho card nổi bật */
+@keyframes featured-breathe {
+  0%, 100% { opacity: .5; }
+  50% { opacity: 1; }
+}
+/* Viền sọc phong thư trượt bằng TRANSFORM (GPU, không repaint → không giật).
+   Dịch trọn 1 chu kỳ theo trục gradient 45° (= 22.627px mỗi trục) → lặp liền mạch. */
+@keyframes airmail-march {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(22.627px, -22.627px, 0); }
+}
+@keyframes hot-pulse {
+  0%, 100% { box-shadow: 0 0 4px 0 var(--hot-glow); }
+  50% { box-shadow: 0 0 10px 1px var(--hot-glow); transform: scale(1.05); }
+}
+
+@keyframes row-highlight {
+  0% { background: var(--accent-soft); }
+  100% { background: transparent; }
+}
+
+@keyframes menu-in {
+  from { opacity: 0; transform: translateY(-6px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes shake {
+  0%,100% { transform: rotate(0); }
+  20% { transform: rotate(-12deg); }
+  40% { transform: rotate(10deg); }
+  60% { transform: rotate(-7deg); }
+  80% { transform: rotate(4deg); }
+}
+@keyframes badge-pop {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+/* Ngôi sao nút Lưu nhảy lên khi bấm */
+@keyframes star-jump {
+  0% { transform: translateY(0) scale(1) rotate(0); }
+  35% { transform: translateY(-7px) scale(1.35) rotate(-12deg); }
+  65% { transform: translateY(0) scale(.92) rotate(6deg); }
+  100% { transform: translateY(0) scale(1) rotate(0); }
+}
+
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(.95) translateY(6px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes modal-out {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(.96); }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(-40px) translateY(6px); }
+  to { opacity: 1; transform: translateX(0) translateY(0); }
+}
+@keyframes toast-out {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(-40px); }
+}
+
+@keyframes hovercard-in {
+  from { opacity: 0; transform: scale(.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes hovercard-out {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(.97); }
+}
+
+@keyframes shimmer { 100% { transform: translateX(100%); } }
+
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes chip-in {
+  from { opacity: 0; transform: scale(.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes chip-out {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(.7); }
+}
+
+@keyframes msg-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Cửa sổ chat dock trượt lên */
+@keyframes chatwin-in {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* page content entrance */
+.page-enter { animation: reveal-up .28s var(--ease); }
+
+/* staggered featured cards */
+.featured-card { opacity: 0; animation: reveal-up .4s var(--ease) forwards; }
+.featured-card:nth-child(1) { animation-delay: .04s; }
+.featured-card:nth-child(2) { animation-delay: .10s; }
+.featured-card:nth-child(3) { animation-delay: .16s; }
+.featured-card:nth-child(4) { animation-delay: .22s; }
+.featured-card:nth-child(5) { animation-delay: .28s; }
+.featured-card:nth-child(6) { animation-delay: .34s; }
+
+/* collapse-on-delete */
+.collapsing-out { overflow: hidden; animation: collapse-out .3s var(--ease) forwards; }
+@keyframes collapse-out {
+  from { opacity: 1; max-height: 600px; }
+  to { opacity: 0; max-height: 0; margin: 0; padding: 0; }
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .featured-card { opacity: 1; }
+  .reveal { opacity: 1; transform: none; }
+}

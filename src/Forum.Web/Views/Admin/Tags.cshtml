@@ -1,0 +1,45 @@
+@model AdminTagsViewModel
+@{
+    ViewData["Container"] = "wide";
+    ViewData["AdminTab"] = "tags";
+    var pagerQuery = string.IsNullOrWhiteSpace(Model.Keyword) ? "" : $"q={Uri.EscapeDataString(Model.Keyword)}";
+}
+
+<h1 class="admin-head">@Html.Icon("hash", 22) Quản lý thẻ</h1>
+<partial name="_AdminNav" />
+
+<div class="feed-toolbar">
+    <form action="/quan-tri/the" method="get" style="margin-left:auto; display:flex; gap:6px;">
+        <input class="input" type="search" name="q" value="@Model.Keyword" placeholder="Tìm thẻ…" style="width:220px;" />
+        <button class="btn btn-sm" type="submit">@Html.Icon("search", 14) Tìm</button>
+    </form>
+</div>
+
+<div class="muted xsmall mb-10">@Model.Tags.TotalCount thẻ · Gộp = chuyển toàn bộ chủ đề của thẻ này sang thẻ khác rồi xóa thẻ.</div>
+
+<div class="card admin-scroll">
+    <table class="admin-table">
+        <thead><tr><th>Thẻ</th><th>Slug</th><th>Lượt dùng</th><th>Thao tác</th></tr></thead>
+        <tbody>
+            @foreach (var t in Model.Tags.Items)
+            {
+                <tr data-tag-row="@t.Id">
+                    <td><b data-tag-name>#@t.Name</b></td>
+                    <td class="small muted" data-tag-slug>@t.Slug</td>
+                    <td class="small" data-tag-count>@t.UseCount</td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn btn-sm" data-tag-rename="@t.Id" data-name="@t.Name">@Html.Icon("pencil", 13) Đổi tên</button>
+                            <button class="btn btn-sm" data-tag-merge="@t.Id" data-name="@t.Name">@Html.Icon("link", 13) Gộp</button>
+                            <button class="btn btn-sm btn-danger" data-tag-del="@t.Id" data-name="@t.Name">@Html.Icon("trash", 13) Xóa</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<partial name="_Pager" model="@(new PagerModel { Page = Model.Tags.Page, TotalPages = Model.Tags.TotalPages, Path = "/quan-tri/the", Query = pagerQuery })" />
+
+@section Scripts { <script src="~/js/admin.js" asp-append-version="true"></script> }

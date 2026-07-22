@@ -1,0 +1,23 @@
+@model List<LeaderRow>
+<partial name="_Breadcrumbs" />
+<h1 style="font-size:1.4rem;">@Html.Icon("award", 22) Bảng xếp hạng thành viên</h1>
+<p class="muted small mb-10">Xếp theo điểm uy tín tích lũy từ hoạt động trong cộng đồng.</p>
+
+<div class="card">
+    @foreach (var row in Model)
+    {
+        <div class="lb-row reveal">
+            <span class="lb-rank @(row.Rank <= 3 ? "top" : "")">@(row.Rank <= 3 ? (row.Rank == 1 ? "🥇" : row.Rank == 2 ? "🥈" : "🥉") : row.Rank.ToString())</span>
+            @Html.Avatar(row.User.AvatarUrl, row.User.DisplayName, 32)
+            <div style="flex:1; min-width:0;">
+                <a class="user-link" data-username="@row.User.UserName" href="/thanh-vien/@row.User.UserName" style="font-weight:700; color:var(--text);">@row.User.DisplayName</a>
+                <div class="xsmall muted">@@@row.User.UserName · @ViewHelpers.TradeLabel(row.User.Trade)</div>
+            </div>
+            <div class="text-center hide-mobile"><b>@row.TopicCount</b><div class="xsmall muted">chủ đề</div></div>
+            <div class="text-center hide-mobile"><b>@row.BadgeCount</b><div class="xsmall muted">huy hiệu</div></div>
+            <div class="text-center"><b style="color:var(--accent);">@row.User.Reputation</b><div class="xsmall muted">uy tín</div></div>
+        </div>
+    }
+</div>
+
+@section Sidebar { @await Component.InvokeAsync("ForumSidebar", new { part = "info" }) }

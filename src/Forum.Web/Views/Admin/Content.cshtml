@@ -1,0 +1,90 @@
+@model AdminContentViewModel
+@inject Forum.Web.Services.IForumUrlService Url
+@{
+    ViewData["Container"] = "wide";
+    ViewData["AdminTab"] = "content";
+    var parts = new List<string>();
+    if (!string.IsNullOrWhiteSpace(Model.Keyword)) parts.Add($"q={Uri.EscapeDataString(Model.Keyword)}");
+    if (!string.IsNullOrWhiteSpace(Model.CategorySlug)) parts.Add($"danh-muc={Model.CategorySlug}");
+    if (Model.IncludeDeleted) parts.Add("gom-xoa=true");
+    var pagerQuery = string.Join("&", parts);
+}
+
+<h1 class="admin-head">@Html.Icon("list", 22) Quản lý nội dung</h1>
+<partial name="_AdminNav" />
+
+<div class="feed-toolbar">
+    <div class="seg">
+        <a href="/quan-tri/noi-dung" class="active">@Html.Icon("list", 14) Chủ đề</a>
+        <a href="/quan-tri/noi-dung/binh-luan">@Html.Icon("message-square", 14) Bình luận</a>
+    </div>
+    <form action="/quan-tri/noi-dung" method="get" style="margin-left:auto; display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+        <select class="input" name="danh-muc" style="width:auto;">
+            <option value="">Tất cả danh mục</option>
+            @foreach (var c in Model.Categories)
+            {
+                <option value="@c.Slug" selected="@(c.Slug == Model.CategorySlug)">@c.Name</option>
+            }
+        </select>
+        <label class="small" style="display:flex; align-items:center; gap:4px;">
+            <input type="checkbox" name="gom-xoa" value="true" @(Model.IncludeDeleted ? "checked" : "") /> Gồm đã xóa
+        </label>
+        <input class="input" type="search" name="q" value="@Model.Keyword" placeholder="Tìm tiêu đề…" style="width:200px;" />
+        <button class="btn btn-sm" type="submit">@Html.Icon("search", 14) Lọc</button>
+    </form>
+</div>
+
+<div class="flex between items-center mb-10">
+    <div class="muted xsmall">@Model.Topics.TotalCount chủ đề</div>
+    <button class="btn btn-sm btn-danger" id="bulk-del-topics">@Html.Icon("trash", 14) Xóa mục đã chọn</button>
+</div>
+
+<div class="card admin-scroll">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th style="width:28px;"><input type="checkbox" id="chk-all" /></th>
+                <th>Chủ đề</th><th>Danh mục</th><th>Tác giả</th><th>Điểm</th><th>B.luận</th><th>Ngày</th><th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model.Topics.Items)
+            {
+                <tr data-topic-row="@t.Id" style="@(t.IsDeleted ? "opacity:.6;" : "")">
+                    <td>@if (!t.IsDeleted) { <input type="checkbox" class="topic-chk" value="@t.Id" /> }</td>
+                    <td>
+                        <a class="ttl" href="@Url.Topic(t)" target="_blank">@t.Title</a>
+                        @if (t.IsPinned) { <span class="flag-chip pin">Ghim</span> }
+                        @if (t.IsFeatured) { <span class="flag-chip feat">Nổi bật</span> }
+                        @if (t.IsLocked) { <span class="flag-chip lock">Khóa</span> }
+                        @if (t.IsDeleted) { <span class="flag-chip del">Đã xóa</span> }
+                    </td>
+                    <td class="small muted">@t.Category?.Name</td>
+                    <td class="small">@t.Author?.DisplayName</td>
+                    <td class="small">@t.Score</td>
+                    <td class="small">@t.CommentCount</td>
+                    <td class="xsmall muted">@t.CreatedAt.ToString("dd/MM/yy")</td>
+                    <td>
+                        <div class="actions">
+                            @if (!t.IsDeleted)
+                            {
+                                <button class="btn-icon" data-topic-act data-id="@t.Id" data-act="@(t.IsPinned ? "unpin" : "pin")" title="@(t.IsPinned ? "Bỏ ghim" : "Ghim")" style="@(t.IsPinned ? "color:var(--pinned)" : "")">@Html.Icon("pin", 15)</button>
+                                <button class="btn-icon" data-topic-act data-id="@t.Id" data-act="@(t.IsLocked ? "unlock" : "lock")" title="@(t.IsLocked ? "Mở khóa" : "Khóa")" style="@(t.IsLocked ? "color:var(--danger)" : "")">@Html.Icon("lock", 15)</button>
+                                <button class="btn-icon" data-topic-act data-id="@t.Id" data-act="@(t.IsFeatured ? "unfeature" : "feature")" title="@(t.IsFeatured ? "Bỏ nổi bật" : "Nổi bật")" style="@(t.IsFeatured ? "color:var(--hot)" : "")">@Html.Icon("flame", 15)</button>
+                                <button class="btn-icon" data-topic-act data-id="@t.Id" data-act="delete" data-confirm="Xóa chủ đề này?" title="Xóa" style="color:var(--danger)">@Html.Icon("trash", 15)</button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-sm" data-topic-act data-id="@t.Id" data-act="restore" title="Khôi phục">@Html.Icon("check-check", 14) Khôi phục</button>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<partial name="_Pager" model="@(new PagerModel { Page = Model.Topics.Page, TotalPages = Model.Topics.TotalPages, Path = "/quan-tri/noi-dung", Query = pagerQuery })" />
+
+@section Scripts { <script src="~/js/admin.js" asp-append-version="true"></script> }

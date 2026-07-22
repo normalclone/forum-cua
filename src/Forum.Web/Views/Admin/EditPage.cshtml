@@ -1,0 +1,35 @@
+@model CmsPageEditModel
+@{
+    ViewData["Container"] = "wide";
+    ViewData["AdminTab"] = "pages";
+}
+
+<h1 class="admin-head">@Html.Icon("pencil", 22) @(Model.Id > 0 ? "Sửa trang" : "Thêm trang")</h1>
+<partial name="_AdminNav" />
+<a href="/quan-tri/trang" class="small">← Về danh sách trang</a>
+
+<form class="admin-form card card-pad mt-14" method="post" action="/quan-tri/trang/luu" style="max-width:820px;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="row">
+        <div>
+            <label>Tiêu đề</label>
+            <input class="input" name="Title" value="@Model.Title" required maxlength="200" />
+        </div>
+        <div style="flex:0 0 260px;">
+            <label>Slug (để trống = tự sinh)</label>
+            <input class="input" name="Slug" value="@Model.Slug" maxlength="80" placeholder="vd: gioi-thieu" />
+        </div>
+    </div>
+    <div>
+        <label>Nội dung (Markdown)</label>
+        <textarea class="input" name="Body" rows="16" style="font-family:var(--mono); font-size:.85rem;">@Model.Body</textarea>
+    </div>
+    <label style="display:flex; align-items:center; gap:8px; font-weight:600; font-size:.85rem;">
+        <input type="checkbox" name="IsPublished" value="true" @(Model.IsPublished ? "checked" : "") /> Hiển thị công khai
+    </label>
+    <div class="flex gap-6">
+        <button class="btn btn-primary" type="submit">@Html.Icon("check", 15) Lưu trang</button>
+        <a class="btn" href="/quan-tri/trang">Hủy</a>
+    </div>
+</form>

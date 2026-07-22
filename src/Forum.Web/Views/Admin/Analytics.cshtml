@@ -1,0 +1,69 @@
+@model AdminAnalyticsViewModel
+@{
+    ViewData["Container"] = "wide";
+    ViewData["AdminTab"] = "analytics";
+    var maxHour = Model.TopicsByHour.DefaultIfEmpty(0).Max();
+    var totalApproval = Model.ApprovedTopics + Model.PendingTopics;
+    var approvedPct = totalApproval > 0 ? Model.ApprovedTopics * 100 / totalApproval : 100;
+}
+
+<h1 class="admin-head">@Html.Icon("trending-up", 22) Phân tích</h1>
+<partial name="_AdminNav" />
+
+<div class="stat-grid">
+    <div class="stat-card"><div class="n">@Model.NewTopics30</div><div class="l">Chủ đề mới (30 ngày)</div></div>
+    <div class="stat-card"><div class="n">@Model.NewComments30</div><div class="l">Bình luận mới (30 ngày)</div></div>
+    <div class="stat-card"><div class="n">@Model.NewUsers30</div><div class="l">Thành viên mới (30 ngày)</div></div>
+    <div class="stat-card"><div class="n">@Model.ActiveUsers30</div><div class="l">Hoạt động (30 ngày)</div></div>
+</div>
+
+<div class="card card-pad mb-10">
+    <div class="card-title">@Html.Icon("check-check", 14) Tỉ lệ duyệt bài</div>
+    <div class="flex items-center gap-6">
+        <div style="flex:1;height:14px;background:var(--surface-2);border-radius:7px;overflow:hidden;">
+            <div style="width:@(approvedPct)%;height:100%;background:var(--accent);"></div>
+        </div>
+        <span class="small">@approvedPct% đã duyệt</span>
+    </div>
+    <div class="muted xsmall mt-8">@Model.ApprovedTopics đã hiển thị · @Model.PendingTopics đang chờ duyệt</div>
+</div>
+
+<div class="card card-pad mb-10">
+    <div class="card-title">@Html.Icon("clock", 14) Chủ đề đăng theo giờ (giờ VN, 30 ngày)</div>
+    <div class="hour-chart">
+        @for (var h = 0; h < 24; h++)
+        {
+            var v = Model.TopicsByHour[h];
+            var pct = maxHour > 0 ? v * 100 / maxHour : 0;
+            <div class="hour-col" title="@(h):00 — @v bài">
+                <div class="hour-bar" style="height:@(Math.Max(pct, 2))%;"></div>
+                <div class="hour-lbl">@h</div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="row">
+    <div class="card card-pad" style="flex:1;min-width:280px;">
+        <div class="card-title">@Html.Icon("flame", 14) Top chủ đề (lượt xem)</div>
+        <ol class="rank-list">
+            @foreach (var t in Model.TopTopics)
+            {
+                <li><a href="@t.Url">@t.Title</a> <span class="muted xsmall">@t.Views lượt xem · @t.Score điểm</span></li>
+            }
+            @if (Model.TopTopics.Count == 0)
+            {
+                <li class="muted small">Chưa có dữ liệu.</li>
+            }
+        </ol>
+    </div>
+    <div class="card card-pad" style="flex:1;min-width:280px;">
+        <div class="card-title">@Html.Icon("award", 14) Top thành viên (uy tín)</div>
+        <ol class="rank-list">
+            @foreach (var u in Model.TopUsers)
+            {
+                <li><a href="/thanh-vien/@u.Username">@u.Name</a> <span class="muted xsmall">@u.Reputation điểm</span></li>
+            }
+        </ol>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+@model List<Tag>
+<partial name="_Breadcrumbs" />
+<h1 style="font-size:1.4rem;">@Html.Icon("hash", 20) Thẻ phổ biến</h1>
+<div class="card card-pad">
+    <div class="flex wrap gap-6">
+        @foreach (var t in Model)
+        {
+            <a class="tag" href="/the/@t.Slug" style="font-size:.82rem; padding:5px 11px;">#@t.Name <span class="muted" style="margin-left:4px;">@t.UseCount</span></a>
+        }
+    </div>
+</div>
+@section Sidebar { @await Component.InvokeAsync("ForumSidebar", new { part = "info" }) }

@@ -1,0 +1,91 @@
+@model AdminBadgesViewModel
+@{
+    ViewData["Container"] = "wide";
+    ViewData["AdminTab"] = "badges";
+    var tiers = new[] { BadgeTier.Bronze, BadgeTier.Silver, BadgeTier.Gold };
+}
+
+<h1 class="admin-head">@Html.Icon("award", 22) Quản lý huy hiệu</h1>
+<partial name="_AdminNav" />
+
+<div class="card card-pad mb-10">
+    <div class="card-title" id="badge-form-title">@Html.Icon("plus", 14) Thêm huy hiệu</div>
+    <form class="admin-form" method="post" action="/quan-tri/huy-hieu/luu" id="badge-form">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="Id" id="badge-id" value="0" />
+        <div class="row">
+            <div>
+                <label>Tên huy hiệu</label>
+                <input class="input" name="Name" id="badge-name" required maxlength="80" placeholder="VD: Chuyên gia cửa" />
+            </div>
+            <div>
+                <label>Icon (Lucide)</label>
+                <input class="input" name="IconName" id="badge-icon" value="award" maxlength="64" />
+            </div>
+            <div style="flex:0 0 120px;">
+                <label>Màu</label>
+                <input class="input" type="color" name="ColorHex" id="badge-color" value="#c9a227" style="height:38px; padding:2px;" />
+            </div>
+            <div style="flex:0 0 130px;">
+                <label>Hạng</label>
+                <select class="input" name="Tier" id="badge-tier">
+                    @foreach (var t in tiers)
+                    {
+                        <option value="@t">@t</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div>
+            <label>Mô tả</label>
+            <input class="input" name="Description" id="badge-desc" maxlength="300" placeholder="Điều kiện / ý nghĩa huy hiệu" />
+        </div>
+        <div class="flex gap-6">
+            <button class="btn btn-primary btn-sm" type="submit">@Html.Icon("check", 14) Lưu</button>
+            <button class="btn btn-sm" type="button" id="badge-reset">Làm mới</button>
+        </div>
+    </form>
+</div>
+
+<div class="card admin-scroll">
+    <table class="admin-table">
+        <thead><tr><th>Huy hiệu</th><th>Slug</th><th>Hạng</th><th>Sở hữu</th><th>Thao tác</th></tr></thead>
+        <tbody>
+            @foreach (var r in Model.Badges)
+            {
+                var b = r.Badge;
+                <tr data-badge-row="@b.Id">
+                    <td>
+                        <span style="color:@b.ColorHex; display:inline-flex; align-items:center; gap:6px; font-weight:700;">@Html.Icon(b.IconName, 16) @b.Name</span>
+                        @if (!string.IsNullOrEmpty(b.Description))
+                        {
+                            <div class="muted xsmall">@b.Description</div>
+                        }
+                    </td>
+                    <td class="small muted">@b.Slug</td>
+                    <td class="small">@b.Tier</td>
+                    <td class="small" data-badge-holders>@r.Holders</td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn btn-sm" data-badge-award="@b.Id">@Html.Icon("plus", 13) Trao</button>
+                            <button class="btn btn-sm" data-badge-revoke="@b.Id">@Html.Icon("x", 13) Thu hồi</button>
+                            <button class="btn btn-sm" data-edit-badge
+                                    data-id="@b.Id" data-name="@b.Name" data-desc="@b.Description"
+                                    data-icon="@b.IconName" data-color="@b.ColorHex" data-tier="@b.Tier">
+                                @Html.Icon("pencil", 13) Sửa
+                            </button>
+                            <form method="post" action="/quan-tri/huy-hieu/xoa" style="display:inline;"
+                                  onsubmit="return confirm('Xóa huy hiệu @b.Name? Sẽ gỡ khỏi @r.Holders người.');">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@b.Id" />
+                                <button class="btn btn-sm btn-danger" type="submit">@Html.Icon("trash", 13)</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts { <script src="~/js/admin.js" asp-append-version="true"></script> }

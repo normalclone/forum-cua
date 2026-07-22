@@ -1,0 +1,8 @@
+@model List<Notification>
+<div class="flex between items-center">
+    <h1 style="font-size:1.4rem;">@Html.Icon("bell", 22) Thông báo</h1>
+    <button class="btn btn-sm" id="notif-mark-all-page" type="button">@Html.Icon("check-check", 15) Đánh dấu tất cả đã đọc</button>
+</div>
+<div class="card">
+    <partial name="_NotificationList" model="Model" />
+</div>

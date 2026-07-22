@@ -1,0 +1,54 @@
+@model AdminPagesViewModel
+@{
+    ViewData["Container"] = "wide";
+    ViewData["AdminTab"] = "pages";
+}
+
+<h1 class="admin-head">@Html.Icon("list", 22) Trang tĩnh</h1>
+<partial name="_AdminNav" />
+
+<div class="flex between items-center mb-10">
+    <div class="muted xsmall">Nội quy, giới thiệu, hướng dẫn… hiển thị tại <code>/noi-quy</code> và <code>/trang/{slug}</code>.</div>
+    <a class="btn btn-primary btn-sm" href="/quan-tri/trang/sua">@Html.Icon("plus", 14) Thêm trang</a>
+</div>
+
+<div class="card admin-scroll">
+    <table class="admin-table">
+        <thead><tr><th>Tiêu đề</th><th>Slug</th><th>Trạng thái</th><th>Cập nhật</th><th>Thao tác</th></tr></thead>
+        <tbody>
+            @if (Model.Pages.Count == 0)
+            {
+                <tr><td colspan="5" class="muted small">Chưa có trang nào.</td></tr>
+            }
+            @foreach (var p in Model.Pages)
+            {
+                var url = p.Slug == "noi-quy" ? "/noi-quy" : $"/trang/{p.Slug}";
+                <tr>
+                    <td><b>@p.Title</b></td>
+                    <td class="small muted"><a href="@url" target="_blank">@url</a></td>
+                    <td>
+                        @if (p.IsPublished)
+                        {
+                            <span class="role-badge r-Moderator">Hiển thị</span>
+                        }
+                        else
+                        {
+                            <span class="role-badge r-Member">Ẩn</span>
+                        }
+                    </td>
+                    <td class="xsmall muted">@p.UpdatedAt.ToString("dd/MM/yy HH:mm")</td>
+                    <td>
+                        <div class="actions">
+                            <a class="btn btn-sm" href="/quan-tri/trang/sua?id=@p.Id">@Html.Icon("pencil", 13) Sửa</a>
+                            <form method="post" action="/quan-tri/trang/xoa" style="display:inline;" onsubmit="return confirm('Xóa trang @p.Title?');">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@p.Id" />
+                                <button class="btn btn-sm btn-danger" type="submit">@Html.Icon("trash", 13)</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

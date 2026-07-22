@@ -1,0 +1,9 @@
+@model Forum.Web.Models.CmsPage
+@{
+    ViewData["Container"] = "single";
+}
+<partial name="_Breadcrumbs" />
+<article class="card card-pad">
+    <h1 style="font-size:1.5rem; margin-top:0;">@Model.Title</h1>
+    <div class="md">@Html.Raw(ViewData["Html"])</div>
+</article>
