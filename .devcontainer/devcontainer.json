@@ -10,7 +10,7 @@
     }
   },
   "postCreateCommand": "dotnet build src/Forum.Web/Forum.Web.csproj -c Debug",
-  "postStartCommand": "bash -c 'cd /workspaces/forum-cua && ASPNETCORE_URLS=http://0.0.0.0:5080 ASPNETCORE_ENVIRONMENT=Development nohup dotnet run --project src/Forum.Web/Forum.Web.csproj --no-launch-profile --no-build > /tmp/app.log 2>&1 &'",
+  "postStartCommand": "bash -c 'cd /workspaces/forum-cua && ASPNETCORE_URLS=http://0.0.0.0:5080 ASPNETCORE_ENVIRONMENT=Development setsid dotnet run --project src/Forum.Web/Forum.Web.csproj --no-launch-profile --no-build > /tmp/app.log 2>&1 < /dev/null & disown; echo started'",
   "customizations": {
     "vscode": {
       "extensions": [ "ms-dotnettools.csdevkit" ]
