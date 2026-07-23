@@ -1,8 +1,10 @@
+using System.Text;
 using Forum.Web.Models.ViewModels;
 using Forum.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace Forum.Web.Controllers;
 
@@ -12,14 +14,28 @@ public class AccountController : ForumControllerBase
     private readonly SignInManager<ApplicationUser> _signIn;
     private readonly IReputationService _reputation;
     private readonly ISiteSettingService _settings;
+    private readonly IAppEmailSender _email;
 
     public AccountController(UserManager<ApplicationUser> users, SignInManager<ApplicationUser> signIn,
-        IReputationService reputation, ISiteSettingService settings)
+        IReputationService reputation, ISiteSettingService settings, IAppEmailSender email)
     {
         _users = users;
         _signIn = signIn;
         _reputation = reputation;
         _settings = settings;
+        _email = email;
+    }
+
+    private static string Enc(string t) => WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(t));
+    private static string Dec(string t) => Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(t));
+
+    private async Task<string> SendConfirmEmailAsync(ApplicationUser user)
+    {
+        var token = await _users.GenerateEmailConfirmationTokenAsync(user);
+        var link = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, token = Enc(token) }, Request.Scheme)!;
+        await _email.SendAsync(user.Email!, "Xác nhận email — Diễn đàn Cửa",
+            $"<p>Chào {user.DisplayName}, nhấn vào liên kết để xác nhận email:</p><p><a href=\"{link}\">{link}</a></p>");
+        return link;
     }
 
     private bool RegistrationOpen => _settings.GetBool(SettingKeys.FeatureRegistration, true);
@@ -56,7 +72,7 @@ public class AccountController : ForumControllerBase
         {
             UserName = vm.UserName,
             Email = vm.Email,
-            EmailConfirmed = true,
+            EmailConfirmed = false,   // sẽ xác nhận qua email (không chặn đăng nhập)
             DisplayName = vm.DisplayName,
             Trade = vm.Trade,
             CreatedAt = DateTime.UtcNow,
@@ -73,7 +89,8 @@ public class AccountController : ForumControllerBase
         await _users.AddToRoleAsync(user, Roles.Member);
         await _reputation.CheckAndAwardBadgesAsync(user.Id);
         await _signIn.SignInAsync(user, isPersistent: true);
-        Toast($"Chào mừng {user.DisplayName}! Tài khoản đã được tạo.");
+        await SendConfirmEmailAsync(user);
+        Toast($"Chào mừng {user.DisplayName}! Đã gửi email xác nhận (xem logs/emails ở chế độ dev).");
         return RedirectToLocal(vm.ReturnUrl);
     }
 
@@ -149,6 +166,129 @@ public class AccountController : ForumControllerBase
         SetSeo(new SeoModel { Title = "Không có quyền truy cập", NoIndex = true });
         Response.StatusCode = StatusCodes.Status403Forbidden;
         return View();
+    }
+
+    // ---------------- Đổi mật khẩu ----------------
+    [HttpGet("/doi-mat-khau")]
+    [Authorize]
+    public IActionResult ChangePassword()
+    {
+        SetSeo(new SeoModel { Title = "Đổi mật khẩu", NoIndex = true });
+        return View(new ChangePasswordViewModel());
+    }
+
+    [HttpPost("/doi-mat-khau")]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangePassword(ChangePasswordViewModel vm)
+    {
+        if (!ModelState.IsValid) { SetSeo(new SeoModel { Title = "Đổi mật khẩu", NoIndex = true }); return View(vm); }
+        var user = await _users.GetUserAsync(User);
+        if (user is null) return Challenge();
+        var r = await _users.ChangePasswordAsync(user, vm.CurrentPassword, vm.NewPassword);
+        if (!r.Succeeded)
+        {
+            foreach (var e in r.Errors)
+                ModelState.AddModelError("", e.Code == "PasswordMismatch" ? "Mật khẩu hiện tại không đúng." : e.Description);
+            SetSeo(new SeoModel { Title = "Đổi mật khẩu", NoIndex = true });
+            return View(vm);
+        }
+        await _signIn.RefreshSignInAsync(user);
+        Toast("Đã đổi mật khẩu thành công.");
+        return RedirectToAction("Settings", "Profile");
+    }
+
+    // ---------------- Quên mật khẩu ----------------
+    [HttpGet("/quen-mat-khau")]
+    [AllowAnonymous]
+    public IActionResult ForgotPassword()
+    {
+        if (IsAuthed) return RedirectToAction("Index", "Home");
+        SetSeo(new SeoModel { Title = "Quên mật khẩu", NoIndex = true });
+        return View(new ForgotPasswordViewModel());
+    }
+
+    [HttpPost("/quen-mat-khau")]
+    [AllowAnonymous]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel vm)
+    {
+        if (!ModelState.IsValid) { SetSeo(new SeoModel { Title = "Quên mật khẩu", NoIndex = true }); return View(vm); }
+        var user = await _users.FindByEmailAsync(vm.Email.Trim());
+        if (user is not null)
+        {
+            var token = await _users.GeneratePasswordResetTokenAsync(user);
+            var link = Url.Action(nameof(ResetPassword), "Account", new { email = user.Email, token = Enc(token) }, Request.Scheme)!;
+            await _email.SendAsync(user.Email!, "Đặt lại mật khẩu — Diễn đàn Cửa",
+                $"<p>Nhấn vào liên kết để đặt lại mật khẩu:</p><p><a href=\"{link}\">{link}</a></p><p>Nếu bạn không yêu cầu, hãy bỏ qua email này.</p>");
+            if (_email.IsDevSink) ViewBag.DevLink = link;   // tiện test khi chưa có SMTP
+        }
+        ViewBag.Sent = true;   // luôn báo chung để tránh dò email tồn tại
+        SetSeo(new SeoModel { Title = "Quên mật khẩu", NoIndex = true });
+        return View(vm);
+    }
+
+    // ---------------- Đặt lại mật khẩu ----------------
+    [HttpGet("/dat-lai-mat-khau")]
+    [AllowAnonymous]
+    public IActionResult ResetPassword(string? email, string? token)
+    {
+        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token))
+        { Toast("Liên kết đặt lại không hợp lệ.", "error"); return RedirectToAction("Login"); }
+        SetSeo(new SeoModel { Title = "Đặt lại mật khẩu", NoIndex = true });
+        return View(new ResetPasswordViewModel { Email = email, Token = token });
+    }
+
+    [HttpPost("/dat-lai-mat-khau")]
+    [AllowAnonymous]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ResetPassword(ResetPasswordViewModel vm)
+    {
+        if (!ModelState.IsValid) { SetSeo(new SeoModel { Title = "Đặt lại mật khẩu", NoIndex = true }); return View(vm); }
+        var user = await _users.FindByEmailAsync(vm.Email);
+        if (user is not null)
+        {
+            IdentityResult r;
+            try { r = await _users.ResetPasswordAsync(user, Dec(vm.Token), vm.NewPassword); }
+            catch (FormatException) { r = IdentityResult.Failed(new IdentityError { Description = "Liên kết không hợp lệ." }); }
+            if (r.Succeeded) { Toast("Đặt lại mật khẩu thành công. Hãy đăng nhập."); return RedirectToAction("Login"); }
+            foreach (var e in r.Errors) ModelState.AddModelError("", e.Description);
+        }
+        else ModelState.AddModelError("", "Liên kết không hợp lệ hoặc đã hết hạn.");
+        SetSeo(new SeoModel { Title = "Đặt lại mật khẩu", NoIndex = true });
+        return View(vm);
+    }
+
+    // ---------------- Xác nhận email ----------------
+    [HttpGet("/xac-nhan-email")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ConfirmEmail(string? userId, string? token)
+    {
+        if (int.TryParse(userId, out var id) && !string.IsNullOrEmpty(token)
+            && await _users.FindByIdAsync(id.ToString()) is { } user)
+        {
+            try
+            {
+                var r = await _users.ConfirmEmailAsync(user, Dec(token));
+                Toast(r.Succeeded ? "Đã xác nhận email!" : "Liên kết xác nhận không hợp lệ hoặc đã hết hạn.",
+                    r.Succeeded ? "success" : "error");
+            }
+            catch (FormatException) { Toast("Liên kết xác nhận không hợp lệ.", "error"); }
+        }
+        else Toast("Liên kết xác nhận không hợp lệ.", "error");
+        return RedirectToAction("Index", "Home");
+    }
+
+    [HttpPost("/gui-lai-xac-nhan")]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ResendConfirmation()
+    {
+        var user = await _users.GetUserAsync(User);
+        if (user is not null && !user.EmailConfirmed) await SendConfirmEmailAsync(user);
+        Toast("Đã gửi lại email xác nhận (xem logs/emails ở chế độ dev).");
+        var back = Request.Headers.Referer.ToString();
+        return Redirect(string.IsNullOrEmpty(back) ? "/" : back);
     }
 
     private IActionResult RedirectToLocal(string? returnUrl)

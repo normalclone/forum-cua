@@ -1,0 +1,27 @@
+@model List<PostRevision>
+@inject Forum.Web.Services.IMarkdownService Md
+@{
+    var topic = (Topic)ViewBag.Topic;
+}
+<div style="max-width:820px; margin:0 auto;">
+    <p class="small"><a href="/chu-de/@topic.Id/@topic.Slug">← Về chủ đề</a></p>
+    <h1 style="font-size:1.4rem;">@Html.Icon("history", 20) Lịch sử chỉnh sửa</h1>
+    <p class="muted small">@topic.Title — @Model.Count lần chỉnh sửa được lưu.</p>
+
+    <div class="card card-pad mb-10">
+        <div class="card-title" style="color:var(--accent);">@Html.Icon("check", 14) Bản hiện tại</div>
+        <div class="md">@Html.Raw(Md.ToHtml($"# {topic.Title}\n\n{topic.Body}"))</div>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="muted small">Chưa có bản chỉnh sửa nào được lưu.</div>
+    }
+    @foreach (var r in Model)
+    {
+        <div class="card card-pad mb-10" style="opacity:.85;">
+            <div class="card-title muted">@Html.Icon("clock", 13) Trước @ViewHelpers.TimeAgo(r.CreatedAt) (@r.CreatedAt.ToLocalTime().ToString("HH:mm dd/MM/yyyy"))</div>
+            <div class="md">@Html.Raw(Md.ToHtml(r.Body))</div>
+        </div>
+    }
+</div>

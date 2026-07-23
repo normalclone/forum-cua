@@ -78,6 +78,12 @@ public class CommentService : ICommentService
     {
         var c = await _db.Comments.FirstOrDefaultAsync(x => x.Id == commentId && !x.IsDeleted);
         if (c is null || c.AuthorId != userId) return null;
+        if (c.Body != body)
+            _db.PostRevisions.Add(new PostRevision
+            {
+                TargetType = ContentTargetType.Comment, TargetId = c.Id,
+                Body = c.Body, EditorId = userId, CreatedAt = DateTime.UtcNow
+            });
         c.Body = body;
         c.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();

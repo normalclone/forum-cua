@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET (theo global.json)
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore -c Debug
+
+      - name: Cài trình duyệt Playwright (chromium)
+        run: pwsh tests/Forum.Tests.E2E/bin/Debug/net8.0/playwright.ps1 install chromium --with-deps
+
+      - name: Chạy E2E (NUnit + Playwright)
+        run: dotnet test tests/Forum.Tests.E2E/Forum.Tests.E2E.csproj --no-build --verbosity minimal

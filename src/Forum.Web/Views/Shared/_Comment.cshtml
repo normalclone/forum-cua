@@ -7,12 +7,21 @@
     var canEdit = !c.IsDeleted && (isOwn || Model.CanModerate);
     var scoreCls = c.Score > 0 ? "pos" : c.Score < 0 ? "neg" : "";
     var isAccepted = Model.AcceptedAnswerId == c.Id;
+    var blocked = Model.BlockedUserIds.Contains(c.AuthorId);
 }
 <div class="comment-node" id="comment-@c.Id" data-comment-id="@c.Id">
     <div class="comment @(c.IsDeleted ? "deleted" : "") @(isAccepted ? "accepted-answer" : "")">
         <div class="comment-head">
             <button class="comment-collapse btn-icon" type="button" title="Thu gọn" aria-label="Thu gọn" style="padding:0;width:16px;height:16px;">@Html.Icon("chevron-down", 14)</button>
-            @if (!c.IsDeleted)
+            @if (c.IsDeleted)
+            {
+                <span class="muted">[Bình luận đã bị xóa]</span>
+            }
+            else if (blocked)
+            {
+                <span class="muted">@Html.Icon("ban", 12) Đã ẩn — bạn đã chặn thành viên này</span>
+            }
+            else
             {
                 @Html.Avatar(c.Author?.AvatarUrl, c.Author?.DisplayName, 20)
                 <a class="author user-link" data-username="@c.Author?.UserName" href="/thanh-vien/@c.Author?.UserName">@(c.Author?.DisplayName ?? "Ẩn danh")</a>
@@ -27,13 +36,9 @@
                     <span class="accepted-badge">@Html.Icon("check-check", 13) Đáp án được chấp nhận</span>
                 }
             }
-            else
-            {
-                <span class="muted">[Bình luận đã bị xóa]</span>
-            }
         </div>
 
-        @if (!c.IsDeleted)
+        @if (!c.IsDeleted && !blocked)
         {
             <div class="comment-body md">@Html.Raw(Md.ToHtml(c.Body))</div>
             <partial name="_Reactions" model="@(new ReactionBarModel { IsComment = true, Id = c.Id, Summary = Model.Reactions.GetValueOrDefault(c.Id, Forum.Web.Services.ReactionSummary.Empty), Allowed = Model.AllowedEmojis, CanReact = Model.CurrentUserId > 0 })" />
@@ -52,6 +57,7 @@
                 @if (!Model.TopicLocked && Model.CurrentUserId > 0)
                 {
                     <button type="button" data-reply="@c.Id" data-author="@c.Author?.UserName">@Html.Icon("reply", 14) Trả lời</button>
+                    <button type="button" data-quote="@c.Id">@Html.Icon("quote", 13) Trích dẫn</button>
                 }
                 @if (canEdit)
                 {

@@ -73,6 +73,7 @@ builder.Services.AddScoped<Forum.Web.Services.IReputationService, Forum.Web.Serv
 builder.Services.AddScoped<Forum.Web.Services.IVoteService, Forum.Web.Services.VoteService>();
 builder.Services.AddScoped<Forum.Web.Services.IEngagementService, Forum.Web.Services.EngagementService>();
 builder.Services.AddScoped<Forum.Web.Services.IPostingGuardService, Forum.Web.Services.PostingGuardService>();
+builder.Services.AddSingleton<Forum.Web.Services.IAppEmailSender, Forum.Web.Services.LogEmailSender>();
 builder.Services.AddScoped<Forum.Web.Services.ISearchService, Forum.Web.Services.SearchService>();
 builder.Services.AddScoped<Forum.Web.Services.IModerationService, Forum.Web.Services.ModerationService>();
 builder.Services.AddScoped<Forum.Web.Services.ITopicService, Forum.Web.Services.TopicService>();

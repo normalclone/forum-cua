@@ -9,6 +9,7 @@ public class ProfileViewModel
     public int FollowerCount { get; set; }
     public int FollowingCount { get; set; }
     public bool IsFollowing { get; set; }
+    public bool IsBlocked { get; set; }
     public bool IsSelf { get; set; }
     public string Tab { get; set; } = "chu-de";
     public PagedResult<Topic> Topics { get; set; } = PagedResult<Topic>.Empty();

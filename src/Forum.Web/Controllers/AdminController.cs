@@ -305,6 +305,7 @@ public class AdminController : ForumControllerBase
             cat.ColorHex = string.IsNullOrWhiteSpace(m.ColorHex) ? "#4f8cff" : m.ColorHex.Trim();
             cat.DisplayOrder = m.DisplayOrder;
             cat.RequireApproval = m.RequireApproval;
+            cat.MinRoleToView = m.MinRoleToView ?? "";
             Toast("Đã cập nhật danh mục.");
         }
         else
@@ -317,6 +318,7 @@ public class AdminController : ForumControllerBase
                 ColorHex = string.IsNullOrWhiteSpace(m.ColorHex) ? "#4f8cff" : m.ColorHex.Trim(),
                 DisplayOrder = m.DisplayOrder > 0 ? m.DisplayOrder : maxOrder + 1,
                 RequireApproval = m.RequireApproval,
+                MinRoleToView = m.MinRoleToView ?? "",
                 CreatedAt = DateTime.UtcNow
             };
             _db.Categories.Add(cat);

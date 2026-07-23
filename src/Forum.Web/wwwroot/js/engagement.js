@@ -58,6 +58,23 @@
       return;
     }
 
+    // ---- Trích dẫn bình luận vào ô soạn ----
+    var q = e.target.closest("[data-quote]");
+    if (q) {
+      e.preventDefault();
+      var cid = q.getAttribute("data-quote");
+      var body = document.querySelector("#comment-" + cid + " .comment-body");
+      var ta = document.querySelector("[data-comment-form] textarea[name=body]");
+      if (body && ta) {
+        var text = body.innerText.trim().split("\n").map(function (l) { return "> " + l; }).join("\n");
+        ta.value = (ta.value ? ta.value + "\n\n" : "") + text + "\n\n";
+        ta.focus();
+        ta.scrollIntoView({ behavior: "smooth", block: "center" });
+        Forum.toast("Đã trích dẫn vào ô bình luận.", "info", 1400);
+      }
+      return;
+    }
+
     // ---- Duyệt / từ chối hàng loạt (bảng kiểm duyệt) ----
     var bulkAll = e.target.closest("[data-bulk-all]");
     if (bulkAll) {
@@ -78,6 +95,20 @@
         Forum.toast("Đã xử lý " + rb.count + " bài.", "success");
         location.reload();
       } catch (ex) { Forum.toast(ex.message || "Lỗi.", "error"); }
+      return;
+    }
+
+    // ---- Chặn / bỏ chặn thành viên ----
+    var blk = e.target.closest("[data-block-user]");
+    if (blk) {
+      e.preventDefault();
+      if (!Forum.isAuthenticated) { Forum.toast("Đăng nhập để chặn.", "warning"); return; }
+      try {
+        var rbk = await Forum.api.post("/tuong-tac/chan", { userId: parseInt(blk.getAttribute("data-block-user"), 10) });
+        blk.classList.toggle("btn-danger", rbk.blocked);
+        var bl = blk.querySelector("[data-block-label]"); if (bl) bl.textContent = rbk.blocked ? "Bỏ chặn" : "Chặn";
+        Forum.toast(rbk.blocked ? "Đã chặn thành viên." : "Đã bỏ chặn.", "success", 1500);
+      } catch (ex) { Forum.toast(ex.message || "Không thực hiện được.", "error"); }
       return;
     }
 

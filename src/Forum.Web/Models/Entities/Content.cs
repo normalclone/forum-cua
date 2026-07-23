@@ -20,6 +20,10 @@ public class Category
     /// <summary>Nếu bật: chủ đề đăng trong danh mục này phải được kiểm duyệt trước khi hiển thị.</summary>
     public bool RequireApproval { get; set; }
 
+    /// <summary>Vai trò tối thiểu để XEM danh mục: "" = ai cũng xem; "Member" = phải đăng nhập;
+    /// "Moderator"/"Admin" = danh mục riêng tư của nhân sự.</summary>
+    public string MinRoleToView { get; set; } = "";
+
     public ICollection<Topic> Topics { get; set; } = new List<Topic>();
 }
 

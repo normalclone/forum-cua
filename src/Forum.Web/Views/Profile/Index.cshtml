@@ -13,11 +13,13 @@
     <div class="profile-head">
         @Html.Avatar(u.AvatarUrl, u.DisplayName, 64, "avatar-ring")
         <div style="flex:1; min-width:0;">
+            @{ var trust = Forum.Web.Services.TrustLevels.For(u.Reputation); }
             <h1 class="pname">@u.DisplayName
                 @if (Model.PrimaryRole != "Member")
                 {
                     <span class="role-badge role-@Model.PrimaryRole">@RoleLabel(Model.PrimaryRole)</span>
                 }
+                <span class="trust-badge trust-@trust.Level" title="Cấp tín nhiệm">@Html.Icon("shield-check", 12) @trust.Name</span>
             </h1>
             <div class="muted small">@@@u.UserName · @ViewHelpers.TradeLabel(u.Trade)
                 @if (!string.IsNullOrEmpty(u.Location))
@@ -48,6 +50,9 @@
                     @(Model.IsFollowing ? "Đang theo dõi" : "Theo dõi")
                 </button>
                 <a class="btn btn-sm" href="/tin-nhan/voi/@u.UserName" data-chat-with="@u.UserName">@Html.Icon("message-square", 15) Nhắn tin</a>
+                <button class="btn btn-sm @(Model.IsBlocked ? "btn-danger" : "")" data-block-user="@u.Id" type="button">
+                    @Html.Icon("ban", 14) <span data-block-label>@(Model.IsBlocked ? "Bỏ chặn" : "Chặn")</span>
+                </button>
             }
         </div>
     </div>

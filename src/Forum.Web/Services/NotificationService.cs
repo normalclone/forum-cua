@@ -42,6 +42,8 @@ public partial class NotificationService : INotificationService
     {
         if (actorId.HasValue && actorId.Value == recipientId)
             return null; // không tự thông báo cho chính mình
+        if (!await AllowAsync(recipientId, type, actorId))
+            return null; // recipient đã tắt loại này hoặc đã chặn actor
 
         var n = new Notification
         {
@@ -125,9 +127,45 @@ public partial class NotificationService : INotificationService
     /// 1 truy vấn gom số chưa đọc, và đẩy SignalR song song — thay cho N+1 round-trip.
     /// Người gọi phải tự loại bỏ actor và khử trùng lặp trước khi truyền vào.
     /// </summary>
+    /// <summary>Loại nào chịu ràng buộc tùy chọn thông báo; loại khác (Vote/Badge/Message/Moderation) luôn gửi.</summary>
+    private static bool PrefAllows(NotificationType type, bool r, bool m, bool f, bool t) => type switch
+    {
+        NotificationType.Reply => r,
+        NotificationType.Mention => m,
+        NotificationType.Follow => f,
+        NotificationType.TagTopic => t,
+        _ => true
+    };
+
+    private async Task<bool> AllowAsync(int recipientId, NotificationType type, int? actorId)
+    {
+        if (actorId is int a && a != recipientId
+            && await _db.UserBlocks.AnyAsync(b => b.BlockerId == recipientId && b.BlockedId == a))
+            return false;
+        if (type is NotificationType.Reply or NotificationType.Mention or NotificationType.Follow or NotificationType.TagTopic)
+        {
+            var u = await _db.Users.Where(x => x.Id == recipientId)
+                .Select(x => new { x.NotifyReplies, x.NotifyMentions, x.NotifyFollows, x.NotifyTagTopics }).FirstOrDefaultAsync();
+            if (u != null) return PrefAllows(type, u.NotifyReplies, u.NotifyMentions, u.NotifyFollows, u.NotifyTagTopics);
+        }
+        return true;
+    }
+
     private async Task FanOutAsync(List<int> recipientIds, NotificationType type, int? actorId,
         int? topicId, int? commentId, string? message, string? url)
     {
+        if (recipientIds.Count == 0) return;
+
+        // Lọc theo tùy chọn thông báo + chặn (bulk, tránh N+1).
+        var prefs = await _db.Users.Where(u => recipientIds.Contains(u.Id))
+            .Select(u => new { u.Id, u.NotifyReplies, u.NotifyMentions, u.NotifyFollows, u.NotifyTagTopics })
+            .ToDictionaryAsync(u => u.Id);
+        var blockers = actorId is int act
+            ? (await _db.UserBlocks.Where(b => b.BlockedId == act && recipientIds.Contains(b.BlockerId)).Select(b => b.BlockerId).ToListAsync()).ToHashSet()
+            : new HashSet<int>();
+        recipientIds = recipientIds.Where(rid => !blockers.Contains(rid)
+            && (!prefs.TryGetValue(rid, out var p) || PrefAllows(type, p.NotifyReplies, p.NotifyMentions, p.NotifyFollows, p.NotifyTagTopics)))
+            .ToList();
         if (recipientIds.Count == 0) return;
 
         var now = DateTime.UtcNow;

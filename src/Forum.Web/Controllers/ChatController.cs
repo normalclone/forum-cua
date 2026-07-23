@@ -88,6 +88,7 @@ public class ChatController : ForumControllerBase
         if (target is null) return NotFound();
         if (target.Id == CurrentUserId) return RedirectToAction(nameof(Index));
         if (IsLocked(target)) { Toast("Không thể nhắn tin cho tài khoản đang bị khóa.", "warning"); return RedirectToAction(nameof(Index)); }
+        if (await IsBlockedPairAsync(target.Id)) { Toast("Không thể nhắn tin do đã chặn giữa hai người.", "warning"); return RedirectToAction(nameof(Index)); }
         var convId = await FindOrCreateConversationAsync(target.Id);
         return RedirectToAction(nameof(Conversation), new { id = convId });
     }
@@ -165,6 +166,7 @@ public class ChatController : ForumControllerBase
         if (target is null) return NotFound();
         if (target.Id == CurrentUserId) return BadRequest(new { message = "Không thể tự nhắn cho chính mình." });
         if (IsLocked(target)) return BadRequest(new { message = "Không thể nhắn tin cho tài khoản đang bị khóa." });
+        if (await IsBlockedPairAsync(target.Id)) return BadRequest(new { message = "Không thể nhắn tin do đã chặn giữa hai người." });
         var convId = await FindOrCreateConversationAsync(target.Id);
         return Json(new
         {
@@ -174,6 +176,10 @@ public class ChatController : ForumControllerBase
     }
 
     private static bool IsLocked(ApplicationUser u) => u.LockoutEnd != null && u.LockoutEnd > DateTimeOffset.UtcNow;
+
+    private Task<bool> IsBlockedPairAsync(int otherId)
+        => _db.UserBlocks.AnyAsync(b => (b.BlockerId == CurrentUserId && b.BlockedId == otherId)
+                                     || (b.BlockerId == otherId && b.BlockedId == CurrentUserId));
 
     private async Task<int> FindOrCreateConversationAsync(int otherUserId)
     {

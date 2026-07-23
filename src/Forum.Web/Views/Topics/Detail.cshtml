@@ -81,6 +81,10 @@
 
         <div class="flex wrap gap-6 mt-14" style="align-items:center;">
             <span class="tf small muted">@Html.Icon("message-square", 14) @Model.CommentCount bình luận</span>
+            @if (t.UpdatedAt.HasValue && Model.RevisionCount > 0)
+            {
+                <a class="tf small muted" href="/chu-de/@t.Id/lich-su" title="Lịch sử chỉnh sửa">@Html.Icon("history", 13) đã sửa (@Model.RevisionCount)</a>
+            }
             @if (User.Identity?.IsAuthenticated == true)
             {
                 <button class="btn-save @(Model.IsBookmarked ? "is-saved" : "")" data-bookmark="@t.Id" type="button">@Html.Icon("star", 15) <span class="bm-label">@(Model.IsBookmarked ? "Đã lưu" : "Lưu")</span></button>
@@ -158,13 +162,27 @@
         {
             foreach (var root in Model.CommentRoots)
             {
-                <partial name="_Comment" model="@(new CommentRenderModel { Node = root, UserVotes = Model.UserCommentVotes, CurrentUserId = User.UserId(), CanModerate = Model.CanModerate, TopicLocked = t.IsLocked, TopicId = t.Id, IsQuestion = t.IsQuestion, AcceptedAnswerId = t.AcceptedAnswerId, CanAccept = Model.CanAcceptAnswer, Reactions = Model.CommentReactions, AllowedEmojis = Model.AllowedEmojis })" />
+                <partial name="_Comment" model="@(new CommentRenderModel { Node = root, UserVotes = Model.UserCommentVotes, CurrentUserId = User.UserId(), CanModerate = Model.CanModerate, TopicLocked = t.IsLocked, TopicId = t.Id, IsQuestion = t.IsQuestion, AcceptedAnswerId = t.AcceptedAnswerId, CanAccept = Model.CanAcceptAnswer, Reactions = Model.CommentReactions, AllowedEmojis = Model.AllowedEmojis, BlockedUserIds = Model.BlockedUserIds })" />
             }
         }
     </div>
 </section>
 
-@section Sidebar { @await Component.InvokeAsync("ForumSidebar", new { part = "info" }) }
+@section Sidebar {
+    @if (Model.RelatedTopics.Count > 0)
+    {
+        <div class="card card-pad mb-10">
+            <div class="card-title">@Html.Icon("link", 14) Chủ đề liên quan</div>
+            <ul class="rank-list" style="list-style:none; padding-left:0;">
+                @foreach (var rt in Model.RelatedTopics)
+                {
+                    <li><a href="@Url.Topic(rt)">@rt.Title</a> <span class="muted xsmall">@rt.CommentCount bình luận</span></li>
+                }
+            </ul>
+        </div>
+    }
+    @await Component.InvokeAsync("ForumSidebar", new { part = "info" })
+}
 
 @section Scripts {
     <script src="~/js/editor.js" asp-append-version="true"></script>

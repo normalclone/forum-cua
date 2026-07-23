@@ -11,7 +11,7 @@
     <div class="card card-pad">
         <div class="card-title">Danh mục</div>
         <ul class="list-reset">
-            @foreach (var cc in Model.Categories)
+            @foreach (var cc in Model.Categories.Where(cc => Forum.Web.Helpers.CategoryAccess.CanView(User, cc.Category.MinRoleToView)))
             {
                 <li>
                     <a href="/danh-muc/@cc.Category.Slug" class="flex items-center between"

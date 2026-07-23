@@ -52,7 +52,9 @@ public class TopicService : ITopicService
         {
             var author0 = await _db.Users.FindAsync(authorId);
             var days = _settings.GetInt(SettingKeys.AutomodNewUserDays, 3);
-            if (author0 != null && (now - author0.CreatedAt).TotalDays < days) approved = false;
+            // Thành viên đủ tín nhiệm được miễn kiểm duyệt "tài khoản mới".
+            if (author0 != null && (now - author0.CreatedAt).TotalDays < days
+                && author0.Reputation < TrustLevels.TrustedThreshold) approved = false;
         }
         if (approved && _settings.GetBool(SettingKeys.AutomodSpam, true) && _filter.LooksLikeSpam(body))
             approved = false;
@@ -107,6 +109,14 @@ public class TopicService : ITopicService
     {
         var topic = await _db.Topics.Include(t => t.TopicTags).FirstOrDefaultAsync(t => t.Id == topicId && !t.IsDeleted);
         if (topic is null) return null;
+
+        // Lưu lịch sử: chụp nội dung cũ nếu có thay đổi thực sự.
+        if (topic.Body != body || topic.Title != title.Trim())
+            _db.PostRevisions.Add(new PostRevision
+            {
+                TargetType = ContentTargetType.Topic, TargetId = topic.Id,
+                Body = $"# {topic.Title}\n\n{topic.Body}", EditorId = editorId, CreatedAt = DateTime.UtcNow
+            });
 
         topic.Title = title.Trim();
         topic.Slug = _slug.Generate(title, 120);

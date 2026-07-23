@@ -26,6 +26,12 @@ public class ApplicationUser : IdentityUser<int>
     /// null hoặc quá khứ = không bị cấm nói.</summary>
     public DateTimeOffset? MutedUntil { get; set; }
 
+    // Tùy chọn nhận thông báo (mặc định bật).
+    public bool NotifyReplies { get; set; } = true;
+    public bool NotifyMentions { get; set; } = true;
+    public bool NotifyFollows { get; set; } = true;
+    public bool NotifyTagTopics { get; set; } = true;
+
     // Navigation
     public ICollection<Topic> Topics { get; set; } = new List<Topic>();
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();

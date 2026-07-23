@@ -23,16 +23,89 @@
                 <input asp-for="Location" class="form-control" placeholder="VD: Hà Nội" />
             </div>
             <div class="field">
-                <label asp-for="AvatarUrl"></label>
-                <input asp-for="AvatarUrl" class="form-control" placeholder="https://… (để trống dùng avatar chữ cái)" />
+                <label asp-for="AvatarUrl">Ảnh đại diện</label>
+                <div class="flex items-center gap-6 mb-8">
+                    <img id="avatar-preview" src="@Model.AvatarUrl" alt="" style="width:48px; height:48px; border-radius:50%; object-fit:cover; @(string.IsNullOrEmpty(Model.AvatarUrl) ? "display:none;" : "")" />
+                    <input type="file" accept="image/*" id="avatar-file" />
+                </div>
+                <input asp-for="AvatarUrl" class="form-control" placeholder="hoặc dán URL ảnh; để trống dùng avatar chữ cái" />
                 <span asp-validation-for="AvatarUrl" class="field-validation-error"></span>
+                <div class="muted xsmall mt-8">Chọn ảnh để tải lên (jpg/png/gif/webp ≤ 5MB) — tải xong sẽ tự lưu.</div>
             </div>
             <div class="field">
                 <label asp-for="Bio"></label>
                 <textarea asp-for="Bio" class="form-control" rows="4" placeholder="Giới thiệu ngắn về bạn…"></textarea>
                 <span asp-validation-for="Bio" class="field-validation-error"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+            <div class="flex gap-6 items-center">
+                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                <a class="btn" href="/doi-mat-khau">@Html.Icon("lock", 14) Đổi mật khẩu</a>
+            </div>
         </form>
     </div>
+
+    @{ var prefs = ViewBag.Prefs as bool[] ?? new[] { true, true, true, true }; }
+    <div class="card card-pad">
+        <div class="card-title">@Html.Icon("bell", 15) Tùy chọn thông báo</div>
+        <form method="post" action="/cai-dat/thong-bao">
+            @Html.AntiForgeryToken()
+            <label class="chk"><input type="checkbox" name="notifyReplies" value="true" @(prefs[0] ? "checked" : "") /> <input type="hidden" name="notifyReplies" value="false" /> Có người trả lời chủ đề/bình luận của tôi</label>
+            <label class="chk"><input type="checkbox" name="notifyMentions" value="true" @(prefs[1] ? "checked" : "") /> <input type="hidden" name="notifyMentions" value="false" /> Được nhắc tên (@@)</label>
+            <label class="chk"><input type="checkbox" name="notifyFollows" value="true" @(prefs[2] ? "checked" : "") /> <input type="hidden" name="notifyFollows" value="false" /> Có người theo dõi tôi</label>
+            <label class="chk"><input type="checkbox" name="notifyTagTopics" value="true" @(prefs[3] ? "checked" : "") /> <input type="hidden" name="notifyTagTopics" value="false" /> Chủ đề mới thuộc thẻ tôi theo dõi</label>
+            <button type="submit" class="btn btn-primary btn-sm mt-8">Lưu tùy chọn</button>
+        </form>
+    </div>
+
+    <div class="card card-pad">
+        <div class="card-title">@Html.Icon("ban", 15) Thành viên đã chặn</div>
+        @{ var blocked = ViewBag.Blocked as IEnumerable<dynamic>; }
+        @if (blocked != null && blocked.Any())
+        {
+            <ul class="note-list">
+                @foreach (var b in blocked)
+                {
+                    <li><a href="/thanh-vien/@b.UserName">@b.DisplayName</a>
+                        <button class="btn btn-sm" data-block-user="@b.Id" type="button" style="float:right;">Bỏ chặn</button></li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="muted small">Bạn chưa chặn ai.</div>
+        }
+    </div>
+
+    <div class="card card-pad">
+        <div class="card-title">@Html.Icon("shield", 15) Dữ liệu &amp; tài khoản</div>
+        <div class="flex wrap gap-6 items-center">
+            <a class="btn btn-sm" href="/cai-dat/xuat-du-lieu">@Html.Icon("download", 14) Tải dữ liệu của tôi (JSON)</a>
+            <form method="post" action="/cai-dat/dong-tai-khoan" onsubmit="return confirm('Đóng tài khoản? Bạn sẽ bị đăng xuất và KHÔNG đăng nhập lại được. Nội dung đã đăng vẫn giữ nhưng ẩn danh.');">
+                @Html.AntiForgeryToken()
+                <button class="btn btn-sm btn-danger" type="submit">@Html.Icon("user-x", 14) Đóng tài khoản</button>
+            </form>
+        </div>
+        <div class="muted xsmall mt-8">Đóng tài khoản: ẩn danh hồ sơ + khóa vĩnh viễn — không thể hoàn tác.</div>
+    </div>
 </div>
+
+@section Scripts {
+<script>
+(function () {
+    var f = document.getElementById("avatar-file");
+    if (!f) return;
+    f.addEventListener("change", async function () {
+        if (!f.files || !f.files[0]) return;
+        var fd = new FormData(); fd.append("file", f.files[0]);
+        try {
+            var r = await window.Forum.api.postForm("/cai-dat/tai-avatar", fd);
+            var url = r.url;
+            document.querySelector("input[name=AvatarUrl]").value = url;
+            var img = document.getElementById("avatar-preview");
+            img.src = url; img.style.display = "";
+            window.Forum.toast("Đã tải & lưu ảnh đại diện.", "success", 1600);
+        } catch (ex) { window.Forum.toast(ex.message || "Tải ảnh thất bại.", "error"); }
+    });
+})();
+</script>
+}

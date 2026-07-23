@@ -66,4 +66,18 @@ public class EngagementController : ForumControllerBase
         var (ok, acceptedId) = await _engagement.ToggleAcceptedAnswerAsync(req.TopicId, req.CommentId, CurrentUserId);
         return Json(new { ok, acceptedId });
     }
+
+    public record BlockRequest(int UserId);
+
+    [HttpPost("chan")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ToggleBlock([FromBody] BlockRequest req)
+    {
+        try
+        {
+            var blocked = await _engagement.ToggleBlockAsync(CurrentUserId, req.UserId);
+            return Json(new { blocked });
+        }
+        catch (InvalidOperationException ex) { return BadRequest(new { message = ex.Message }); }
+    }
 }

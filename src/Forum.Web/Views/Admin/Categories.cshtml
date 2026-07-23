@@ -39,6 +39,15 @@
             @Html.Icon("clock", 15) Yêu cầu kiểm duyệt trước khi hiển thị (đăng phải chờ duyệt)
         </label>
         <div>
+            <label>Quyền xem (danh mục riêng tư)</label>
+            <select class="input" name="MinRoleToView" id="cat-minrole" style="width:auto;">
+                <option value="">Công khai — ai cũng xem</option>
+                <option value="Member">Chỉ thành viên đã đăng nhập</option>
+                <option value="Moderator">Chỉ điều hành viên + quản trị viên</option>
+                <option value="Admin">Chỉ quản trị viên</option>
+            </select>
+        </div>
+        <div>
             <label>Kiểm duyệt viên phụ trách (username, cách nhau dấu phẩy)</label>
             <input class="input" name="Moderators" id="cat-mods" placeholder="vd: mod, kts-linh" />
             <div class="muted xsmall mt-8">Mod được gán sẽ chỉ thấy hàng chờ duyệt/báo cáo của các danh mục mình phụ trách. Bỏ trống = mod thường thấy tất cả.</div>
@@ -90,6 +99,7 @@
                                     data-id="@c.Id" data-name="@c.Name" data-desc="@c.Description"
                                     data-icon="@c.IconName" data-color="@c.ColorHex" data-order="@c.DisplayOrder"
                                     data-approval="@c.RequireApproval.ToString().ToLower()"
+                                    data-minrole="@c.MinRoleToView"
                                     data-mods="@(Model.Moderators.TryGetValue(c.Id, out var em) ? string.Join(", ", em) : "")">
                                 @Html.Icon("pencil", 13) Sửa
                             </button>

@@ -750,3 +750,12 @@ a.tag:hover { text-decoration: none; filter: brightness(.97); border-color: var(
 .note-list li { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-size: .85rem; }
 .canned-chip { cursor: pointer; border: 1px dashed var(--border-strong); background: transparent; }
 .canned-chip:hover { border-style: solid; border-color: var(--accent); color: var(--accent); }
+
+/* Cấp tín nhiệm */
+.trust-badge { font-size: .66rem; padding: 1px 7px; border-radius: 999px; background: var(--surface-2); color: var(--text-muted); font-weight: 700; vertical-align: middle; display: inline-flex; align-items: center; gap: 2px; }
+.trust-badge.trust-2 { color: #2e7d32; background: rgba(46,125,50,.12); }
+.trust-badge.trust-3 { color: #1565c0; background: rgba(21,101,192,.14); }
+.trust-badge.trust-4 { color: #8e24aa; background: rgba(142,36,170,.14); }
+
+/* Checkbox theo hàng (dùng chung, ngoài admin) */
+.chk { display: flex; align-items: center; gap: 8px; font-size: .86rem; padding: 3px 0; }

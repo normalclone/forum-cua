@@ -12,6 +12,20 @@ public static class ReputationPoints
     public const int AcceptedAnswer = 15;   // được chọn làm đáp án hay
 }
 
+/// <summary>Cấp độ tín nhiệm suy ra từ điểm uy tín.</summary>
+public static class TrustLevels
+{
+    /// <summary>Trả về (cấp, tên) theo uy tín.</summary>
+    public static (int Level, string Name) For(int rep) =>
+        rep >= 2000 ? (4, "Chuyên gia") :
+        rep >= 800 ? (3, "Kỳ cựu") :
+        rep >= 200 ? (2, "Tích cực") :
+        rep >= 50 ? (1, "Thành viên") : (0, "Mới");
+
+    /// <summary>Từ mức này trở lên: miễn kiểm duyệt "tài khoản mới".</summary>
+    public const int TrustedThreshold = 200;
+}
+
 /// <summary>Slug các huy hiệu (đồng bộ với dữ liệu seed).</summary>
 public static class BadgeSlugs
 {

@@ -71,6 +71,7 @@ public class CategoryEditModel
     public int DisplayOrder { get; set; }
     public bool RequireApproval { get; set; }
     public string? Moderators { get; set; }   // username kiểm duyệt viên, cách nhau dấu phẩy
+    public string? MinRoleToView { get; set; } // "" công khai; "Member"/"Moderator"/"Admin"
 }
 
 public class AdminTagsViewModel

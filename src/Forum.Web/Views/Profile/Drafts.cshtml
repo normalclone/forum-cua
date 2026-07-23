@@ -1,0 +1,27 @@
+@model List<Draft>
+<div style="max-width:720px; margin:0 auto;">
+    <h1 style="font-size:1.4rem;">@Html.Icon("file-text", 20) Bản nháp của tôi</h1>
+    @if (Model.Count == 0)
+    {
+        <div class="empty"><div class="ico">@Html.Icon("file-text", 40)</div><h3>Chưa có bản nháp</h3><p class="muted">Bài đang soạn dở sẽ tự lưu vào đây.</p><a class="btn btn-primary btn-sm" href="/tao-chu-de">Soạn chủ đề</a></div>
+    }
+    else
+    {
+        <div class="card">
+            @foreach (var d in Model)
+            {
+                <div class="lb-row" style="justify-content:space-between; align-items:center;">
+                    <div>
+                        <a href="/tao-chu-de" style="font-weight:600;">@(string.IsNullOrWhiteSpace(d.Title) ? "(chưa có tiêu đề)" : d.Title)</a>
+                        <div class="muted xsmall">Cập nhật @ViewHelpers.TimeAgo(d.UpdatedAt)</div>
+                    </div>
+                    <form method="post" action="/ban-nhap/xoa" onsubmit="return confirm('Xóa bản nháp này?');">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@d.Id" />
+                        <button class="btn btn-sm btn-danger" type="submit">@Html.Icon("trash", 13) Xóa</button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+</div>

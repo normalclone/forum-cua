@@ -17,11 +17,37 @@ public class ProfileController : ForumControllerBase
     private readonly INotificationService _notifications;
     private readonly ISeoService _seo;
     private readonly IForumUrlService _url;
+    private readonly IWebHostEnvironment _env;
 
     public ProfileController(ApplicationDbContext db, UserManager<ApplicationUser> users, SignInManager<ApplicationUser> signIn,
-        ISearchService search, INotificationService notifications, ISeoService seo, IForumUrlService url)
+        ISearchService search, INotificationService notifications, ISeoService seo, IForumUrlService url, IWebHostEnvironment env)
     {
-        _db = db; _users = users; _signIn = signIn; _search = search; _notifications = notifications; _seo = seo; _url = url;
+        _db = db; _users = users; _signIn = signIn; _search = search; _notifications = notifications; _seo = seo; _url = url; _env = env;
+    }
+
+    // Tải ảnh đại diện (avatar) — thành viên đã đăng nhập. Chỉ nhận ảnh raster.
+    [HttpPost("/cai-dat/tai-avatar")]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    [RequestSizeLimit(6 * 1024 * 1024)]
+    public async Task<IActionResult> UploadAvatar(IFormFile? file)
+    {
+        if (file is null || file.Length == 0) return BadRequest(new { message = "Chưa chọn tệp." });
+        if (file.Length > 5 * 1024 * 1024) return BadRequest(new { message = "Ảnh vượt quá 5MB." });
+        var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+        if (!new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" }.Contains(ext))
+            return BadRequest(new { message = "Định dạng ảnh không hỗ trợ." });
+        var webRoot = _env.WebRootPath ?? Path.Combine(_env.ContentRootPath, "wwwroot");
+        var dir = Path.Combine(webRoot, "uploads");
+        Directory.CreateDirectory(dir);
+        var stored = $"avatar-{CurrentUserId}-{Guid.NewGuid():N}{ext}";
+        await using (var fs = System.IO.File.Create(Path.Combine(dir, stored)))
+            await file.CopyToAsync(fs);
+        var url = $"/uploads/{stored}";
+        // Lưu ngay vào hồ sơ + làm mới claim avatar.
+        var user = await _users.GetUserAsync(User);
+        if (user is not null) { user.AvatarUrl = url; await _users.UpdateAsync(user); await _signIn.RefreshSignInAsync(user); }
+        return Json(new { url });
     }
 
     [HttpGet("/thanh-vien/{username}")]
@@ -41,6 +67,7 @@ public class ProfileController : ForumControllerBase
             FollowingCount = await _db.UserFollows.CountAsync(f => f.FollowerId == user.Id),
             IsSelf = IsAuthed && CurrentUserId == user.Id,
             IsFollowing = IsAuthed && await _db.UserFollows.AnyAsync(f => f.FollowerId == CurrentUserId && f.FolloweeId == user.Id),
+            IsBlocked = IsAuthed && await _db.UserBlocks.AnyAsync(b => b.BlockerId == CurrentUserId && b.BlockedId == user.Id),
             Tab = tab
         };
 
@@ -135,7 +162,25 @@ public class ProfileController : ForumControllerBase
         var user = await _users.GetUserAsync(User);
         if (user is null) return Challenge();
         SetSeo(new SeoModel { Title = "Cài đặt hồ sơ", NoIndex = true });
+        ViewBag.Prefs = new[] { user.NotifyReplies, user.NotifyMentions, user.NotifyFollows, user.NotifyTagTopics };
+        ViewBag.Blocked = await _db.UserBlocks.Where(b => b.BlockerId == user.Id)
+            .Join(_db.Users, b => b.BlockedId, u => u.Id, (b, u) => new { u.UserName, u.DisplayName, u.Id })
+            .ToListAsync();
         return View(new EditProfileViewModel { DisplayName = user.DisplayName, Bio = user.Bio, Location = user.Location, Trade = user.Trade, AvatarUrl = user.AvatarUrl });
+    }
+
+    [HttpPost("/cai-dat/thong-bao")]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SaveNotificationPrefs(bool notifyReplies, bool notifyMentions, bool notifyFollows, bool notifyTagTopics)
+    {
+        var user = await _users.GetUserAsync(User);
+        if (user is null) return Challenge();
+        user.NotifyReplies = notifyReplies; user.NotifyMentions = notifyMentions;
+        user.NotifyFollows = notifyFollows; user.NotifyTagTopics = notifyTagTopics;
+        await _users.UpdateAsync(user);
+        Toast("Đã lưu tùy chọn thông báo.");
+        return RedirectToAction(nameof(Settings));
     }
 
     [HttpPost("/cai-dat")]
@@ -157,6 +202,70 @@ public class ProfileController : ForumControllerBase
 
         Toast("Đã lưu hồ sơ.");
         return RedirectToAction(nameof(Index), new { username = user.UserName });
+    }
+
+    [HttpGet("/ban-nhap")]
+    [Authorize]
+    public async Task<IActionResult> Drafts()
+    {
+        SetSeo(new SeoModel { Title = "Bản nháp của tôi", NoIndex = true });
+        var drafts = await _db.Drafts.Where(d => d.UserId == CurrentUserId)
+            .OrderByDescending(d => d.UpdatedAt).ToListAsync();
+        return View(drafts);
+    }
+
+    [HttpPost("/ban-nhap/xoa")]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteDraft(int id)
+    {
+        var d = await _db.Drafts.FindAsync(id);
+        if (d is not null && d.UserId == CurrentUserId) { _db.Drafts.Remove(d); await _db.SaveChangesAsync(); }
+        Toast("Đã xóa bản nháp.");
+        return RedirectToAction(nameof(Drafts));
+    }
+
+    // ---------------- GDPR: xuất dữ liệu + đóng tài khoản ----------------
+    [HttpGet("/cai-dat/xuat-du-lieu")]
+    [Authorize]
+    public async Task<IActionResult> ExportData()
+    {
+        var user = await _users.GetUserAsync(User);
+        if (user is null) return Challenge();
+        var data = new
+        {
+            profile = new { user.UserName, user.DisplayName, user.Email, user.Bio, user.Location, user.Reputation, user.CreatedAt },
+            topics = await _db.Topics.IgnoreQueryFilters().Where(t => t.AuthorId == user.Id)
+                .Select(t => new { t.Title, t.Body, t.CreatedAt, t.Score }).ToListAsync(),
+            comments = await _db.Comments.IgnoreQueryFilters().Where(c => c.AuthorId == user.Id)
+                .Select(c => new { c.Body, c.CreatedAt, c.Score }).ToListAsync()
+        };
+        var json = System.Text.Json.JsonSerializer.Serialize(data, new System.Text.Json.JsonSerializerOptions
+        {
+            WriteIndented = true,
+            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        });
+        return File(System.Text.Encoding.UTF8.GetBytes(json), "application/json", $"du-lieu-{user.UserName}.json");
+    }
+
+    [HttpPost("/cai-dat/dong-tai-khoan")]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CloseAccount()
+    {
+        var user = await _users.GetUserAsync(User);
+        if (user is null) return Challenge();
+        // Ẩn danh + khóa vĩnh viễn + vô hiệu phiên. Giữ nội dung (đã ẩn danh tác giả).
+        await _users.SetEmailAsync(user, $"closed-{user.Id}@deleted.local");
+        user.DisplayName = "Tài khoản đã đóng";
+        user.Bio = null; user.Location = null; user.AvatarUrl = null;
+        await _users.SetLockoutEnabledAsync(user, true);
+        await _users.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+        await _users.UpdateAsync(user);
+        await _users.UpdateSecurityStampAsync(user);
+        await _signIn.SignOutAsync();
+        Toast("Tài khoản của bạn đã được đóng. Cảm ơn bạn đã tham gia.");
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpGet("/bang-tin")]

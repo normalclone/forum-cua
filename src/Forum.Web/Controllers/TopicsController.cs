@@ -40,6 +40,7 @@ public class TopicsController : ForumControllerBase
     {
         var topic = await _topics.GetForDetailAsync(id);
         if (topic is null || topic.IsDeleted) return NotFound();
+        if (!Helpers.CategoryAccess.CanView(User, topic.Category?.MinRoleToView)) return NotFound();   // danh mục riêng tư
 
         // Bài chờ kiểm duyệt: chỉ tác giả và nhân viên kiểm duyệt được xem.
         if (!topic.IsApproved && !(IsAuthed && (topic.AuthorId == CurrentUserId || User.IsStaff())))
@@ -89,6 +90,15 @@ public class TopicsController : ForumControllerBase
         vm.TopicReactions = await _engagement.GetForTopicAsync(id, reactUid);
         vm.CommentReactions = await _engagement.GetForCommentsAsync(ordered.Select(c => c.Id).ToList(), reactUid);
         vm.CanAcceptAnswer = IsAuthed && topic.IsQuestion && (topic.AuthorId == CurrentUserId || vm.CanModerate);
+
+        // ---- Chặn (ẩn bình luận), chủ đề liên quan, lịch sử sửa ----
+        if (IsAuthed) vm.BlockedUserIds = await _engagement.BlockedIdsAsync(CurrentUserId);
+        var tagIds = topic.TopicTags.Select(tt => tt.TagId).ToList();
+        if (tagIds.Count > 0)
+            vm.RelatedTopics = await _db.Topics
+                .Where(t => t.Id != id && t.IsApproved && t.TopicTags.Any(tt => tagIds.Contains(tt.TagId)))
+                .OrderByDescending(t => t.HotScore).Take(5).ToListAsync();
+        vm.RevisionCount = await _db.PostRevisions.CountAsync(r => r.TargetType == ContentTargetType.Topic && r.TargetId == id);
 
         // ---- SEO ----
         var img = _md.FirstImageUrl(topic.Body);
@@ -198,15 +208,33 @@ public class TopicsController : ForumControllerBase
         if (topic.IsApproved)
             await _notifications.NotifyNewTopicToTagFollowersAsync(topic.Id, CurrentUserId);
 
-        // Xoá nháp của người dùng (nếu có).
-        var drafts = await _db.Drafts.Where(d => d.UserId == CurrentUserId).ToListAsync();
-        if (drafts.Count > 0) { _db.Drafts.RemoveRange(drafts); await _db.SaveChangesAsync(); }
+        // Xoá đúng bản nháp vừa dùng (giữ các bản nháp khác — hỗ trợ nhiều bản nháp).
+        if (vm.DraftId is int usedDraft)
+        {
+            var d = await _db.Drafts.FindAsync(usedDraft);
+            if (d is not null && d.UserId == CurrentUserId) { _db.Drafts.Remove(d); await _db.SaveChangesAsync(); }
+        }
 
         Toast(topic.IsApproved
             ? "Đã đăng chủ đề!"
             : "Đã gửi bài. Chủ đề thuộc danh mục cần kiểm duyệt nên sẽ hiển thị sau khi được duyệt.",
             topic.IsApproved ? "success" : "warning");
         return Redirect(_url.Topic(topic));
+    }
+
+    // ---------------- Lịch sử chỉnh sửa ----------------
+    [HttpGet("/chu-de/{id:int}/lich-su")]
+    [AllowAnonymous]
+    public async Task<IActionResult> History(int id)
+    {
+        var topic = await _db.Topics.FirstOrDefaultAsync(t => t.Id == id && !t.IsDeleted);
+        if (topic is null) return NotFound();
+        SetSeo(new SeoModel { Title = $"Lịch sử chỉnh sửa: {topic.Title}", NoIndex = true });
+        ViewBag.Topic = topic;
+        var revs = await _db.PostRevisions
+            .Where(r => r.TargetType == ContentTargetType.Topic && r.TargetId == id)
+            .OrderByDescending(r => r.CreatedAt).ToListAsync();
+        return View(revs);
     }
 
     // ---------------- Edit ----------------

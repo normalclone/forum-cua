@@ -1,3 +1,4 @@
+using Forum.Web.Helpers;
 using Forum.Web.Models.ViewModels;
 using Forum.Web.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -39,6 +40,7 @@ public class CategoriesController : ForumControllerBase
     {
         var cat = await _db.Categories.FirstOrDefaultAsync(c => c.Slug == slug);
         if (cat is null) return NotFound();
+        if (!CategoryAccess.CanView(User, cat.MinRoleToView)) return NotFound();   // danh mục riêng tư
 
         var (sort, sortKey) = HomeController.ParseSort(sapXep);
         // Bài ghim/nổi bật của riêng danh mục → strip đầu trang. Loại đúng các bài này

@@ -23,6 +23,10 @@ public class TopicDetailViewModel
     public Forum.Web.Services.ReactionSummary TopicReactions { get; set; } = Forum.Web.Services.ReactionSummary.Empty;
     public Dictionary<int, Forum.Web.Services.ReactionSummary> CommentReactions { get; set; } = new();
     public IReadOnlyList<string> AllowedEmojis { get; set; } = System.Array.Empty<string>();
+
+    public List<Topic> RelatedTopics { get; set; } = new();
+    public HashSet<int> BlockedUserIds { get; set; } = new();
+    public int RevisionCount { get; set; }
 }
 
 public class CommentNode
@@ -57,13 +61,15 @@ public class CommentRenderModel
     public bool CanAccept { get; set; }   // tác giả chủ đề hoặc nhân sự → được chọn đáp án
     public Dictionary<int, Forum.Web.Services.ReactionSummary> Reactions { get; set; } = new();
     public IReadOnlyList<string> AllowedEmojis { get; set; } = System.Array.Empty<string>();
+    public HashSet<int> BlockedUserIds { get; set; } = new();
 
     public CommentRenderModel ForChild(CommentNode child) => new()
     {
         Node = child, UserVotes = UserVotes, CurrentUserId = CurrentUserId,
         CanModerate = CanModerate, TopicLocked = TopicLocked,
         TopicId = TopicId, IsQuestion = IsQuestion, AcceptedAnswerId = AcceptedAnswerId,
-        CanAccept = CanAccept, Reactions = Reactions, AllowedEmojis = AllowedEmojis
+        CanAccept = CanAccept, Reactions = Reactions, AllowedEmojis = AllowedEmojis,
+        BlockedUserIds = BlockedUserIds
     };
 }
 

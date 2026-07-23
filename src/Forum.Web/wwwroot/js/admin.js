@@ -155,6 +155,7 @@
       document.getElementById("cat-color").value = g("color") || "#4f8cff";
       document.getElementById("cat-order").value = g("order") || "0";
       document.getElementById("cat-approval").checked = g("approval") === "true";
+      var mr = document.getElementById("cat-minrole"); if (mr) mr.value = g("minrole");
       document.getElementById("cat-mods").value = g("mods");
       document.getElementById("cat-form-title").textContent = "Sửa danh mục: " + g("name");
       document.getElementById("cat-form").scrollIntoView({ behavior: "smooth", block: "center" });

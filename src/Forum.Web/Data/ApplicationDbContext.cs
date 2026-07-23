@@ -48,6 +48,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<Reaction> Reactions => Set<Reaction>();
     public DbSet<TagSubscription> TagSubscriptions => Set<TagSubscription>();
     public DbSet<UserNote> UserNotes => Set<UserNote>();
+    public DbSet<UserBlock> UserBlocks => Set<UserBlock>();
+    public DbSet<PostRevision> PostRevisions => Set<PostRevision>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -99,6 +101,18 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             e.HasOne(n => n.User).WithMany().HasForeignKey(n => n.UserId);
             e.HasOne(n => n.Author).WithMany().HasForeignKey(n => n.AuthorId);
         });
+        b.Entity<UserBlock>(e =>
+        {
+            e.HasKey(x => new { x.BlockerId, x.BlockedId });
+            e.HasOne(x => x.Blocker).WithMany().HasForeignKey(x => x.BlockerId);
+            e.HasOne(x => x.Blocked).WithMany().HasForeignKey(x => x.BlockedId);
+        });
+        b.Entity<PostRevision>(e =>
+        {
+            e.HasIndex(x => new { x.TargetType, x.TargetId });
+            e.Property(x => x.Body).HasMaxLength(20000);
+        });
+        b.Entity<Category>(e => e.Property(c => c.MinRoleToView).HasMaxLength(20));
 
         // ---- Identity user ----
         b.Entity<ApplicationUser>(e =>

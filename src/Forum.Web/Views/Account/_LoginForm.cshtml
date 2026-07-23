@@ -21,7 +21,10 @@
         <input asp-for="Password" class="form-control" autocomplete="current-password" />
         <span asp-validation-for="Password" class="field-validation-error"></span>
     </div>
-    <label class="checkbox mb-10"><input asp-for="RememberMe" type="checkbox" /> @Html.DisplayNameFor(m => m.RememberMe)</label>
+    <div class="flex between items-center mb-10">
+        <label class="checkbox" style="margin:0;"><input asp-for="RememberMe" type="checkbox" /> @Html.DisplayNameFor(m => m.RememberMe)</label>
+        <a class="small" href="/quen-mat-khau" data-no-progress>Quên mật khẩu?</a>
+    </div>
     <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
 </form>
 

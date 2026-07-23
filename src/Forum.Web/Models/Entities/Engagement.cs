@@ -31,6 +31,29 @@ public class TagSubscription
     public DateTime CreatedAt { get; set; }
 }
 
+/// <summary>Chặn/ẩn một thành viên: không nhận thông báo/tin nhắn từ họ, ẩn bình luận của họ.</summary>
+public class UserBlock
+{
+    public int BlockerId { get; set; }
+    public ApplicationUser Blocker { get; set; } = null!;
+
+    public int BlockedId { get; set; }
+    public ApplicationUser Blocked { get; set; } = null!;
+
+    public DateTime CreatedAt { get; set; }
+}
+
+/// <summary>Bản lưu nội dung cũ mỗi lần sửa bài/bình luận (lịch sử chỉnh sửa).</summary>
+public class PostRevision
+{
+    public int Id { get; set; }
+    public ContentTargetType TargetType { get; set; }   // Topic | Comment
+    public int TargetId { get; set; }
+    public string Body { get; set; } = string.Empty;    // nội dung TRƯỚC khi sửa
+    public int EditorId { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
+
 /// <summary>Ghi chú nội bộ về một thành viên — chỉ điều hành viên/quản trị viên xem được.</summary>
 public class UserNote
 {

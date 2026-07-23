@@ -27,3 +27,7 @@ playwright-report/
 # Ảnh/video kiểm chứng (tự sinh lại được, không đưa vào repo)
 shots/
 TestResults/
+
+# Email dev sink (IAppEmailSender ghi log ra đây khi chưa có SMTP)
+logs/
+**/logs/emails/

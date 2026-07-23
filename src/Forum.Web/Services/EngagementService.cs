@@ -22,6 +22,10 @@ public interface IEngagementService
 
     /// <summary>Chọn/bỏ chọn đáp án được chấp nhận. Trả về (ok, acceptedCommentId hiện tại).</summary>
     Task<(bool ok, int? acceptedId)> ToggleAcceptedAnswerAsync(int topicId, int commentId, int actingUserId);
+
+    Task<bool> ToggleBlockAsync(int blockerId, int blockedId);   // trả về trạng thái đã chặn
+    Task<bool> IsBlockedAsync(int blockerId, int blockedId);
+    Task<HashSet<int>> BlockedIdsAsync(int blockerId);
 }
 
 public class EngagementService : IEngagementService
@@ -131,4 +135,21 @@ public class EngagementService : IEngagementService
         await _db.SaveChangesAsync();
         return (true, topic.AcceptedAnswerId);
     }
+
+    public async Task<bool> ToggleBlockAsync(int blockerId, int blockedId)
+    {
+        if (blockerId == blockedId) throw new InvalidOperationException("Không thể tự chặn chính mình.");
+        var existing = await _db.UserBlocks.FindAsync(blockerId, blockedId);
+        if (existing != null) { _db.UserBlocks.Remove(existing); await _db.SaveChangesAsync(); return false; }
+        if (!await _db.Users.AnyAsync(u => u.Id == blockedId)) throw new InvalidOperationException("Không tìm thấy thành viên.");
+        _db.UserBlocks.Add(new UserBlock { BlockerId = blockerId, BlockedId = blockedId, CreatedAt = DateTime.UtcNow });
+        await _db.SaveChangesAsync();
+        return true;
+    }
+
+    public Task<bool> IsBlockedAsync(int blockerId, int blockedId)
+        => _db.UserBlocks.AnyAsync(b => b.BlockerId == blockerId && b.BlockedId == blockedId);
+
+    public async Task<HashSet<int>> BlockedIdsAsync(int blockerId)
+        => (await _db.UserBlocks.Where(b => b.BlockerId == blockerId).Select(b => b.BlockedId).ToListAsync()).ToHashSet();
 }
