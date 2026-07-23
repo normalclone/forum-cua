@@ -37,6 +37,20 @@ dotnet run --project src/Forum.Web
 
 Mở trình duyệt tại **http://localhost:5080**.
 
+### 3b. Chạy demo online bằng GitHub Codespaces
+
+Repo đã có sẵn `.devcontainer/` để chạy trực tiếp trên cloud của GitHub (không cần cài .NET ở máy):
+
+1. Trên trang repo GitHub → nút **Code** (xanh) → tab **Codespaces** → **Create codespace on main**.
+2. Chờ container khởi tạo (`dotnet restore` chạy tự động), rồi trong terminal chạy:
+   ```bash
+   dotnet run --project src/Forum.Web/Forum.Web.csproj --no-launch-profile
+   ```
+3. Lần đầu tự migrate + seed (~15–20s). Codespaces sẽ hiện thông báo forward **cổng 5080** → bấm **Open in Browser**.
+4. Để chia sẻ **link demo công khai**: tab **Ports** → chuột phải cổng 5080 → **Port Visibility → Public**, rồi copy URL (dạng `https://<tên>-5080.app.github.dev`).
+
+> Link chỉ hoạt động khi codespace đang bật. Tài khoản demo: `admin` / `mod` / `demo` (mật khẩu `Test@123`).
+
 - **Lần chạy đầu** tự động tạo DB + đổ dữ liệu mẫu (~15–20 giây): 43 người dùng, 9 danh mục, 73 chủ đề, ~480 bình luận lồng nhau, ~100 thẻ, poll, báo cáo, hội thoại chat…
 - **Đổ lại dữ liệu sạch:** xóa `src/Forum.Web/forum.db*` rồi chạy lại.
 
