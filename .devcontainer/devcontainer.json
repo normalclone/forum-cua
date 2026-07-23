@@ -1,6 +1,9 @@
 {
   "name": "Diễn đàn Cửa (.NET 8)",
   "image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0",
+  "features": {
+    "ghcr.io/devcontainers/features/sshd:1": {}
+  },
   "forwardPorts": [5080],
   "portsAttributes": {
     "5080": {
