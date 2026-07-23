@@ -1,9 +1,6 @@
 {
   "name": "Diễn đàn Cửa (.NET 8)",
   "image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0",
-  "features": {
-    "ghcr.io/devcontainers/features/sshd:1": {}
-  },
   "forwardPorts": [5080],
   "portsAttributes": {
     "5080": {
@@ -12,14 +9,8 @@
       "onAutoForward": "openBrowser"
     }
   },
-  "remoteEnv": {
-    "ASPNETCORE_URLS": "http://0.0.0.0:5080",
-    "ASPNETCORE_ENVIRONMENT": "Development"
-  },
-  "postCreateCommand": "dotnet restore Forum.sln",
-  "postAttachCommand": {
-    "chay-app": "echo 'Chạy demo:  dotnet run --project src/Forum.Web/Forum.Web.csproj --no-launch-profile   → mở cổng 5080 (đặt Public để chia sẻ link).'"
-  },
+  "postCreateCommand": "dotnet build src/Forum.Web/Forum.Web.csproj -c Debug",
+  "postStartCommand": "bash -c 'cd /workspaces/forum-cua && ASPNETCORE_URLS=http://0.0.0.0:5080 ASPNETCORE_ENVIRONMENT=Development nohup dotnet run --project src/Forum.Web/Forum.Web.csproj --no-launch-profile --no-build > /tmp/app.log 2>&1 &'",
   "customizations": {
     "vscode": {
       "extensions": [ "ms-dotnettools.csdevkit" ]
