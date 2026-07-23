@@ -1,0 +1,16 @@
+**/bin/
+**/obj/
+shots/
+logs/
+**/logs/emails/
+*.db
+*.db-shm
+*.db-wal
+.git/
+.github/
+.vs/
+.idea/
+tests/
+**/TestResults/
+src/Forum.Web/wwwroot/uploads/*
+!src/Forum.Web/wwwroot/uploads/.gitkeep

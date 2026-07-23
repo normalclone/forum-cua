@@ -1,0 +1,13 @@
+# Render Blueprint — deploy tự động từ repo GitHub.
+# Trên render.com: New + → Blueprint → chọn repo forum-cua → Render đọc file này.
+services:
+  - type: web
+    name: forum-cua
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Development
