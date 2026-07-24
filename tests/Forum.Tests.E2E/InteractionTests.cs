@@ -47,7 +47,7 @@ public class InteractionTests : TestBase
     public async Task ModMenu_Opens_Above_And_Visible_For_Admin()
     {
         await LoginAsync("admin");
-        await OpenCategoryTopicAsync("cua-go");
+        await OpenCategoryTopicAsync("ket-cau-thi-cong");
         var btn = Page.Locator("[data-menu=\"mod-menu\"]");
         await btn.ScrollIntoViewIfNeededAsync();
         await btn.ClickAsync();
@@ -74,7 +74,7 @@ public class InteractionTests : TestBase
     public async Task Bookmark_Toggle_On_Topic()
     {
         await LoginAsync("demo");
-        await OpenCategoryTopicAsync("cua-go");
+        await OpenCategoryTopicAsync("ket-cau-thi-cong");
         var bm = Page.Locator("[data-bookmark]").First;
         await bm.ClickAsync();
         await Expect(bm).ToContainTextAsync("Đã lưu", new() { Timeout = 8000 });

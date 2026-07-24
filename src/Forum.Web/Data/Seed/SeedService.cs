@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Forum.Web.Data.Seed;
 
 /// <summary>
-/// Đổ dữ liệu mẫu ngành cửa vào DB khi khởi chạy lần đầu (idempotent).
+/// Đổ dữ liệu mẫu ngành xây dựng vào DB khi khởi chạy lần đầu (idempotent).
 /// Nội dung tiếng Việt lấy từ các file JSON dưới Data/Seed/content; số liệu &amp; ngày
 /// sinh bằng Bogus (seed cố định -> tái lập được).
 /// </summary>
@@ -100,7 +100,7 @@ public class SeedService
 
         // Tài khoản demo cố định (ghi trong README).
         _admin = await Create("admin", "Quản trị viên", Roles.Admin, UserTrade.KySuVatLieu,
-            "Quản trị diễn đàn Cửa. Liên hệ khi cần hỗ trợ kỹ thuật/bài viết.", "Hà Nội", 700);
+            "Quản trị diễn đàn Xây dựng Việt. Liên hệ khi cần hỗ trợ kỹ thuật/bài viết.", "Hà Nội", 700);
         _mod = await Create("mod", "Điều hành viên", Roles.Moderator, UserTrade.ThoLapDat,
             "Điều hành nội dung, hỗ trợ thành viên mới.", "TP.HCM", 600);
         _demo = await Create("demo", "Bạn Demo", Roles.Member, UserTrade.ChuNha,
@@ -130,11 +130,11 @@ public class SeedService
     {
         var badges = new[]
         {
-            new Badge { Slug = BadgeSlugs.NewMember, Name = "Thành viên mới", Description = "Chào mừng gia nhập cộng đồng Cửa.", IconName = "user", ColorHex = "#a86a32", Tier = BadgeTier.Bronze },
+            new Badge { Slug = BadgeSlugs.NewMember, Name = "Thành viên mới", Description = "Chào mừng gia nhập cộng đồng Xây dựng Việt.", IconName = "user", ColorHex = "#a86a32", Tier = BadgeTier.Bronze },
             new Badge { Slug = BadgeSlugs.FirstTopic, Name = "Bài đầu tiên", Description = "Đăng chủ đề thảo luận đầu tiên.", IconName = "edit-3", ColorHex = "#a86a32", Tier = BadgeTier.Bronze },
             new Badge { Slug = BadgeSlugs.Contributor, Name = "Người đóng góp", Description = "Viết từ 10 bình luận hữu ích.", IconName = "message-square", ColorHex = "#707880", Tier = BadgeTier.Silver },
             new Badge { Slug = BadgeSlugs.Popular, Name = "Được yêu thích", Description = "Có chủ đề đạt 10+ điểm.", IconName = "heart", ColorHex = "#707880", Tier = BadgeTier.Silver },
-            new Badge { Slug = BadgeSlugs.Expert, Name = "Chuyên gia cửa", Description = "Đạt 500+ điểm uy tín.", IconName = "award", ColorHex = "#b7860b", Tier = BadgeTier.Gold },
+            new Badge { Slug = BadgeSlugs.Expert, Name = "Chuyên gia xây dựng", Description = "Đạt 500+ điểm uy tín.", IconName = "award", ColorHex = "#b7860b", Tier = BadgeTier.Gold },
             new Badge { Slug = BadgeSlugs.Veteran, Name = "Kỳ cựu", Description = "Gắn bó trên 6 tháng.", IconName = "shield", ColorHex = "#b7860b", Tier = BadgeTier.Gold },
         };
         _db.Badges.AddRange(badges);
@@ -146,15 +146,14 @@ public class SeedService
     {
         var defs = new (string slug, string name, string desc, string icon, string color)[]
         {
-            ("cua-go", "Cửa gỗ", "Cửa gỗ tự nhiên, HDF/MDF veneer, gỗ công nghiệp.", "door-open", "#b06a2c"),
-            ("cua-nhom-kinh", "Cửa nhôm kính & kính cường lực", "Nhôm Xingfa/PMA, kính cường lực, cửa lùa.", "door-open", "#1c7ed6"),
-            ("cua-cuon-tu-dong", "Cửa cuốn & cửa tự động", "Cửa cuốn khe thoáng, motor, cửa tự động cảm ứng.", "door-open", "#495057"),
-            ("cua-nhua-upvc", "Cửa nhựa uPVC / Composite", "uPVC lõi thép, composite chống nước, cách âm.", "door-open", "#2f9e44"),
-            ("cua-thep-chong-chay", "Cửa thép vân gỗ & chống cháy", "Cửa thép vân gỗ, chống cháy EI60/EI90, thoát hiểm.", "shield", "#e03131"),
-            ("phu-kien-cua", "Phụ kiện cửa", "Khóa, bản lề, tay nắm, ray trượt, gioăng.", "settings", "#9c36b5"),
-            ("tu-van-bao-gia", "Tư vấn chọn mua & báo giá", "So sánh, chọn loại cửa theo nhu cầu, báo giá 2026.", "bar-chart", "#e8590c"),
-            ("lap-dat-bao-tri", "Lắp đặt, bảo trì & sửa chữa", "Hướng dẫn lắp đặt, căn chỉnh, khắc phục lỗi.", "pencil", "#0c8599"),
-            ("phong-thuy-cua", "Phong thủy cửa", "Hướng cửa, kích thước Lỗ Ban, ngũ hành.", "compass", "#c2255c"),
+            ("ket-cau-thi-cong", "Kết cấu & Thi công", "Móng, cột, dầm, sàn, bê tông cốt thép, biện pháp thi công.", "hammer", "#e8590c"),
+            ("vat-lieu-xay-dung", "Vật liệu xây dựng", "Xi măng, gạch, cát đá, thép, phụ gia — so sánh & báo giá.", "layers", "#b06a2c"),
+            ("dien-nuoc", "Điện & Nước (M&E)", "Đi dây điện, cấp thoát nước, thiết bị vệ sinh, an toàn điện.", "zap", "#f08c00"),
+            ("chong-tham-son", "Chống thấm & Sơn", "Chống thấm mái/nhà vệ sinh/tường, sơn nội ngoại thất.", "droplets", "#1c7ed6"),
+            ("cua-nhom-kinh", "Cửa, nhôm kính & vách", "Cửa gỗ, nhôm Xingfa, kính cường lực, vách ngăn, cửa cuốn.", "door-open", "#2f9e44"),
+            ("noi-that-hoan-thien", "Nội thất & Hoàn thiện", "Trần thạch cao, sàn gỗ/gạch, tủ bếp, nội thất, hoàn thiện.", "home", "#9c36b5"),
+            ("phong-thuy-nha-o", "Phong thủy nhà ở", "Hướng nhà, bố trí, kích thước Lỗ Ban, ngũ hành, tuổi làm nhà.", "compass", "#c2255c"),
+            ("nha-thau-bao-gia", "Nhà thầu, tư vấn & Báo giá", "Chọn nhà thầu, đơn giá xây thô/trọn gói, hợp đồng, dự toán.", "bar-chart", "#0c8599"),
         };
         var map = new Dictionary<string, Category>();
         var order = 1;
@@ -186,8 +185,8 @@ public class SeedService
         {
             Title = "📌 Nội quy diễn đàn & hướng dẫn đăng bài",
             Slug = _slug.Generate("Nội quy diễn đàn & hướng dẫn đăng bài", 120),
-            Body = "Chào mừng tới **Diễn đàn Cửa**!\n\n- Đăng đúng danh mục, tiêu đề rõ ràng.\n- Không spam, không quảng cáo trá hình.\n- Tôn trọng thành viên khác.\n\n> Vi phạm nhiều lần sẽ bị khóa tài khoản.",
-            CategoryId = cats["tu-van-bao-gia"].Id,
+            Body = "Chào mừng tới **Diễn đàn Xây dựng Việt**!\n\n- Đăng đúng danh mục, tiêu đề rõ ràng.\n- Không spam, không quảng cáo trá hình.\n- Tôn trọng thành viên khác, chia sẻ kinh nghiệm thi công thực tế.\n\n> Vi phạm nhiều lần sẽ bị khóa tài khoản.",
+            CategoryId = cats["nha-thau-bao-gia"].Id,
             Author = _admin, AuthorId = _admin.Id,
             IsPinned = true, IsLocked = true, IsFeatured = false, IsQuestion = false,
             CreatedAt = DateTime.UtcNow.AddDays(-200), LastActivityAt = DateTime.UtcNow.AddDays(-10),
@@ -518,7 +517,7 @@ public class SeedService
                 IsPublished = true,
                 UpdatedAt = DateTime.UtcNow,
                 Body =
-@"Chào mừng bạn đến với **Diễn đàn Cửa** — cộng đồng thảo luận về cửa & vật liệu cửa.
+@"Chào mừng bạn đến với **Diễn đàn Xây dựng Việt** — cộng đồng thảo luận về cửa & vật liệu cửa.
 
 ## Quy tắc chung
 1. **Đăng đúng danh mục**, đặt tiêu đề rõ ràng, dễ tìm.

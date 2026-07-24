@@ -1,0 +1,36 @@
+{
+  "topics": [
+    {
+      "title": "Móng băng hay móng cọc ép cho nhà phố 4 tầng nền đất yếu?",
+      "body": "Nhà mình xây 4 tầng, khổ đất 4x16m ở khu vực nền đất yếu (gần ao lấp). Nhà thầu tư vấn ép cọc bê tông 200x200, nhưng có người bảo móng băng hai phương là đủ. Các bác cho em xin kinh nghiệm với ạ — chi phí chênh nhau khá nhiều.",
+      "isQuestion": true,
+      "featured": true,
+      "tags": ["móng", "kết-cấu", "nhà-phố", "đất-yếu"],
+      "comments": [
+        { "body": "Đất yếu gần ao lấp thì **nên ép cọc** cho chắc, đừng tiếc. Móng băng dễ lún lệch, nứt tường sau 1-2 năm. Nên khoan khảo sát địa chất trước khi quyết.",
+          "replies": [ { "body": "Đồng ý, mình từng làm móng băng khu ruộng lấp, 2 năm sau nứt chân tường phải xử lý tốn hơn tiền ép cọc ban đầu." } ] },
+        { "body": "Nên yêu cầu nhà thầu ép thử (PDA/nén tĩnh) vài tim cọc để biết sức chịu tải thực tế rồi mới chốt số lượng cọc, tránh ép thừa lãng phí." }
+      ]
+    },
+    {
+      "title": "Đổ bê tông cột – dầm – sàn mùa mưa cần lưu ý gì?",
+      "body": "Sắp đổ sàn tầng 2 mà đang mùa mưa Sài Gòn. Em lo bê tông bị pha loãng do nước mưa, ảnh hưởng mác. Có nên phủ bạt, và bao lâu thì được phép đi lại trên sàn?",
+      "isQuestion": true,
+      "tags": ["bê-tông", "thi-công", "sàn"],
+      "comments": [
+        { "body": "Che bạt kín khu vực đổ, canh lúc tạnh mà đổ. Quan trọng là **giữ ẩm bảo dưỡng 7 ngày**, đừng để nắng gắt gây nứt chân chim. Sau 24-36h mới nên đi lại nhẹ." },
+        { "body": "Nhớ kiểm tra độ sụt (slump) tại công trình khi xe bồn tới, mưa xong nước đọng trong hộc là dễ bị pha loãng lắm." }
+      ]
+    },
+    {
+      "title": "Kinh nghiệm chọn nhà thầu xây thô có đội giám sát riêng",
+      "body": "Chia sẻ chút kinh nghiệm sau khi xây xong nhà 3 tầng: nên tách phần giám sát độc lập với đội thi công. Giám sát bắt lỗi thép sai khoảng cách đai, kê con kê sai — tiết kiệm được nhiều rủi ro về sau.",
+      "isQuestion": false,
+      "featured": false,
+      "tags": ["giám-sát", "thi-công", "kinh-nghiệm"],
+      "comments": [
+        { "body": "Chuẩn bác. Nhà em không thuê giám sát, thợ buộc thép thưa hơn thiết kế mà không biết, giờ nghĩ lại thấy may là chưa sao." }
+      ]
+    }
+  ]
+}

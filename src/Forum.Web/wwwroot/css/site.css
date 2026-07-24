@@ -760,3 +760,25 @@ a.tag:hover { text-decoration: none; filter: brightness(.97); border-color: var(
 
 /* Checkbox theo hàng (dùng chung, ngoài admin) */
 .chk { display: flex; align-items: center; gap: 8px; font-size: .86rem; padding: 3px 0; }
+
+/* Banner quảng cáo cố định 2 bên (chỉ màn hình rộng) */
+.ad-rail { position: fixed; top: 88px; width: 160px; z-index: 40; display: none; }
+.ad-left { left: 20px; }
+.ad-right { right: 20px; }
+.ad-slot {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  height: 600px; width: 160px; border: 1px dashed var(--border-strong); border-radius: 10px;
+  background: var(--surface-2); color: var(--text-muted); text-decoration: none; text-align: center;
+  transition: border-color .15s, color .15s;
+}
+.ad-slot:hover { border-color: var(--accent); color: var(--accent); }
+.ad-slot .ad-label { font-weight: 800; letter-spacing: .08em; font-size: .8rem; }
+.ad-slot .ad-size { font-size: .72rem; opacity: .8; }
+.ad-slot .ad-note { font-size: .7rem; opacity: .7; margin-top: 4px; }
+@media (min-width: 1500px) {
+  .ad-rail { display: block; }
+  /* Thu gọn nội dung để chừa chỗ cho 2 banner, tránh đè lên bài viết */
+  .container.three { max-width: 1180px; }
+  .container.single { max-width: 820px; }
+  .container.wide { max-width: 1240px; }
+}

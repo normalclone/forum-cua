@@ -1,309 +1,33 @@
 {
   "topics": [
     {
-      "title": "Tổng hợp báo giá cửa nhôm Xingfa & kính cường lực 2026 (cập nhật liên tục)",
-      "body": "## Bảng giá tham khảo khu vực Hà Nội - TP.HCM\n\nMình lập bài này để **tổng hợp báo giá** các hệ nhôm phổ biến, anh em có giá mới cứ comment để mình cập nhật vào bài chính.\n\n> Lưu ý: giá đã bao gồm kính, phụ kiện cơ bản, *chưa* gồm lưới chống muỗi và vận chuyển xa.\n\n| Hệ cửa | Loại nhôm | Kính | Đơn giá (VND/m²) |\n|---|---|---|---|\n| Cửa đi mở quay | Xingfa hệ 55 | Cường lực 8mm | 1.350.000 |\n| Cửa lùa 2 ray | Xingfa hệ 93 | Cường lực 8mm | 1.450.000 |\n| Cửa sổ mở hất | PMA hệ 50 | Hộp 5-9-5 | 1.250.000 |\n| Vách kính cường lực | Khung bao nhôm | Cường lực 10mm | 1.100.000 |\n| Cầu cách nhiệt | Xingfa nhập | Hộp Low-E | 2.600.000 |\n\nVí dụ tính nhanh cho bộ cửa 4 cánh 2.4m x 2.2m:\n\n```\nDien tich = 2.4 x 2.2 = 5.28 m2\nDon gia he 55 cuong luc 8mm = 1.350.000d/m2\nThanh tien = 5.28 x 1.350.000 = 7.128.000d\nPhu kcien khoa da diem Kinlong = +850.000d\nTong tam tinh ~ 7.98 trieu/bo\n```\n\nAnh em tham khảo, **giá thực tế còn tùy phụ kiện và độ dày kính**. Có gì cứ trao đổi thêm bên dưới nhé.",
-      "isQuestion": false,
+      "title": "Cửa nhôm Xingfa hệ 55 hay hệ 65 cho nhà mặt phố nhiều gió?",
+      "body": "Nhà em mặt tiền hướng gió, muốn lắp cửa đi lùa và cửa sổ nhôm kính. Thợ báo hệ 55 và 65 chênh giá kha khá. Hệ nào kín gió, cách âm tốt hơn cho nhà phố ạ?",
+      "isQuestion": true,
       "featured": true,
-      "pinned": true,
-      "tags": ["báo-giá", "cửa-nhôm", "Xingfa", "kính-cường-lực"],
-      "poll": null,
+      "tags": ["cửa-nhôm", "xingfa", "kính-cường-lực"],
       "comments": [
-        {
-          "body": "Báo giá rất chi tiết, cảm ơn chủ thớt. Bên mình ở Đà Nẵng hệ 55 cường lực 8mm đang nhận **1.420.000đ/m²**, kính nhập về xa hơn nên nhỉnh hơn chút.",
-          "replies": [
-            {
-              "body": "Cảm ơn bạn, mình bổ sung mức Đà Nẵng vào bài chính. Bạn dùng phụ kiện khóa hãng nào vậy?",
-              "replies": [
-                {
-                  "body": "Mình dùng khóa đa điểm KIN LONG, độ bền tốt mà giá mềm hơn GU. Khách phản hồi ổn 2 năm nay rồi.",
-                  "replies": []
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "body": "Cho hỏi giá cầu cách nhiệt 2.6 triệu/m² đã gồm kính Low-E chưa hay tính riêng ạ?",
-          "replies": [
-            {
-              "body": "Đã gồm kính hộp Low-E 5-12-5 rồi bạn. Nếu lên hộp 2 lớp Argon thì cộng thêm khoảng 400k/m².",
-              "replies": []
-            }
-          ]
-        },
-        {
-          "body": "Mọi người cảnh giác mấy chỗ báo giá 900k/m² hệ 55 nhé, đa số là nhôm nhái pha tạp, thành mỏng dưới 1.2mm.",
-          "replies": [
-            {
-              "body": "Chuẩn luôn, rẻ bất thường là có vấn đề. Mình từng gỡ bộ cửa nhôm nhái ra thấy thành chỉ 1.0mm, bấm móp tay luôn.",
-              "replies": []
-            }
-          ]
-        },
-        {
-          "body": "Có ai làm vách kính cường lực 10mm cho mặt tiền shop chưa? Đơn giá 1.1 triệu nghe hợp lý đó.",
-          "replies": []
-        }
+        { "body": "Nhà nhiều gió, ồn thì nên **hệ 65 + kính hộp**, khung dày hơn, gioăng nhiều lớp nên kín và cách âm tốt hơn 55. Chênh tiền nhưng đáng cho mặt phố.",
+          "replies": [ { "body": "Chuẩn, mình ở mặt đường lớn, lắp hệ 65 kính hộp giảm ồn thấy rõ." } ] },
+        { "body": "Lưu ý mua nhôm chính hãng có tem Xingfa, thị trường nhiều hàng nhái profile mỏng." }
       ]
     },
     {
-      "title": "So sánh cửa nhôm Xingfa và PMA: chọn hệ nào cho nhà phố?",
-      "body": "Nhiều bác phân vân giữa **Xingfa** và **PMA** nên mình làm bảng so sánh ngắn gọn từ kinh nghiệm thi công thực tế.\n\n## Bảng so sánh nhanh\n\n| Tiêu chí | Xingfa (nhập Quảng Đông) | PMA (Việt Nam) |\n|---|---|---|\n| Độ dày thành nhôm | 1.4 - 2.0mm | 1.2 - 1.4mm |\n| Khả năng chịu lực | Rất tốt | Khá tốt |\n| Mẫu mã/màu sơn | Đa dạng, sơn tĩnh điện đẹp | Đa dạng |\n| Giá thành | Cao hơn 10-20% | Mềm hơn |\n| Bảo hành profile | 10-15 năm | 5-10 năm |\n\n### Quan điểm cá nhân\n\n- Nếu nhà mặt tiền, cửa lớn chịu gió mạnh -> nên chọn **Xingfa hệ 55/93** cho chắc.\n- Nhà trong ngõ, ngân sách vừa phải -> **PMA** vẫn rất ổn, *tiết kiệm được kha khá*.\n\n> Lưu ý quan trọng: dù hệ nào thì phụ kiện (bản lề, khóa, gioăng) mới quyết định 50% độ bền và độ kín khít.\n\n![Mẫu cửa nhôm Xingfa hệ 55 lắp cho nhà phố](https://picsum.photos/seed/xingfadoor1/800/450)\n\nAnh em đang dùng hệ nào, thấy sao về độ cách âm sau vài năm sử dụng?",
-      "isQuestion": false,
-      "featured": true,
-      "pinned": false,
-      "tags": ["cửa-nhôm", "Xingfa", "so-sánh", "cách-âm"],
-      "poll": null,
-      "comments": [
-        {
-          "body": "Nhà mình dùng Xingfa hệ 55 được 3 năm, cách âm tốt, đóng mở vẫn êm. Đáng tiền.",
-          "replies": [
-            {
-              "body": "Bạn dùng kính đơn hay kính hộp vậy? Mình thấy cách âm phụ thuộc kính khá nhiều.",
-              "replies": [
-                {
-                  "body": "Mình dùng kính hộp 5-9-5, ở mặt đường mà tiếng ồn giảm hẳn. Nếu kính đơn 8mm thì cách âm kém hơn nhiều.",
-                  "replies": []
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "body": "PMA giờ cũng cải thiện nhiều rồi, mình làm cho cả khu chung cư mini, khách ít than phiền. Quan trọng là chọn đại lý uy tín.",
-          "replies": []
-        },
-        {
-          "body": "Bổ sung thêm: nhớ kiểm tra **tem laser** và mã vạch trên thanh nhôm Xingfa để tránh hàng nhái nhé.",
-          "replies": [
-            {
-              "body": "Đúng rồi, Xingfa chính hãng có in chìm logo và dãy số dọc thân profile, lấy điện thoại soi rõ lắm.",
-              "replies": []
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Cách phân biệt nhôm Xingfa chính hãng và nhôm nhái?",
-      "body": "Em chuẩn bị làm bộ cửa nhôm cho nhà mới, nghe nói thị trường nhiều **Xingfa nhái** lắm. Các bác chỉ em cách phân biệt với ạ?\n\nEm đọc sơ thì thấy có mấy điểm:\n\n1. Tem/logo in trên thanh nhôm\n2. Độ dày thành nhôm\n3. Màu sơn tĩnh điện\n4. Giấy tờ CO/CQ\n\nNhưng ra cửa hàng họ nói gì cũng *chính hãng* hết, em không biết tin ai. Mong anh em có kinh nghiệm tư vấn giúp những điểm dễ kiểm tra nhất tại chỗ. Cảm ơn cả nhà nhiều!",
+      "title": "Cửa gỗ công nghiệp HDF veneer cho phòng ngủ có bền không?",
+      "body": "Ngân sách có hạn, em tính làm cửa thông phòng bằng HDF veneer thay vì gỗ tự nhiên. Ở khí hậu ẩm miền Bắc thì cửa HDF dùng lâu có bị cong vênh, bong veneer không?",
       "isQuestion": true,
-      "featured": false,
-      "pinned": false,
-      "tags": ["Xingfa", "cửa-nhôm", "phân-biệt-hàng-nhái"],
-      "poll": null,
+      "tags": ["cửa-gỗ", "hdf", "phòng-ngủ"],
       "comments": [
-        {
-          "body": "Mấy điểm dễ kiểm tra nhất tại chỗ:\n\n- **Đo thành nhôm**: chính hãng hệ 55 thường 1.4mm trở lên, lấy thước kẹp đo là biết.\n- **Soi tem laser**: in chìm dọc thân, không phải dán decal.\n- **Cân thử thanh nhôm**: hàng thật nặng tay hơn vì đặc.",
-          "replies": [
-            {
-              "body": "Bổ sung: yêu cầu họ cho xem **phiếu xuất kho và CO/CQ** lô hàng. Đại lý đàng hoàng luôn có sẵn.",
-              "replies": [
-                {
-                  "body": "Cảm ơn hai bác, để em mang theo thước kẹp đi đo thử. Soi tem laser đúng là mẹo hay.",
-                  "replies": []
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "body": "Mẹo nữa: gõ vào thanh nhôm, hàng thật tiếng đanh chắc, hàng nhái pha tạp tiếng hơi rè vì kim loại không tinh.",
-          "replies": []
-        },
-        {
-          "body": "Em từng dính nhôm nhái, sơn tĩnh điện 1 năm là bạc màu loang lổ ở chỗ nắng chiếu. Hàng thật 5 năm vẫn đẹp.",
-          "replies": [
-            {
-              "body": "Đúng, sơn tĩnh điện kém còn dễ phồng rộp khi gặp nước mưa đọng. Bác kiểm tra kỹ phần gioăng cao su nữa nhé.",
-              "replies": []
-            }
-          ]
-        }
+        { "body": "HDF veneer dùng trong nhà, khô ráo thì ổn 5-10 năm. Tránh lắp chỗ hắt mưa/ẩm trực tiếp. Chọn loại **cốt HDF chống ẩm** cho cửa nhà tắm là yên tâm hơn." }
       ]
     },
     {
-      "title": "Cửa lùa nhôm kính bị kẹt ray, đẩy nặng - khắc phục thế nào?",
-      "body": "Nhà em dùng **cửa lùa nhôm kính 2 ray** hệ 93 được khoảng 2 năm. Gần đây đẩy rất nặng, có lúc kẹt cứng phải dùng lực mạnh mới trượt được.\n\nEm đã thử lau ray nhưng không ăn thua. Nghi ngờ là:\n\n- Bánh xe (con lăn) bị mòn hoặc kẹt bụi\n- Ray dưới bị cong/lún\n- Cánh cửa bị xệ\n\nCó bác nào gặp tình trạng tương tự chưa ạ? Tự sửa được không hay phải gọi thợ? Em cảm ơn!",
+      "title": "Kính cường lực bao nhiêu ly cho vách tắm và lan can?",
+      "body": "Em làm vách kính phòng tắm và lan can ban công. Thợ tư vấn 8ly cho vách tắm, 10-12ly cho lan can. Con số này hợp lý chưa, và có cần dán phim an toàn không?",
       "isQuestion": true,
-      "featured": false,
-      "pinned": false,
-      "tags": ["cửa-lùa", "cửa-nhôm", "bảo-trì", "sửa-chữa"],
-      "poll": null,
+      "tags": ["kính-cường-lực", "vách-kính", "an-toàn"],
       "comments": [
-        {
-          "body": "90% là do **bánh xe con lăn** kẹt bụi hoặc mòn. Bạn tháo nẹp dưới ra vệ sinh ray, tra ít mỡ bò hoặc silicon vào con lăn xem sao.",
-          "replies": [
-            {
-              "body": "Tuyệt đối đừng tra dầu nhớt loãng nhé, nó hút bụi bám lại còn kẹt nặng hơn. Dùng mỡ silicon dạng xịt là chuẩn.",
-              "replies": [
-                {
-                  "body": "Cảm ơn bác, em ra tiệm mua chai xịt silicon thử trước. Nếu vẫn nặng chắc phải thay con lăn.",
-                  "replies": []
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "body": "Nếu cánh nặng và to thì con lăn bi rẻ tiền dễ vỡ. Thay loại con lăn 2 bánh chịu tải KIN LONG là êm hẳn, giá tầm 80-120k/bộ.",
-          "replies": []
-        }
-      ]
-    },
-    {
-      "title": "Review hệ nhôm cầu cách nhiệt sau 1 mùa hè ở nhà hướng Tây",
-      "body": "Nhà mình hướng Tây, mùa hè nóng kinh khủng nên năm ngoái mình đầu tư **hệ nhôm cầu cách nhiệt** kèm kính hộp Low-E. Giờ qua một mùa hè rồi, xin chia sẻ trải nghiệm thật.\n\n## Cấu tạo mình chọn\n\n- Profile cầu cách nhiệt **Xingfa nhập**, lõi nhựa PA66 ngăn cầu nhiệt\n- Kính hộp **Low-E 5-12-5**, bơm khí Argon\n- Gioăng EPDM 3 lớp\n\n### Kết quả thực tế\n\n| Chỉ số | Trước (cửa nhôm thường) | Sau (cầu cách nhiệt) |\n|---|---|---|\n| Nhiệt phòng buổi chiều | 34-35°C | 29-30°C |\n| Tiền điện máy lạnh/tháng | ~1.4 triệu | ~950k |\n| Tiếng ồn đường phố | Nghe rõ | Giảm rõ rệt |\n\n> Chốt lại: chi phí cao gấp ~2 lần nhôm thường nhưng với nhà hướng Tây thì **rất đáng đầu tư**, tiền điện tiết kiệm dần sẽ bù lại.\n\n![Cửa nhôm cầu cách nhiệt kính Low-E phòng khách hướng Tây](https://picsum.photos/seed/thermalbreak1/800/450)\n\nAi nhà nóng hướng Tây/Tây Nam thì cân nhắc nhé.",
-      "isQuestion": false,
-      "featured": false,
-      "pinned": false,
-      "tags": ["cầu-cách-nhiệt", "cửa-nhôm", "kính-Low-E", "cách-âm"],
-      "poll": null,
-      "comments": [
-        {
-          "body": "Cảm ơn review thực tế. Cho hỏi giá trọn gói bạn làm khoảng bao nhiêu 1m² vậy?",
-          "replies": [
-            {
-              "body": "Mình làm trọn gói cả kính Low-E Argon khoảng **2.9 triệu/m²**. Đắt nhưng dùng rồi mới thấy đáng.",
-              "replies": []
-            }
-          ]
-        },
-        {
-          "body": "Số liệu tiền điện ấn tượng đó. Nhà mình hướng Tây Nam cũng đang tính lên cầu cách nhiệt, đọc bài này quyết tâm hơn.",
-          "replies": [
-            {
-              "body": "Lưu ý chọn đơn vị làm gioăng EPDM đủ 3 lớp nhé, nhiều chỗ ăn bớt còn 1 lớp là mất hết tác dụng cách âm cách nhiệt.",
-              "replies": [
-                {
-                  "body": "Chuẩn, mình kiểm tra kỹ phần này. Gioăng tốt sờ vào thấy mềm đàn hồi, hàng kém thì cứng và mau chai.",
-                  "replies": []
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "body": "Low-E giờ có loại bám màng phản quang nhẹ nữa, vừa cách nhiệt vừa chống chói. Mình dùng thấy ổn.",
-          "replies": []
-        }
-      ]
-    },
-    {
-      "title": "Kính cường lực nên chọn 8mm, 10mm hay 12mm cho cửa đi?",
-      "body": "Em đang làm bộ **cửa kính cường lực** cho mặt tiền cửa hàng, phân vân giữa các độ dày kính. Thợ thì khuyên 10mm, chủ shop bên cạnh nói 12mm cho chắc, có người lại bảo 8mm là đủ.\n\nNhờ các bác tư vấn:\n\n- Cửa đi cao 2.4m, rộng 1m mỗi cánh thì dùng dày bao nhiêu là hợp lý?\n- Chênh lệch giá giữa các loại có nhiều không?\n- Kính dày hơn có nặng quá gây xệ bản lề sàn không?\n\nCảm ơn cả nhà!",
-      "isQuestion": true,
-      "featured": false,
-      "pinned": false,
-      "tags": ["kính-cường-lực", "cửa-kính", "tư-vấn"],
-      "poll": {
-        "question": "Theo bạn, độ dày kính cường lực hợp lý nhất cho cửa đi mặt tiền là?",
-        "options": ["8mm", "10mm", "12mm", "Tùy kích thước, không cố định"]
-      },
-      "comments": [
-        {
-          "body": "Cửa đi cao 2.4m mặt tiền shop thì **10mm là chuẩn nhất**: đủ chắc, không quá nặng. 8mm hơi mỏng cho cánh cao, 12mm thì nặng và đắt không cần thiết.",
-          "replies": [
-            {
-              "body": "Đồng ý 10mm. Mình làm hàng chục cửa shop đều 10mm, kẹp bản lề sàn VVP hoặc Newstar là êm.",
-              "replies": [
-                {
-                  "body": "Cảm ơn hai bác, vậy em chốt 10mm. Bản lề sàn loại nào chịu tải tốt mà giá hợp lý ạ?",
-                  "replies": []
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "body": "Kính 12mm 1 cánh cao 2.4m nặng cỡ 60-70kg, phải dùng kẹp và bản lề sàn loại chịu tải lớn, không là xệ. 10mm an toàn hơn về kết cấu.",
-          "replies": []
-        },
-        {
-          "body": "Chênh giá: 8mm ~ 450k/m², 10mm ~ 600k/m², 12mm ~ 850k/m² (kính cường lực phẳng). Bác cân đối nhé.",
-          "replies": [
-            {
-              "body": "Nhớ yêu cầu kính có **tem CE/dấu kiểm định cường lực** ở góc, tránh kính thường giả cường lực vỡ rất nguy hiểm.",
-              "replies": []
-            }
-          ]
-        },
-        {
-          "body": "Mặt tiền shop nên dán thêm phim an toàn, lỡ vỡ thì mảnh kính dính lại không văng gây thương tích.",
-          "replies": []
-        }
-      ]
-    },
-    {
-      "title": "Hướng dẫn tự kiểm tra độ kín khít cửa nhôm kính trước khi nghiệm thu",
-      "body": "Chia sẻ với anh em vài bước **tự nghiệm thu cửa nhôm kính** tại nhà trước khi thanh toán nốt cho thợ, tránh sau này hở gió, dột nước rồi mới phát hiện.\n\n## Các bước kiểm tra\n\n1. **Kiểm tra khe hở cánh - khung**: dùng tờ giấy A4 kẹp vào, đóng cửa lại rồi kéo. Giấy bị giữ chặt là khít.\n2. **Test nước**: xịt vòi nước vào mép cửa, quan sát bên trong xem có rò không (quan trọng với mặt tiền hứng mưa).\n3. **Kiểm tra gioăng**: gioăng phải liền mạch, ép đều, không hở góc.\n4. **Đóng mở thử**: cánh đóng êm, khóa đa điểm ăn khớp cả trên-dưới-giữa.\n5. **Cân chỉnh ke góc**: nhìn 4 góc kính, mạch silicon phải đều, không hở.\n\n### Checklist phụ kiện\n\n- [ ] Bản lề/con lăn đúng hãng cam kết\n- [ ] Khóa đa điểm hoạt động trơn\n- [ ] Đủ vít, nở, không thiếu ốc\n\n> Mẹo: yêu cầu thợ ghi rõ **hãng phụ kiện** trong hợp đồng, lúc nghiệm thu đối chiếu là chắc ăn nhất.\n\nAnh em có bước nào hay nữa thì bổ sung giúp nhé.",
-      "isQuestion": false,
-      "featured": false,
-      "pinned": false,
-      "tags": ["nghiệm-thu", "cửa-nhôm", "hướng-dẫn", "kính-cường-lực"],
-      "poll": null,
-      "comments": [
-        {
-          "body": "Bài quá hữu ích. Bổ sung bước: kiểm tra **độ phẳng của khung** bằng thước nivo, khung lệch thì đóng mở mới đầu thì êm sau xệ dần.",
-          "replies": [
-            {
-              "body": "Đúng, ke góc 90 độ rất quan trọng. Mình hay dùng ke vuông áp vào 4 góc kiểm tra luôn.",
-              "replies": []
-            }
-          ]
-        },
-        {
-          "body": "Test nước hay đó, nhà mình ngày xưa nghiệm thu qua loa, mưa to mới biết cửa sổ mở hất bị hắt nước vào. Sửa lại mất công lắm.",
-          "replies": []
-        },
-        {
-          "body": "Lưu giữ lại phần thừa thanh nhôm và gioăng cùng lô để sau này sửa chữa còn khớp màu nhé anh em.",
-          "replies": [
-            {
-              "body": "Mẹo hay, gioăng EPDM mỗi lô màu hơi khác nhau, thay lẻ nhìn rất kỳ.",
-              "replies": []
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Cửa nhôm kính có chống được bão không? Kinh nghiệm vùng ven biển",
-      "body": "Nhà em ở vùng **ven biển miền Trung**, năm nào cũng vài cơn bão. Đang xây nhà mới, băn khoăn không biết **cửa nhôm kính** có chịu nổi gió bão không hay phải làm cửa khác?\n\nEm lo nhất là:\n\n- Gió giật mạnh có thể bung cánh, vỡ kính\n- Hơi muối biển ăn mòn nhôm và phụ kiện\n\nCác bác ở vùng biển dùng cửa nhôm kính chia sẻ giúp em với, nên chọn hệ nào, kính dày bao nhiêu, phụ kiện ra sao để an tâm mùa bão. Cảm ơn cả nhà nhiều!",
-      "isQuestion": true,
-      "featured": false,
-      "pinned": false,
-      "tags": ["cửa-nhôm", "kính-cường-lực", "vùng-biển", "tư-vấn"],
-      "poll": null,
-      "comments": [
-        {
-          "body": "Vùng biển thì cửa nhôm kính vẫn dùng tốt, nhưng cần chú ý:\n\n- Chọn hệ dày như **Xingfa hệ 55/65**, thành nhôm 1.4mm trở lên.\n- Kính **cường lực 10mm** hoặc kính dán an toàn (laminate) để lỡ vỡ không văng.\n- Khóa **đa điểm** ăn 3-4 chốt để gió không bung cánh.",
-          "replies": [
-            {
-              "body": "Bổ sung quan trọng: phụ kiện phải loại **inox 304** chống gỉ, chứ phụ kiện thường gặp hơi muối là gỉ sét sau 1-2 năm.",
-              "replies": [
-                {
-                  "body": "Chuẩn bác, nhà em ở Quy Nhơn dùng phụ kiện inox 304 với gioăng EPDM, qua mấy mùa bão vẫn ngon. Nhớ vệ sinh nước ngọt định kỳ rửa muối nhé.",
-                  "replies": []
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "body": "Nhà mình ở Phú Yên, cửa lùa lớn nên mình làm thêm thanh đố giữa gia cố. Bão số 9 năm ngoái vẫn an toàn.",
-          "replies": [
-            {
-              "body": "Cửa to nên chia ô nhỏ hơn, đừng để 1 tấm kính quá rộng, diện tích lớn gió đập dễ vỡ.",
-              "replies": []
-            }
-          ]
-        },
-        {
-          "body": "Em góp ý: dán thêm phim an toàn cho kính, vùng bão nó giữ mảnh kính lại rất hiệu quả khi có vật bay đập vào.",
-          "replies": []
-        }
+        { "body": "Vách tắm 8ly ok, lan can nên 10-12ly cường lực. **Nên dán phim an toàn** để lỡ vỡ mảnh không văng, nhất là nhà có trẻ nhỏ." }
       ]
     }
   ]

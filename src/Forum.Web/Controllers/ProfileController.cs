@@ -95,7 +95,7 @@ public class ProfileController : ForumControllerBase
         SetSeo(new SeoModel
         {
             Title = $"{user.DisplayName} (@{user.UserName})",
-            Description = string.IsNullOrEmpty(user.Bio) ? $"Hồ sơ thành viên {user.DisplayName} trên Diễn đàn Cửa." : user.Bio,
+            Description = string.IsNullOrEmpty(user.Bio) ? $"Hồ sơ thành viên {user.DisplayName} trên Diễn đàn Xây dựng Việt." : user.Bio,
             CanonicalUrl = _url.Absolute(_url.User(user.UserName!)),
             OgType = "profile",
             JsonLd = { },

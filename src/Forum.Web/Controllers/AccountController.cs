@@ -33,7 +33,7 @@ public class AccountController : ForumControllerBase
     {
         var token = await _users.GenerateEmailConfirmationTokenAsync(user);
         var link = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, token = Enc(token) }, Request.Scheme)!;
-        await _email.SendAsync(user.Email!, "Xác nhận email — Diễn đàn Cửa",
+        await _email.SendAsync(user.Email!, "Xác nhận email — Diễn đàn Xây dựng Việt",
             $"<p>Chào {user.DisplayName}, nhấn vào liên kết để xác nhận email:</p><p><a href=\"{link}\">{link}</a></p>");
         return link;
     }
@@ -50,7 +50,7 @@ public class AccountController : ForumControllerBase
             Toast("Đăng ký thành viên đang tạm khóa.", "warning");
             return RedirectToAction("Login");
         }
-        SetSeo(new SeoModel { Title = "Đăng ký tài khoản", Description = "Tạo tài khoản để tham gia thảo luận về cửa.", NoIndex = true });
+        SetSeo(new SeoModel { Title = "Đăng ký tài khoản", Description = "Tạo tài khoản để tham gia thảo luận về xây dựng, nhà ở.", NoIndex = true });
         return View(new RegisterViewModel { ReturnUrl = returnUrl });
     }
 
@@ -101,7 +101,7 @@ public class AccountController : ForumControllerBase
         if (IsAuthed) return IsAjax ? Json(new { ok = true, redirect = "/" }) : RedirectToAction("Index", "Home");
         var vm = new LoginViewModel { ReturnUrl = returnUrl };
         if (IsAjax) return PartialView("_LoginForm", vm);   // chỉ form, để nạp vào popup
-        SetSeo(new SeoModel { Title = "Đăng nhập", Description = "Đăng nhập vào Diễn đàn Cửa.", NoIndex = true });
+        SetSeo(new SeoModel { Title = "Đăng nhập", Description = "Đăng nhập vào Diễn đàn Xây dựng Việt.", NoIndex = true });
         return View(vm);
     }
 
@@ -219,7 +219,7 @@ public class AccountController : ForumControllerBase
         {
             var token = await _users.GeneratePasswordResetTokenAsync(user);
             var link = Url.Action(nameof(ResetPassword), "Account", new { email = user.Email, token = Enc(token) }, Request.Scheme)!;
-            await _email.SendAsync(user.Email!, "Đặt lại mật khẩu — Diễn đàn Cửa",
+            await _email.SendAsync(user.Email!, "Đặt lại mật khẩu — Diễn đàn Xây dựng Việt",
                 $"<p>Nhấn vào liên kết để đặt lại mật khẩu:</p><p><a href=\"{link}\">{link}</a></p><p>Nếu bạn không yêu cầu, hãy bỏ qua email này.</p>");
             if (_email.IsDevSink) ViewBag.DevLink = link;   // tiện test khi chưa có SMTP
         }

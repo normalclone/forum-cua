@@ -43,7 +43,7 @@ public class TestBase : PageTest
     }
 
     /// <summary>Mở một chủ đề (không khóa) trong danh mục cho trước.</summary>
-    protected async Task<string> OpenCategoryTopicAsync(string categorySlug = "cua-go")
+    protected async Task<string> OpenCategoryTopicAsync(string categorySlug = "ket-cau-thi-cong")
     {
         await Page.GotoAsync($"/danh-muc/{categorySlug}");
         await Page.Locator(".topic-card .topic-title").First.ClickAsync();

@@ -1,0 +1,36 @@
+{
+  "topics": [
+    {
+      "title": "Thép Hòa Phát, Việt Nhật hay Pomina cho nhà dân — khác nhau nhiều không?",
+      "body": "Em chuẩn bị mua thép cho nhà 3 tầng. Ba hãng này giá chênh nhau, đại lý mỗi người nói một kiểu. Về chất lượng cho nhà ở dân dụng thì có thực sự khác biệt đáng kể không ạ?",
+      "isQuestion": true,
+      "featured": false,
+      "tags": ["thép", "vật-liệu", "báo-giá"],
+      "poll": { "question": "Bạn tin dùng hãng thép nào cho nhà dân?", "options": ["Hòa Phát", "Việt Nhật", "Pomina", "Miền Nam / khác"] },
+      "comments": [
+        { "body": "Cả 3 đều đạt chuẩn nếu **mua đúng hàng chính hãng** (có tem, CO/CQ). Vấn đề lớn hơn là thép giả/nhái ngoài đại lý nhỏ. Nhà dân thì hãng nào phổ biến, dễ kiểm tra là được.",
+          "replies": [ { "body": "Đúng, quan trọng là cân đủ ký và đúng đường kính. Mua chỗ uy tín xuất hóa đơn." } ] },
+        { "body": "Mình dùng Hòa Phát vì đại lý gần, đổi trả dễ. Giá nhỉnh hơn chút nhưng yên tâm." }
+      ]
+    },
+    {
+      "title": "Gạch không nung (AAC) vs gạch đỏ nung — nên chọn loại nào?",
+      "body": "Nghe nói gạch AAC nhẹ, cách nhiệt tốt, xây nhanh. Nhưng lo khoan bắt vít, treo đồ nặng lên tường không chắc. Các bác đã ở nhà xây gạch AAC review giúp em với.",
+      "isQuestion": true,
+      "tags": ["gạch", "vật-liệu", "cách-nhiệt"],
+      "comments": [
+        { "body": "Nhà em xây AAC tầng trên cho nhẹ tải. Cách nhiệt tốt thật, mát hơn hẳn. Treo đồ nặng thì dùng **tắc kê chuyên dụng cho gạch nhẹ** là ổn, đừng dùng vít thường." },
+        { "body": "AAC hút nước nên tô trát phải dùng vữa phù hợp và tưới ẩm, không là dễ bong nứt vữa." }
+      ]
+    },
+    {
+      "title": "Cách nhận biết xi măng thật/giả và bảo quản đúng cách",
+      "body": "Chia sẻ mẹo: xi măng thật khi bóp mịn, không vón cục; bao còn nguyên tem, hạn sử dụng rõ. Bảo quản kê cao khỏi nền, tránh ẩm, dùng trong vòng 2-3 tháng là tốt nhất.",
+      "isQuestion": false,
+      "tags": ["xi-măng", "vật-liệu", "mẹo"],
+      "comments": [
+        { "body": "Bổ sung: xi măng để lâu bị vón cục là mất mác rồi, đừng tiếc mà đem trộn bê tông chịu lực." }
+      ]
+    }
+  ]
+}

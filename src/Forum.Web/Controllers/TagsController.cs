@@ -44,7 +44,7 @@ public class TagsController : ForumControllerBase
         SetSeo(new SeoModel
         {
             Title = $"#{tag.Name}",
-            Description = $"Các chủ đề được gắn thẻ #{tag.Name} trên Diễn đàn Cửa.",
+            Description = $"Các chủ đề được gắn thẻ #{tag.Name} trên Diễn đàn Xây dựng Việt.",
             CanonicalUrl = _url.Absolute(CategoriesController.PageUrl(basePath, query, trang)),
             PrevUrl = topics.HasPrevious ? _url.Absolute(CategoriesController.PageUrl(basePath, query, trang - 1)) : null,
             NextUrl = topics.HasNext ? _url.Absolute(CategoriesController.PageUrl(basePath, query, trang + 1)) : null,

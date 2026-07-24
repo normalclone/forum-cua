@@ -30,7 +30,7 @@ public class MembersController : ForumControllerBase
         SetSeo(new SeoModel
         {
             Title = "Bảng xếp hạng thành viên",
-            Description = "Những thành viên tích cực nhất của Diễn đàn Cửa theo điểm uy tín.",
+            Description = "Những thành viên tích cực nhất của Diễn đàn Xây dựng Việt theo điểm uy tín.",
             CanonicalUrl = _url.Absolute("/thanh-vien-tich-cuc"),
             Breadcrumbs = { new BreadcrumbItem("Trang chủ", "/"), new BreadcrumbItem("Bảng xếp hạng", null) }
         });

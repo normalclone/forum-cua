@@ -1,0 +1,25 @@
+{
+  "topics": [
+    {
+      "title": "Tuổi 1990 (Canh Ngọ) năm 2026 xây nhà được không?",
+      "body": "Vợ chồng em tuổi Canh Ngọ 1990, dự định khởi công năm 2026. Em nghe nói phải xem Kim Lâu, Hoang Ốc, Tam Tai. Có bác nào rành tử vi phong thủy xem giúp tuổi này năm nào đẹp để làm nhà không ạ?",
+      "isQuestion": true,
+      "featured": false,
+      "tags": ["phong-thủy", "xem-tuổi", "làm-nhà"],
+      "comments": [
+        { "body": "Nếu không được tuổi thì có thể **mượn tuổi** người hợp để khởi công, làm thủ tục nhập trạch đầy đủ. Nên hỏi thêm thầy có uy tín, đừng chỉ tra bảng online.",
+          "replies": [ { "body": "Mượn tuổi phổ biến mà, nhà mình cũng mượn tuổi ông chú, mọi việc suôn sẻ." } ] },
+        { "body": "Quan trọng nhất vẫn là hướng nhà và công năng hợp lý, phong thủy chỉ nên tham khảo cho an tâm thôi." }
+      ]
+    },
+    {
+      "title": "Kích thước cửa chính theo thước Lỗ Ban bao nhiêu là đẹp?",
+      "body": "Em muốn kích thước cửa chính rơi vào cung đẹp thước Lỗ Ban. Nhà phố thông thủy tầm 1m2 rộng thì nên lấy số nào, và đo theo thước 52.2cm hay 42.9cm ạ?",
+      "isQuestion": true,
+      "tags": ["lỗ-ban", "cửa-chính", "phong-thủy"],
+      "comments": [
+        { "body": "Cửa đi thường đo **thước 52.2cm** (khoảng thông thủy). Ví dụ rộng ~1m07 hoặc 1m27 rơi cung đẹp. Cửa chính 2 cánh có thể lấy 1m27–1m56 tùy mặt tiền." }
+      ]
+    }
+  ]
+}

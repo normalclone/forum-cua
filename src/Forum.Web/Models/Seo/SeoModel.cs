@@ -6,7 +6,7 @@ namespace Forum.Web.Models;
 /// </summary>
 public class SeoModel
 {
-    public string Title { get; set; } = "Diễn đàn Cửa";
+    public string Title { get; set; } = "Diễn đàn Xây dựng Việt";
     public string? Description { get; set; }
     public string? CanonicalUrl { get; set; }
 

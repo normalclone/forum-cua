@@ -1,0 +1,26 @@
+{
+  "topics": [
+    {
+      "title": "Đi dây điện âm tường: nên dùng dây đơn luồn ống hay cáp?",
+      "body": "Nhà 3 tầng, em muốn đi điện âm tường gọn gàng, sau này dễ thay dây. Thợ nói luồn dây đơn trong ống PVC/đàn hồi để kéo lại được. Có bác nào rành tiết diện dây cho ổ cắm, đèn, điều hòa chỉ giúp em?",
+      "isQuestion": true,
+      "featured": false,
+      "tags": ["điện", "đi-dây", "an-toàn-điện"],
+      "comments": [
+        { "body": "Luồn dây đơn trong ống là chuẩn để sau kéo lại được. Tham khảo: đèn 1.5mm², ổ cắm 2.5mm², **điều hòa/bình nóng lạnh đi riêng 4mm²** và có aptomat riêng.",
+          "replies": [ { "body": "Nhớ chừa dây tiếp địa cho bình nóng lạnh và ổ cắm nhà tắm nhé, an toàn là trên hết." } ] },
+        { "body": "Vẽ lại sơ đồ điện và chụp ảnh trước khi tô trát, sau này khoan tường đỡ trúng dây." }
+      ]
+    },
+    {
+      "title": "Chọn ống cấp nước nóng lạnh: PPR hay PEX?",
+      "body": "Đang phân vân giữa ống PPR (hàn nhiệt) và PEX cho hệ nước nóng. PPR phổ biến, thợ quen tay; PEX mềm dễ đi nhưng cần phụ kiện riêng. Nhà các bác dùng loại nào, có rò rỉ mối nối không?",
+      "isQuestion": true,
+      "tags": ["nước", "ống-nước", "M&E"],
+      "comments": [
+        { "body": "PPR hàn nhiệt bền, kín mối nếu thợ hàn đúng nhiệt/đúng thời gian. Nước nóng thì dùng **PPR loại chịu nhiệt (PN20/sọc đỏ)**. PEX tiện cho sàn/âm sàn nhưng thợ dân dụng ít quen." },
+        { "body": "Dù loại nào cũng nên test áp lực toàn hệ trước khi tô, giữ áp 30 phút xem có tụt không." }
+      ]
+    }
+  ]
+}

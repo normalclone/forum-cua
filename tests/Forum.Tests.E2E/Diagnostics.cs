@@ -67,7 +67,7 @@ public class Diagnostics : TestBase
         }
 
         // Trang danh mục — strip "Ghim & nổi bật" riêng của danh mục ở đầu trang.
-        await Page.GotoAsync("/danh-muc/cua-go");
+        await Page.GotoAsync("/danh-muc/ket-cau-thi-cong");
         await Page.WaitForSelectorAsync(".featured-strip");
         await Page.WaitForTimeoutAsync(500);
         await Page.ScreenshotAsync(new() { Path = Path.Combine(Dir, "10-category-featured.png") });

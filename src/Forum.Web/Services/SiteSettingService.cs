@@ -30,9 +30,9 @@ public class SiteSettingService : ISiteSettingService
     private volatile bool _loaded;
 
     // Giá trị mặc định khi DB chưa có bản ghi tương ứng.
-    public const string DefaultName = "Diễn đàn Cửa";
+    public const string DefaultName = "Diễn đàn Xây dựng Việt";
     public const string DefaultDescription =
-        "Cộng đồng thảo luận về cửa: cửa gỗ, nhôm kính, cửa cuốn, uPVC, cửa chống cháy, phụ kiện, báo giá & phong thủy cửa.";
+        "Cộng đồng xây dựng Việt Nam: kết cấu & thi công, vật liệu, điện nước, chống thấm, cửa nhôm kính, nội thất hoàn thiện, phong thủy, nhà thầu & báo giá.";
     private static readonly string[] DefaultBanned =
         { "đồ ngu", "thằng ngu", "lừa đảo trắng trợn", "địt", "đm", "vcl", "dmm", "óc chó" };
 

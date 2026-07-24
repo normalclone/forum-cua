@@ -15,7 +15,7 @@ public class TopicTests : TestBase
         await Page.GotoAsync("/tao-chu-de");
         var title = Unique("Chủ đề kiểm thử cửa ");
         await Page.FillAsync("input[name=Title]", title);
-        await Page.SelectOptionAsync("select[name=CategoryId]", new SelectOptionValue { Label = "Cửa gỗ" });
+        await Page.SelectOptionAsync("select[name=CategoryId]", new SelectOptionValue { Label = "Kết cấu & Thi công" });
         await Page.FillAsync("textarea[name=Body]", "Nội dung kiểm thử về **cửa gỗ HDF** và cửa gỗ tự nhiên cho phòng ngủ.");
         await Page.FillAsync("[data-tag-add]", "kiểm-thử");
         await Page.PressAsync("[data-tag-add]", "Enter");

@@ -9,7 +9,7 @@ public class CommentVoteTests : TestBase
     public async Task Post_Comment_And_Nested_Reply()
     {
         await LoginAsync("demo");
-        await OpenCategoryTopicAsync("cua-go");
+        await OpenCategoryTopicAsync("ket-cau-thi-cong");
 
         var body = Unique("Bình luận kiểm thử ");
         await Page.FillAsync("[data-comment-form] textarea[name=body]", body);
@@ -31,7 +31,7 @@ public class CommentVoteTests : TestBase
     public async Task Upvote_Topic_Updates_State()
     {
         await LoginAsync("demo");
-        await OpenCategoryTopicAsync("cua-go");
+        await OpenCategoryTopicAsync("ket-cau-thi-cong");
 
         var up = Page.Locator(".vote-rail .vote-btn.up");
         await up.ClickAsync();
@@ -43,7 +43,7 @@ public class CommentVoteTests : TestBase
     {
         await LoginAsync("demo");
         // Mở một chủ đề có sẵn bình luận (tránh tu-van-bao-gia vì chủ đề ghim "Nội quy" bị khóa).
-        await OpenCategoryTopicAsync("lap-dat-bao-tri");
+        await OpenCategoryTopicAsync("chong-tham-son");
         var firstUp = Page.Locator(".comment-actions .vote-btn.up").First;
         if (await firstUp.CountAsync() == 0)
         {

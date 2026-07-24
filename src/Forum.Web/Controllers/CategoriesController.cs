@@ -28,7 +28,7 @@ public class CategoriesController : ForumControllerBase
         SetSeo(new SeoModel
         {
             Title = "Danh mục thảo luận",
-            Description = "Tất cả danh mục: cửa gỗ, nhôm kính, cửa cuốn, uPVC, chống cháy, phụ kiện, báo giá, phong thủy.",
+            Description = "Tất cả danh mục: kết cấu, vật liệu, điện nước, chống thấm, cửa nhôm kính, nội thất, phong thủy, nhà thầu & báo giá.",
             CanonicalUrl = _url.Absolute("/danh-muc"),
             Breadcrumbs = { new BreadcrumbItem("Trang chủ", "/"), new BreadcrumbItem("Danh mục", null) }
         });
@@ -58,7 +58,7 @@ public class CategoriesController : ForumControllerBase
         SetSeo(new SeoModel
         {
             Title = cat.Name,
-            Description = cat.Description ?? $"Thảo luận về {cat.Name} trên Diễn đàn Cửa.",
+            Description = cat.Description ?? $"Thảo luận về {cat.Name} trên Diễn đàn Xây dựng Việt.",
             CanonicalUrl = _url.Absolute(PageUrl(basePath, query, trang)),
             PrevUrl = topics.HasPrevious ? _url.Absolute(PageUrl(basePath, query, trang - 1)) : null,
             NextUrl = topics.HasNext ? _url.Absolute(PageUrl(basePath, query, trang + 1)) : null,

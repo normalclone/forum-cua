@@ -10,7 +10,7 @@ public class ModerationAuthTests : TestBase
     {
         await LoginAsync("demo");
         // Mở chủ đề "Nội quy" do admin đăng (ghim đầu tu-van-bao-gia) — chắc chắn không phải của demo.
-        await Page.GotoAsync("/danh-muc/tu-van-bao-gia");
+        await Page.GotoAsync("/danh-muc/nha-thau-bao-gia");
         await Page.Locator(".topic-card .topic-title").First.ClickAsync();
         await Page.WaitForSelectorAsync("article h1");
         var author = await Page.Locator("article .user-link[data-username]").First.GetAttributeAsync("data-username");
@@ -41,7 +41,7 @@ public class ModerationAuthTests : TestBase
     public async Task Admin_Can_Pin_Topic()
     {
         await LoginAsync("admin");
-        await OpenCategoryTopicAsync("phu-kien-cua");
+        await OpenCategoryTopicAsync("vat-lieu-xay-dung");
 
         await Page.ClickAsync("[data-menu=mod-menu]");
         await Page.ClickAsync("[data-mod=pin]");
@@ -53,7 +53,7 @@ public class ModerationAuthTests : TestBase
     public async Task Admin_Sees_Moderation_Menu_On_Topic()
     {
         await LoginAsync("admin");
-        await OpenCategoryTopicAsync("cua-go");
+        await OpenCategoryTopicAsync("ket-cau-thi-cong");
         await Expect(Page.Locator("[data-menu=mod-menu]")).ToBeVisibleAsync();
     }
 }

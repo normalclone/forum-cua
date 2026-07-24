@@ -1,0 +1,27 @@
+{
+  "topics": [
+    {
+      "title": "[TỔNG HỢP] Đơn giá xây nhà 2026: xây thô & trọn gói tham khảo",
+      "body": "Mình tổng hợp mặt bằng giá tham khảo đầu 2026 để anh em đỡ bỡ ngỡ (tùy vùng, vật tư sẽ chênh):\n\n- **Xây thô + nhân công hoàn thiện:** ~3.3 – 3.8 triệu/m².\n- **Trọn gói vật tư trung bình:** ~5.5 – 6.5 triệu/m².\n- **Trọn gói vật tư khá:** ~6.5 – 8 triệu/m².\n\nGiá chưa gồm móng đặc biệt, nội thất rời. Anh em bổ sung giá khu vực mình cho phong phú nhé.",
+      "isQuestion": false,
+      "featured": true,
+      "pinned": true,
+      "tags": ["báo-giá", "đơn-giá", "xây-nhà", "tổng-hợp"],
+      "comments": [
+        { "body": "Cảm ơn bác, đang cần đúng cái này. Khu em (ngoại thành HN) xây thô đang ~3.5tr/m², trọn gói khá tầm 7tr.",
+          "replies": [ { "body": "Miền Trung nhà mình trọn gói trung bình ký 6tr/m², vật tư liệt kê rõ trong hợp đồng." } ] },
+        { "body": "Lưu ý cách tính diện tích (hệ số móng, mái, sân, tầng tum) mỗi nhà thầu một kiểu — hỏi kỹ trước khi so giá kẻo hớ." }
+      ]
+    },
+    {
+      "title": "Nên ký hợp đồng trọn gói hay khoán nhân công + tự mua vật tư?",
+      "body": "Em phân vân: ký trọn gói cho khỏe nhưng sợ nhà thầu rút ruột vật tư; còn khoán nhân công tự mua vật tư thì cực và dễ đội giá. Với người bận đi làm thì phương án nào hợp lý ạ?",
+      "isQuestion": true,
+      "tags": ["hợp-đồng", "nhà-thầu", "tư-vấn"],
+      "comments": [
+        { "body": "Bận thì **trọn gói + phụ lục vật tư ghi rõ chủng loại/thương hiệu** là an toàn nhất. Kèm điều khoản nghiệm thu theo giai đoạn và giữ lại % bảo hành. Có giám sát độc lập càng tốt." },
+        { "body": "Tự mua vật tư chỉ hợp khi bạn có thời gian và biết chút về xây dựng, không thì dễ mệt và tốn hơn tưởng." }
+      ]
+    }
+  ]
+}

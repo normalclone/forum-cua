@@ -41,14 +41,14 @@
             }
             else
             {
-                @Html.Icon("door-open", 26, "logo")
+                @Html.Icon("hammer", 26, "logo")
             }
             <span class="hide-mobile">@Settings.SiteName</span>
         </a>
 
         <form class="header-search collapsible" action="/tim-kiem" method="get" role="search" autocomplete="off" data-autocomplete>
             @Html.Icon("search", 17, "search-icon")
-            <input class="input input-search" type="search" name="q" placeholder="Tìm chủ đề, thẻ, bài viết về cửa…"
+            <input class="input input-search" type="search" name="q" placeholder="Tìm chủ đề, thẻ, bài viết về xây dựng…"
                    value="@(Context.Request.Query["q"])" aria-label="Tìm kiếm" />
             <div class="menu ac-menu" id="ac-menu" hidden></div>
         </form>
@@ -103,6 +103,22 @@
         </div>
     </header>
 
+    @* Banner quảng cáo cố định 2 bên (hiện trên màn hình rộng ≥1500px) *@
+    <aside class="ad-rail ad-left" aria-label="Quảng cáo">
+        <a class="ad-slot" href="#" data-no-progress>
+            <span class="ad-label">QUẢNG CÁO</span>
+            <span class="ad-size">160 × 600</span>
+            <span class="ad-note">Đặt banner tại đây</span>
+        </a>
+    </aside>
+    <aside class="ad-rail ad-right" aria-label="Quảng cáo">
+        <a class="ad-slot" href="#" data-no-progress>
+            <span class="ad-label">QUẢNG CÁO</span>
+            <span class="ad-size">160 × 600</span>
+            <span class="ad-note">Đặt banner tại đây</span>
+        </a>
+    </aside>
+
     <div class="container @containerClass">
         <main class="main-col" role="main">
             @if (TempData["Toast"] is string toast)
@@ -120,7 +136,7 @@
 
     <footer class="footer">
         <div>
-            © 2026 <strong>@Settings.SiteName</strong> — Cộng đồng thảo luận về cửa &amp; vật liệu cửa.
+            © 2026 <strong>@Settings.SiteName</strong> — Cộng đồng xây dựng & nhà ở Việt Nam.
             <a href="/noi-quy">Nội quy</a> · <a href="/sitemap.xml" data-no-progress>Sitemap</a>
         </div>
     </footer>

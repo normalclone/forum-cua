@@ -37,7 +37,7 @@ public class SearchController : ForumControllerBase
         SetSeo(new SeoModel
         {
             Title = string.IsNullOrWhiteSpace(q) ? "Tìm kiếm" : $"Tìm kiếm: {q}",
-            Description = $"Kết quả tìm kiếm trên Diễn đàn Cửa cho từ khóa \"{q}\".",
+            Description = $"Kết quả tìm kiếm trên Diễn đàn Xây dựng Việt cho từ khóa \"{q}\".",
             NoIndex = true // trang kết quả tìm kiếm không cần index
         });
 

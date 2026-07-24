@@ -1,0 +1,33 @@
+{
+  "topics": [
+    {
+      "title": "Trần thạch cao chìm hay nổi cho phòng khách?",
+      "body": "Em làm trần phòng khách, phân vân trần chìm (phẳng, đẹp, giấu khung) hay trần nổi (dễ tháo sửa, rẻ hơn). Nhà chung cư có nên làm trần chìm giật cấp không, hay nặng và tốn?",
+      "isQuestion": true,
+      "featured": true,
+      "tags": ["trần-thạch-cao", "hoàn-thiện", "phòng-khách"],
+      "comments": [
+        { "body": "Phòng khách nên **trần chìm giật cấp** cho thẩm mỹ, giấu đèn hắt. Trần nổi hợp văn phòng/nơi cần tháo bảo trì hệ thống. Nhớ dùng khung xương tốt, tấm chống ẩm ở khu bếp." },
+        { "body": "Chung cư trần chìm bình thường, nhẹ. Quan trọng thợ đóng ty treo đủ dày, không là võng." }
+      ]
+    },
+    {
+      "title": "Sàn gỗ công nghiệp hay gạch giả gỗ cho nhà có trẻ nhỏ?",
+      "body": "Nhà có bé nhỏ hay làm đổ nước. Sàn gỗ công nghiệp ấm chân, đẹp nhưng sợ ngấm nước phồng. Gạch giả gỗ thì mát, chống nước nhưng cứng. Các bác chọn gì?",
+      "isQuestion": true,
+      "tags": ["sàn-gỗ", "gạch", "nội-thất"],
+      "comments": [
+        { "body": "Có trẻ nhỏ, hay đổ nước thì **gạch giả gỗ** an toàn hơn, lau chùi thoải mái. Muốn ấm chân dùng sàn gỗ thì chọn loại cốt chịu nước AC4-AC5 và lau khô ngay khi đổ nước." }
+      ]
+    },
+    {
+      "title": "Kinh nghiệm đặt tủ bếp: thùng nhựa Picomat hay gỗ MDF chống ẩm?",
+      "body": "Chia sẻ: mình làm tủ bếp thùng nhựa Picomat, cánh Acrylic. Sau 3 năm khu vực chậu rửa vẫn khô ráo, không mối mọt như tủ MDF nhà cũ. Chi phí nhỉnh hơn nhưng đáng cho khu ẩm ướt.",
+      "isQuestion": false,
+      "tags": ["tủ-bếp", "nội-thất", "kinh-nghiệm"],
+      "comments": [
+        { "body": "Đúng, khu chậu rửa nên nhựa. Phần tủ trên khô ráo dùng MDF chống ẩm cho tiết kiệm cũng được." }
+      ]
+    }
+  ]
+}

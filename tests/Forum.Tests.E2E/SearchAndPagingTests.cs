@@ -15,7 +15,7 @@ public class SearchAndPagingTests : TestBase
     [Test]
     public async Task Search_Filter_By_Category()
     {
-        await Page.GotoAsync("/tim-kiem?q=" + Uri.EscapeDataString("cửa") + "&danh-muc=cua-go");
+        await Page.GotoAsync("/tim-kiem?q=" + Uri.EscapeDataString("cửa") + "&danh-muc=cua-nhom-kinh");
         await Expect(Page.Locator(".topic-card").First).ToBeVisibleAsync(new() { Timeout = 10000 });
     }
 

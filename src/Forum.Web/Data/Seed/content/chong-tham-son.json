@@ -1,0 +1,26 @@
+{
+  "topics": [
+    {
+      "title": "Chống thấm nhà vệ sinh: nên làm mấy lớp và dùng vật liệu gì?",
+      "body": "Nhà cũ bị thấm trần nhà vệ sinh tầng dưới. Giờ đục ra làm lại, em muốn làm dứt điểm. Các bác tư vấn quy trình và vật liệu chống thấm gốc xi măng hay gốc PU cho khu vệ sinh với ạ.",
+      "isQuestion": true,
+      "featured": false,
+      "tags": ["chống-thấm", "nhà-vệ-sinh", "sửa-chữa"],
+      "comments": [
+        { "body": "Quy trình chuẩn: đục tới bê tông, vệ sinh sạch, quét **lót + 2-3 lớp chống thấm gốc xi măng 2 thành phần**, gia cố lưới ở góc chân tường và cổ ống. Ngâm nước thử 24-48h trước khi cán nền, ốp lát.",
+          "replies": [ { "body": "Cổ ống xuyên sàn là chỗ hay thấm nhất, nhớ quấn thanh trương nở + trám kỹ quanh ống." } ] },
+        { "body": "Đừng bỏ bước ngâm thử nước. Nhiều thợ làm nhanh ốp luôn, thấm lại là đục hết rất tốn." }
+      ]
+    },
+    {
+      "title": "Sơn nội thất: có cần sơn lót không, hay sơn phủ 2 lớp là đủ?",
+      "body": "Đại lý bảo bỏ sơn lót cho rẻ, phủ 3 lớp màu luôn. Nhưng em đọc thấy sơn lót chống kiềm quan trọng. Thực tế ở nhà mới tô thì có nhất thiết phải lót không?",
+      "isQuestion": true,
+      "tags": ["sơn", "hoàn-thiện", "nội-thất"],
+      "comments": [
+        { "body": "**Bắt buộc có lót kháng kiềm** với tường mới, không là vài tháng loang ố, kiềm hóa bong màu. Lót 1 lớp + phủ 2 lớp là chuẩn, đừng nghe bỏ lót." },
+        { "body": "Tường mới nên để khô ít nhất 3-4 tuần rồi sơn, ẩm quá sơn cũng dễ hỏng." }
+      ]
+    }
+  ]
+}
