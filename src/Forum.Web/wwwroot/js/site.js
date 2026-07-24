@@ -270,4 +270,18 @@
     // đã vẽ → nội dung hiện ra rồi bị ẩn đi và trượt lại (giật). Nội dung giờ hiển thị
     // ngay, không animate cả cột; riêng thẻ chủ đề vẫn fade nhẹ qua .reveal.
   });
+
+  // Cả thẻ chủ đề đều click được để vào chi tiết — trừ khi bấm vào phần tử tương tác
+  // (link/nút/vote/lưu/menu/thẻ) hoặc đang bôi đen chọn text.
+  document.addEventListener("click", (e) => {
+    const card = e.target.closest(".topic-card");
+    if (!card) return;
+    if (e.target.closest("a, button, [data-vote], [data-bookmark], [data-menu], input, textarea, select, label")) return;
+    if (window.getSelection && String(window.getSelection())) return;   // đang chọn text → không điều hướng
+    const link = card.querySelector("a.topic-title[href]");
+    if (!link) return;
+    const href = link.getAttribute("href");
+    if (e.ctrlKey || e.metaKey || e.shiftKey) window.open(href, "_blank");   // Ctrl/Cmd/Shift → tab mới
+    else window.location.href = href;
+  });
 })();

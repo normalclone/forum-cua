@@ -287,6 +287,7 @@ a.tag:hover { text-decoration: none; filter: brightness(.97); border-color: var(
 /* Hover cả card -> tiêu đề sáng lên (accent), tóm tắt rõ hơn. */
 .topic-card:hover .topic-title { color: var(--accent); }
 .topic-card:hover .topic-excerpt { color: var(--text); }
+.topic-card { cursor: pointer; }   /* cả thẻ click được để vào chi tiết */
 .topic-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 6px; }
 .topic-footer { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; font-size: .78rem; color: var(--text-muted); }
 .topic-footer .tf { display: inline-flex; align-items: center; gap: 5px; }
