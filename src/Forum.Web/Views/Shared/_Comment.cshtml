@@ -41,7 +41,6 @@
         @if (!c.IsDeleted && !blocked)
         {
             <div class="comment-body md">@Html.Raw(Md.ToHtml(c.Body))</div>
-            <partial name="_Reactions" model="@(new ReactionBarModel { IsComment = true, Id = c.Id, Summary = Model.Reactions.GetValueOrDefault(c.Id, Forum.Web.Services.ReactionSummary.Empty), Allowed = Model.AllowedEmojis, CanReact = Model.CurrentUserId > 0 })" />
             <div class="comment-actions">
                 @if (Model.IsQuestion && Model.CanAccept)
                 {
